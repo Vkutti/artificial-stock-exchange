@@ -5,10 +5,14 @@ from exchange.trade import Trade
 import time
 
 class Exchange:
-    _id_generator = count(1)  
-    
+    _id_generator = count(1)
+
     def __init__(self):
-        self.order_book = {Side.BUY: {}, Side.SELL: {}}
+
+        self.order_book = {
+            Side.BUY: {},
+            Side.SELL: {}
+        }
 
         self.trade_history = []
 
@@ -24,22 +28,15 @@ class Exchange:
 
         if order.quantity <= 0:
             raise ValueError("Quantity Invalid")
-        
+
     def add_order_to_book(self, order: Order):
         side_book = self.order_book[order.side]
 
         if order.price not in side_book:
             side_book[order.price] = []
-        
+
         side_book[order.price].append(order)
 
-    def get_opposite_book(self, order: Order):
-        if order.side == Side.BUY:
-            return self.order_book[Side.SELL], Side.SELL
-
-        else:
-            return self.order_book[Side.BUY], Side.BUY
-        
     def get_best_price(self, order: Order):
         if order.side == Side.BUY:
             sell_book = self.order_book[Side.SELL]
@@ -55,7 +52,7 @@ class Exchange:
                 return None
 
             return max(buy_book.keys())
-        
+
     def get_best_bid(self):
         buy_book = self.order_book[Side.BUY]
 
@@ -63,37 +60,35 @@ class Exchange:
             return None
 
         return max(buy_book.keys())
-        
+
     def get_best_ask(self):
         sell_book = self.order_book[Side.SELL]
 
         if not sell_book:
             return None
-        
+
         return min(sell_book.keys())
-    
+
     def get_last_trade_price(self):
         if not self.trade_history:
             return None
 
         return self.trade_history[-1].price
-    
+
     def get_spread(self):
-        ask = self.get_best_ask()
         bid = self.get_best_bid()
+        ask = self.get_best_ask()
 
-        if ask is None or bid is None:
-            return None 
+        if bid is None or ask is None:
+            return None
 
-        return (ask - bid)
-        
-    def create_trade(self, order: Order, other_order, best_price, trade_quantity):
+        return ask - bid
+
+    def create_trade(self, order: Order, other_order: Order, price, quantity):
         if order.side == Side.BUY:
-            trade = Trade(order.trader_id, other_order.trader_id, best_price, trade_quantity, time.time())
+            return Trade(order.trader_id, other_order.trader_id, price, quantity, time.time())
         else:
-            trade = Trade(other_order.trader_id, order.trader_id, best_price, trade_quantity, time.time())
-
-        return trade
+            return Trade(other_order.trader_id, order.trader_id, price, quantity, time.time())
 
     def match_order(self, order: Order):
         trades = []
@@ -104,30 +99,47 @@ class Exchange:
             if best_price is None:
                 break
 
-            if order.side == Side.BUY and order.price < best_price:
-                break
+            if order.side == Side.BUY:
+                if order.price < best_price:
+                    break
+            else:
+                if order.price > best_price:
+                    break
 
-            if order.side == Side.SELL and order.price > best_price:
-                break
+            opposite_side = (Side.SELL if order.side == Side.BUY else Side.BUY)
 
-            other_side = Side.SELL if order.side == Side.BUY else Side.BUY
-            other_order = self.order_book[other_side][best_price][0]
+            price_level = (self.order_book[opposite_side][best_price])
 
-            trade_quantity = min(order.remaining_quantity, other_order.remaining_quantity)
+            if not price_level:
+                del self.order_book[opposite_side][best_price]
+                continue
+
+            resting_order = price_level[0]
+
+            trade_quantity = min(order.remaining_quantity, resting_order.remaining_quantity)
 
             order.remaining_quantity -= trade_quantity
-            other_order.remaining_quantity -= trade_quantity
 
-            trade = self.create_trade(order, other_order, best_price, trade_quantity)
+            resting_order.remaining_quantity -= trade_quantity
+
+            trade = self.create_trade(order, resting_order, best_price, trade_quantity)
 
             self.trade_history.append(trade)
+
+            self.recent_prices.append(trade.price)
+
+            if len(self.recent_prices) > 1000:
+                self.recent_prices.pop(0)
+
+            self.current_volume += (trade_quantity)
+
             trades.append(trade)
 
-            if other_order.remaining_quantity == 0:
-                self.order_book[other_side][best_price].pop(0)
+            if resting_order.remaining_quantity == 0:
+                price_level.pop(0)
 
-                if len(self.order_book[other_side][best_price]) == 0:
-                    del self.order_book[other_side][best_price]
+                if len(price_level) == 0:
+                    del self.order_book[opposite_side][best_price]
 
         if order.remaining_quantity == 0:
             order.status = OrderStatus.FILLED
@@ -137,7 +149,7 @@ class Exchange:
             order.status = OrderStatus.NEW
 
         return trades
-    
+
     def check_match(self, order: Order):
         best_price = self.get_best_price(order)
 
@@ -145,26 +157,49 @@ class Exchange:
             return False
 
         if order.side == Side.BUY:
-            if order.price >= best_price:
-                return True
+            return order.price >= best_price
         else:
-            if order.price <= best_price:
-                return True
-            
-        return False
-        
+            return order.price <= best_price
+
     def submit_order(self, order: Order):
         self.validate_order(order)
 
         order.id = self.next_order_id
+
         self.next_order_id += 1
 
-        can_match = self.check_match(order)
+        trades = []
 
-        if can_match:
-            self.match_order(order)
+        if self.check_match(order):
+            trades = self.match_order(order)
 
         if order.remaining_quantity > 0:
             self.add_order_to_book(order)
 
-        return order
+        return trades
+
+    def cancel_expired_orders(self, current_tick):
+        cancelled = []
+
+        for side in (Side.BUY, Side.SELL):
+            side_book = self.order_book[side]
+
+            for price in list(side_book.keys()):
+                active_orders = []
+
+                for order in side_book[price]:
+                    if (current_tick >= order.expiration_tick):
+                        order.status = (OrderStatus.CANCELLED)
+
+                        cancelled.append(order)
+                    else:
+                        active_orders.append(order)
+
+                if active_orders:
+                    side_book[price] = active_orders
+                else:
+                    del side_book[price]
+
+
+
+        return cancelled
