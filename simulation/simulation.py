@@ -2,11 +2,15 @@ from exchange.exchange import Exchange
 from exchange.market_state import MarketState
 from traders.random_trader import RandomTrader
 from traders.market_maker import MarketMaker
+from traders.momentum_trader import MomentumTrader
+from traders.fair_value_trader import FairValueTrader
 from exchange.order import Order
 from exchange.enums import Side
 
+import random
+
 class Simulation:
-    def __init__(self, exchange: Exchange, traders: list[RandomTrader | MarketMaker], ticks):
+    def __init__(self, exchange: Exchange, traders: list[RandomTrader | MarketMaker | FairValueTrader | MomentumTrader], ticks):
         self.exchange = exchange
 
         self.traders = traders
@@ -20,6 +24,11 @@ class Simulation:
         self.bid_data = []
         self.ask_data = []
         self.mid_data = []
+        self.spread_data = []
+        self.fundamental_price_data = []
+        self.volume_data = []
+
+        self.fundamental_price = 100
 
     def build_market_state(self):
         return MarketState(
@@ -28,7 +37,9 @@ class Simulation:
             last_trade_price=self.exchange.get_last_trade_price(),
             spread=self.exchange.get_spread(),
             recent_prices=self.exchange.recent_prices,
-            current_tick=self.current_tick)
+            current_tick=self.current_tick,
+            fundamental_price=self.fundamental_price, 
+            volume=self.exchange.current_volume)
 
     def process_trade(self, trade):
         buyer = self.trader_map[trade.buy_trader_id]
@@ -67,6 +78,7 @@ class Simulation:
             self.process_trade(trade)
 
         print(
+            f"Tick {current_tick}: "
             f"{trader.name}: "
             f"{decision.side.name} "
             f"{decision.quantity}"
@@ -76,12 +88,20 @@ class Simulation:
     def step(self, current_tick):
         self.current_tick = current_tick
 
-        market_state = self.build_market_state()
+        active_traders = self.traders.copy()
+        random.shuffle(active_traders)
 
-        for trader in self.traders:
+        for trader in active_traders:
+            if current_tick < trader.next_action_tick:
+                continue
+
+            market_state = self.build_market_state()
+
             actions = trader.decide_action(market_state)
 
             if actions is None:
+
+                trader.next_action_tick = (current_tick + max(1, int(random.expovariate(1 / trader.average_wait))))
                 continue
 
             if not isinstance(actions, list):
@@ -89,6 +109,8 @@ class Simulation:
 
             for action in actions:
                 self.submit_action(trader, action, current_tick)
+
+            trader.next_action_tick = (current_tick + max(1, int(random.expovariate(1 / trader.average_wait))))
 
         expired = (self.exchange.cancel_expired_orders(current_tick))
 
@@ -99,6 +121,11 @@ class Simulation:
                 trader.money += (order.price * order.remaining_quantity)
             else:
                 trader.shares += (order.remaining_quantity)
+
+        drift = 0.002 * (100 - self.fundamental_price)
+        noise = random.gauss(0, 0.05)
+
+        self.fundamental_price += drift + noise
 
     def run(self):
         for tick in range(self.ticks):
@@ -117,7 +144,12 @@ class Simulation:
 
             self.mid_data.append(mid)
 
-        return (self.bid_data, self.ask_data, self.mid_data)
+            self.spread_data.append(market_state.spread)
+            self.fundamental_price_data.append(market_state.fundamental_price)
+            self.volume_data.append(market_state.volume)
+
+
+        return (self.bid_data, self.ask_data, self.mid_data, self.fundamental_price_data, self.spread_data, self.volume_data)
 
     def reset(self):
         self.bid_data.clear()

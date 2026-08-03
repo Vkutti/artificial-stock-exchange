@@ -27,6 +27,9 @@ class MarketMaker:
         self.min_order_size = 5
         self.max_order_size = 20
 
+        self.next_action_tick = 0
+        self.average_wait = 1
+
     def decide_action(self, market_state: MarketState):
         current_tick = market_state.current_tick
 
@@ -52,10 +55,9 @@ class MarketMaker:
 
         ask_price = (mid_price + self.base_spread - inventory_skew)
 
-        bid_price = max(1, int(bid_price))
-
-        ask_price = max(bid_price + 1, int(ask_price))
-
+        bid_price = max(1, round(bid_price))
+        ask_price = max(bid_price + 1, round(ask_price))
+ 
         actions = []
 
         if inventory_difference > 0:
