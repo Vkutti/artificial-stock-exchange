@@ -48,7 +48,7 @@ names_3 = [
     "Spencer", "Gavin", "Grant", "Trevor", "Max"
 ]
 
-money = [1000, 2000, 5000, 8000, 10000, 20000, 50000, 80000, 100000]
+money = [1000, 2000, 5000, 8000, 10000, 20000, 50000]
 
 for _ in range(5):
     traders.append(MarketMaker("MarketMaker", 250000, 2500, 100))
@@ -58,12 +58,12 @@ for _ in range(60):
 
     traders.append(RandomTrader(names_1[_], cash, cash // 100, 0)) 
 
-for _ in range(15):
+for _ in range(20):
     cash = random.choice(money)
 
     traders.append(FairValueTrader(names_2[_], cash, cash // 100, 0))
 
-for _ in range(20):
+for _ in range(15):
     cash = random.choice(money)
 
     traders.append(MomentumTrader(names_3[_], cash, cash // 100, 0))
@@ -87,6 +87,20 @@ for trader in traders:
         trade_counts.get(trader.trader_id, 0),
         type(trader).__name__, trader.name
     )
+
+from collections import defaultdict
+
+pairs = defaultdict(int)
+
+for trade in exchange.trade_history:
+    buyer = type(simulation.trader_map[trade.buy_trader_id]).__name__
+    seller = type(simulation.trader_map[trade.sell_trader_id]).__name__
+
+    key = tuple(sorted((buyer, seller)))
+    pairs[key] += 1
+
+for pair, count in sorted(pairs.items(), key=lambda x: x[1], reverse=True):
+    print(pair, count)
 
 plt.figure(figsize=(12, 8))
 

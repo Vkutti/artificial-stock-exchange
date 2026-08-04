@@ -14,12 +14,12 @@ class RandomTrader:
         self.shares = shares
         self.orders = orders
 
-        self.activity_rate = random.uniform(0.005, 0.02)
+        self.activity_rate = random.uniform(0.01, 0.02)
 
         self.order_ttl = random.randint(30, 300)
 
         self.next_action_tick = 0
-        self.average_wait = random.randint(15, 60)
+        self.average_wait = random.randint(5, 45)
 
     def decide_action(self, market_state: MarketState):
         if random.random() > self.activity_rate:

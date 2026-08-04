@@ -24,7 +24,7 @@ class FairValueTrader:
         self.threshold = random.uniform(1, 3)
 
         self.next_action_tick = 0
-        self.average_wait = random.randint(5, 30)
+        self.average_wait = random.randint(5, 20)
 
     def decide_action(self, market_state: MarketState):
         if random.random() > self.activity_rate:
