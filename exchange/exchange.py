@@ -84,13 +84,13 @@ class Exchange:
 
         return ask - bid
 
-    def create_trade(self, order: Order, other_order: Order, price, quantity):
+    def create_trade(self, order: Order, other_order: Order, price, quantity, current_tick):
         if order.side == Side.BUY:
-            return Trade(order.trader_id, other_order.trader_id, price, quantity, time.time())
+            return Trade(order.trader_id, other_order.trader_id, price, quantity, time.time(), current_tick)
         else:
-            return Trade(other_order.trader_id, order.trader_id, price, quantity, time.time())
+            return Trade(other_order.trader_id, order.trader_id, price, quantity, time.time(), current_tick)
 
-    def match_order(self, order: Order):
+    def match_order(self, order: Order, current_tick):
         trades = []
 
         while order.remaining_quantity > 0:
@@ -122,7 +122,7 @@ class Exchange:
 
             resting_order.remaining_quantity -= trade_quantity
 
-            trade = self.create_trade(order, resting_order, best_price, trade_quantity)
+            trade = self.create_trade(order, resting_order, best_price, trade_quantity, current_tick)
 
             self.trade_history.append(trade)
 
@@ -161,7 +161,7 @@ class Exchange:
         else:
             return order.price <= best_price
 
-    def submit_order(self, order: Order):
+    def submit_order(self, order: Order, current_tick):
         self.validate_order(order)
 
         order.id = self.next_order_id
@@ -171,7 +171,7 @@ class Exchange:
         trades = []
 
         if self.check_match(order):
-            trades = self.match_order(order)
+            trades = self.match_order(order, current_tick)
 
         if order.remaining_quantity > 0:
             self.add_order_to_book(order)
@@ -201,5 +201,28 @@ class Exchange:
                     del side_book[price]
 
 
+
+        return cancelled
+    
+    def cancel_trader_orders(self, trader_id):
+        cancelled = []
+
+        for side in (Side.BUY, Side.SELL):
+            side_book = self.order_book[side]
+
+            for price in list(side_book.keys()):
+                remaining_orders = []
+
+                for order in side_book[price]:
+                    if order.trader_id == trader_id:
+                        order.status = OrderStatus.CANCELLED
+                        cancelled.append(order)
+                    else:
+                        remaining_orders.append(order)
+
+                if remaining_orders:
+                    side_book[price] = remaining_orders
+                else:
+                    del side_book[price]
 
         return cancelled

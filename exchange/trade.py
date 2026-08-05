@@ -1,10 +1,19 @@
 class Trade:
-    def __init__(self, buy_trader_id, sell_trader_id, price, quantity, timestamp):
+    def __init__(
+        self,
+        buy_trader_id,
+        sell_trader_id,
+        price,
+        quantity,
+        timestamp,
+        tick,
+    ):
         self.buy_trader_id = buy_trader_id
         self.sell_trader_id = sell_trader_id
         self.price = price
         self.quantity = quantity
         self.timestamp = timestamp
+        self.tick = tick
 
     def __repr__(self):
         return (

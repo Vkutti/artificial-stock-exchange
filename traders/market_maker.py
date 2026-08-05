@@ -16,84 +16,133 @@ class MarketMaker:
         self.shares = shares
         self.orders = orders
 
-        self.quote_interval = random.randint(3, 7)
-
-        self.last_quote_tick = -1
-
-        self.order_ttl = 10
-
         self.target_inventory = shares
-
-        self.inventory_factor = 8
 
         self.base_spread = 2
 
-        self.min_order_size = 5
-        self.max_order_size = 20
+        self.inventory_factor = 5
 
-        self.next_action_tick = 0
-        self.average_wait = 1
+        self.order_ttl = 6
 
-        self.fair_value_offset = random.gauss(0, 5)        
+        self.average_wait = 2
 
-    def decide_action(self, market_state: MarketState):
-        current_tick = market_state.current_tick
+        self.quote_interval = 3
 
-        if current_tick - self.last_quote_tick < self.quote_interval:
+        self.last_quote_tick = -999
+
+        self.min_size = 5
+        self.max_size = 20
+
+        self.fair_value_offset = random.gauss(0, 2)      
+
+    def decide_action(self, market_state):
+
+        tick = market_state.current_tick
+
+        if tick - self.last_quote_tick < self.quote_interval:
             return None
-        
-        fair_value = (market_state.fundamental_price + self.fair_value_offset)
 
-        self.last_quote_tick = current_tick
+        self.last_quote_tick = tick
 
-        if (market_state.best_bid is not None and market_state.best_ask is not None):
-            mid_price = (market_state.best_bid + market_state.best_ask) / 2
+        market_mid = None
+
+        if (
+            market_state.best_bid is not None and
+            market_state.best_ask is not None
+        ):
+            market_mid = (
+                market_state.best_bid +
+                market_state.best_ask
+            ) / 2
+
         elif market_state.last_trade_price is not None:
-            mid_price = market_state.last_trade_price
+            market_mid = market_state.last_trade_price
+
+        fundamental = (
+            market_state.fundamental_price +
+            self.fair_value_offset
+        )
+
+        if market_mid is None:
+            fair = fundamental
         else:
-            mid_price = fair_value
+            fair = (
+                0.8 * fundamental +
+                0.2 * market_mid
+            )
 
-        recent_prices = market_state.recent_prices[-50:]
+        prices = market_state.recent_prices[-50:]
 
-        if len(recent_prices) >= 2:
-            volatility = np.std(recent_prices)
+        if len(prices) > 5:
+            volatility = np.std(prices)
         else:
             volatility = 0
 
-        spread = self.base_spread + volatility * 0.5
+        spread = max(
+            self.base_spread,
+            self.base_spread + volatility
+        )
 
-        inventory_difference = (self.shares - self.target_inventory)
+        inventory_error = (
+            self.shares -
+            self.target_inventory
+        )
 
-        inventory_ratio = (inventory_difference / max(self.target_inventory, 1))
+        inventory_ratio = (
+            inventory_error /
+            max(self.target_inventory, 1)
+        )
 
-        inventory_skew = (inventory_ratio * self.inventory_factor)
+        skew = (
+            inventory_ratio *
+            self.inventory_factor
+        )
 
-        bid_price = (mid_price - spread - inventory_skew)
+        bid = fair - spread / 2 - skew
+        ask = fair + spread / 2 - skew
 
-        ask_price = (mid_price + spread - inventory_skew)
+        bid = max(1, round(bid))
+        ask = max(bid + 1, round(ask))
 
-        bid_price = max(1, round(bid_price))
-        ask_price = max(bid_price + 1, round(ask_price))
- 
+        base = random.randint(
+            self.min_size,
+            self.max_size
+        )
+
+        bid_size = base
+        ask_size = base
+
+        if inventory_ratio > 0:
+
+            ask_size = int(base * 1.5)
+            bid_size = int(base * 0.5)
+
+        elif inventory_ratio < 0:
+
+            bid_size = int(base * 1.5)
+            ask_size = int(base * 0.5)
+
+        bid_size = max(1, bid_size)
+        ask_size = max(1, ask_size)
+
         actions = []
 
-        if inventory_difference > 0:
-            bid_quantity = random.randint(1, self.min_order_size)
+        actions.append(
+            Action(
+                Side.BUY,
+                bid,
+                bid_size,
+                OrderType.LIMIT
+            )
+        )
 
-            ask_quantity = random.randint(self.min_order_size, self.max_order_size)
-        elif inventory_difference < 0:
-            bid_quantity = random.randint(self.min_order_size, self.max_order_size)
-
-            ask_quantity = random.randint(1, self.min_order_size)
-        else:
-            bid_quantity = max(1, int(20 * np.exp(-abs(inventory_ratio))))
-
-            ask_quantity = max(1, int(20 * np.exp(-abs(inventory_ratio))))
-
-        if self.money >= bid_price * bid_quantity:
-            actions.append(Action(Side.BUY, bid_price, bid_quantity, OrderType.LIMIT))
-
-        if self.shares >= ask_quantity:
-            actions.append(Action( Side.SELL, ask_price, ask_quantity, OrderType.LIMIT))
+        actions.append(
+            Action(
+                Side.SELL,
+                ask,
+                ask_size,
+                OrderType.LIMIT
+            )
+        )
 
         return actions

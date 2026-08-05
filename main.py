@@ -10,6 +10,10 @@ import random
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+import mplfinance as mpf
+from collections import defaultdict
+
 
 exchange = Exchange()
 
@@ -73,7 +77,7 @@ simulation = Simulation(exchange, traders, 117000)
 # simulation = Simulation(exchange, traders, 468000)
 # simulation = Simulation(exchange, traders, 5616000)
 
-bid_data, ask_data, mid_data, fundamental_price, spread, volume = simulation.run()
+bid_data, ask_data, mid_data, fundamental_price, spread, volume, last_trade_price, fundamental_ticks = simulation.run()
 
 trade_counts = {}
 
@@ -88,8 +92,6 @@ for trader in traders:
         type(trader).__name__, trader.name
     )
 
-from collections import defaultdict
-
 pairs = defaultdict(int)
 
 for trade in exchange.trade_history:
@@ -102,25 +104,41 @@ for trade in exchange.trade_history:
 for pair, count in sorted(pairs.items(), key=lambda x: x[1], reverse=True):
     print(pair, count)
 
-plt.figure(figsize=(12, 8))
+trade_ticks = [trade.tick for trade in exchange.trade_history]
+trade_prices = [trade.price for trade in exchange.trade_history]
 
-plt.subplot(2,2,1)
-plt.plot(mid_data)
-plt.title("Mid Price")
 
-plt.subplot(2,2,2)
-plt.plot(volume)
-plt.title("Volume")
+event_ticks = range(len(fundamental_price))
 
-plt.subplot(2,2,3)
-plt.plot(spread)
-plt.title("Spread")
+STEP = max(1, len(trade_ticks) // 11.7)
 
-plt.subplot(2,2,4)
-plt.plot(fundamental_price)
-plt.title("Fundamental Price")
+plt.figure(figsize=(15, 7))
 
+plt.plot(
+    trade_ticks,
+    trade_prices,
+    color="tab:blue",
+    linewidth=0.8,
+    label="Trade Price",
+)
+
+plt.plot(
+    fundamental_ticks,
+    fundamental_price,
+    color="tab:red",
+    linewidth=2,
+    linestyle="--",
+    label="Fundamental Value",
+)
+
+plt.title("Market Price vs Fundamental Value")
+plt.xlabel("Simulation Tick")
+plt.ylabel("Price")
+
+plt.grid(alpha=0.3)
 plt.legend()
+
+plt.tight_layout()
 plt.show()
 
 print("Trades:", len(exchange.trade_history))

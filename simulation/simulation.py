@@ -34,8 +34,10 @@ class Simulation:
         self.spread_data = []
         self.fundamental_price_data = []
         self.volume_data = []
+        self.last_trade_price_data = []
 
         self.fundamental_price = 100
+        self.fundamental_ticks = []
 
         self.event_queue = []
         self.event_counter = count()
@@ -78,14 +80,13 @@ class Simulation:
                 return
 
             trader.money -= reserved
-            
         else:
             if trader.shares < order.quantity:
                 return
             
             trader.shares -= order.quantity
 
-        trades = self.exchange.submit_order(order)
+        trades = self.exchange.submit_order(order, current_tick)
 
         for trade in trades:
             self.process_trade(trade)
@@ -115,17 +116,26 @@ class Simulation:
 
             heapq.heappush(
                 self.event_queue,
-                Event(
-                    first_tick,
-                    next(self.event_counter),
-                    trader
-                )
-            )
+                Event(first_tick, next(self.event_counter), trader))
 
     def process_event(self, event):
         self.current_tick = event.tick
 
         trader = event.trader
+
+        if isinstance(trader, MarketMaker):
+
+            cancelled = self.exchange.cancel_trader_orders(trader.trader_id)
+
+            for order in cancelled:
+
+                if order.side == Side.BUY:
+                    trader.money += (
+                        order.price *
+                        order.remaining_quantity
+                    )
+                else:
+                    trader.shares += order.remaining_quantity
 
         market_state = self.build_market_state()
 
@@ -137,41 +147,22 @@ class Simulation:
                 actions = [actions]
 
             for action in actions:
-                self.submit_action(
-                    trader,
-                    action,
-                    self.current_tick
-                )
+                self.submit_action(trader, action, self.current_tick)
 
-        wait = max(
-            1,
-            int(random.expovariate(1 / trader.average_wait))
-        )
+        wait = max(1, int(random.expovariate(1 / trader.average_wait)))
 
         heapq.heappush(
             self.event_queue,
-            Event(
-                self.current_tick + wait,
-                next(self.event_counter),
-                trader
-            )
-        )
+            Event(self.current_tick + wait, next(self.event_counter), trader))
 
 
-        expired = self.exchange.cancel_expired_orders(
-            self.current_tick
-        )
+        expired = self.exchange.cancel_expired_orders(self.current_tick)
 
         for order in expired:
-
             trader = self.trader_map[order.trader_id]
 
             if order.side == Side.BUY:
-                trader.money += (
-                    order.price *
-                    order.remaining_quantity
-                )
-
+                trader.money += (order.price * order.remaining_quantity)
             else:
                 trader.shares += order.remaining_quantity
 
@@ -238,11 +229,15 @@ class Simulation:
                 market_state.fundamental_price
             )
 
+            self.fundamental_ticks.append(
+                self.current_tick
+            )
+
             self.volume_data.append(
                 market_state.volume
             )
 
-            self.mid_data.append(mid)
+            self.last_trade_price_data.append(market_state.last_trade_price)
 
         #     if len(self.mid_data) % 500 == 0:
         #         line.set_data(range(len(self.mid_data)), self.mid_data)
@@ -255,6 +250,13 @@ class Simulation:
         # plt.ioff()
         # plt.show()
 
+            # print(
+            #     self.exchange.get_best_bid(),
+            #     self.exchange.get_best_ask(),
+            #     len(self.exchange.order_book[Side.BUY]),
+            #     len(self.exchange.order_book[Side.SELL])
+            # )
+
         return (
             self.bid_data,
             self.ask_data,
@@ -262,6 +264,8 @@ class Simulation:
             self.fundamental_price_data,
             self.spread_data,
             self.volume_data,
+            self.last_trade_price_data,
+            self.fundamental_ticks,
         )
 
     def reset(self):
