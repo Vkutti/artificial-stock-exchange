@@ -4,6 +4,8 @@ from traders.random_trader import RandomTrader
 from traders.market_maker import MarketMaker
 from traders.momentum_trader import MomentumTrader
 from traders.fair_value_trader import FairValueTrader
+from traders.persistent_trader import PersistentTrader
+
 from exchange.order import Order
 from exchange.enums import Side
 
@@ -13,11 +15,13 @@ import random
 import heapq
 from itertools import count
 
+from company.company import Company
+
 import matplotlib.pyplot as plt
 import numpy as np
 
 class Simulation:
-    def __init__(self, exchange: Exchange, traders: list[RandomTrader | MarketMaker | FairValueTrader | MomentumTrader], ticks):
+    def __init__(self, exchange: Exchange, traders: list[RandomTrader | MarketMaker | FairValueTrader | MomentumTrader | PersistentTrader], ticks, company: Company):
         self.exchange = exchange
 
         self.traders = traders
@@ -36,13 +40,23 @@ class Simulation:
         self.volume_data = []
         self.last_trade_price_data = []
 
-        self.fundamental_price = 100
+        self.revenue_data = []
+        self.earnings_data = []
+        self.book_value_data = []
+        self.company_cash_data = []
+        self.debt_data = []
+
         self.fundamental_ticks = []
 
         self.event_queue = []
         self.event_counter = count()
 
         self.previous_tick = 0
+
+        self.company = company
+
+        self.company_update_interval = 23400
+        self.next_company_update = self.company_update_interval
         
     def build_market_state(self):
         return MarketState(
@@ -52,19 +66,20 @@ class Simulation:
             spread=self.exchange.get_spread(),
             recent_prices=self.exchange.recent_prices,
             current_tick=self.current_tick,
-            fundamental_price=self.fundamental_price, 
-            volume=self.exchange.current_volume)
+            fundamental_price=self.company.fundamental_value,
+            volume=self.exchange.current_volume
+        )
 
     def process_trade(self, trade):
         buyer = self.trader_map[trade.buy_trader_id]
-
         seller = self.trader_map[trade.sell_trader_id]
 
-        value = (trade.price * trade.quantity)
+        value = trade.price * trade.quantity
 
         buyer.shares += trade.quantity
-
         seller.money += value
+
+        self.company.update_market_stats(trade.price)
 
     def submit_action(self, trader, decision, current_tick):
         order = Order(trader.trader_id, decision.side, decision.price, decision.quantity, decision.type)
@@ -103,8 +118,6 @@ class Simulation:
             f"{decision.side.name} "
             f"{decision.quantity}"
             f" @ {decision.price}"
-
-           # f"Current Amount of Money: {trader.money}"
         )
 
     def initialize_events(self):
@@ -121,28 +134,28 @@ class Simulation:
     def process_event(self, event):
         self.current_tick = event.tick
 
+        while self.current_tick >= self.next_company_update:
+
+            self.company.update()
+
+            self.next_company_update += self.company_update_interval
+
         trader = event.trader
 
         if isinstance(trader, MarketMaker):
-
             cancelled = self.exchange.cancel_trader_orders(trader.trader_id)
 
             for order in cancelled:
-
                 if order.side == Side.BUY:
-                    trader.money += (
-                        order.price *
-                        order.remaining_quantity
-                    )
+                    trader.money += (order.price * order.remaining_quantity)
                 else:
-                    trader.shares += order.remaining_quantity
+                    trader.shares += (order.remaining_quantity)
 
         market_state = self.build_market_state()
 
         actions = trader.decide_action(market_state)
 
         if actions is not None:
-
             if not isinstance(actions, list):
                 actions = [actions]
 
@@ -152,9 +165,7 @@ class Simulation:
         wait = max(1, int(random.expovariate(1 / trader.average_wait)))
 
         heapq.heappush(
-            self.event_queue,
-            Event(self.current_tick + wait, next(self.event_counter), trader))
-
+            self.event_queue, Event(self.current_tick + wait, next(self.event_counter), trader))
 
         expired = self.exchange.cancel_expired_orders(self.current_tick)
 
@@ -164,27 +175,9 @@ class Simulation:
             if order.side == Side.BUY:
                 trader.money += (order.price * order.remaining_quantity)
             else:
-                trader.shares += order.remaining_quantity
-
-        drift = 0.00005
-        dt = self.current_tick - self.previous_tick
-
-        self.previous_tick = self.current_tick
-
-        noise = random.gauss(0, 0.02 * (dt ** 0.5))
-
-        self.fundamental_price += drift * dt + noise
+                trader.shares += (order.remaining_quantity)
 
     def run(self):
-
-        # plt.ion()
-
-        # fig, ax = plt.subplots()
-
-        # line, = ax.plot([], [])
-
-        # ax.set_title("Mid Price")
-
         self.initialize_events()
 
         while self.event_queue:
@@ -198,44 +191,34 @@ class Simulation:
 
             market_state = self.build_market_state()
 
-            if (
-                market_state.best_bid is not None
-                and
-                market_state.best_ask is not None
-            ):
-                mid = (
-                    market_state.best_bid
-                    +
-                    market_state.best_ask
-                ) / 2
+            if (market_state.best_bid is not None and market_state.best_ask is not None):
+                mid = (market_state.best_bid + market_state.best_ask) / 2
             else:
                 mid = None
 
-            self.bid_data.append(
-                market_state.best_bid
-            )
+            self.bid_data.append(market_state.best_bid)
 
-            self.ask_data.append(
-                market_state.best_ask
-            )
+            self.ask_data.append(market_state.best_ask)
 
             self.mid_data.append(mid)
 
-            self.spread_data.append(
-                market_state.spread
-            )
+            self.spread_data.append(market_state.spread)
 
-            self.fundamental_price_data.append(
-                market_state.fundamental_price
-            )
+            self.fundamental_price_data.append(market_state.fundamental_price)
 
-            self.fundamental_ticks.append(
-                self.current_tick
-            )
+            self.fundamental_ticks.append(self.current_tick)
 
-            self.volume_data.append(
-                market_state.volume
-            )
+            self.volume_data.append(market_state.volume)
+
+            self.revenue_data.append(self.company.revenue)
+
+            self.earnings_data.append(self.company.earnings)
+
+            self.book_value_data.append(self.company.book_value)
+
+            self.company_cash_data.append(self.company.money)
+
+            self.debt_data.append(self.company.debt)
 
             self.last_trade_price_data.append(market_state.last_trade_price)
 
@@ -266,6 +249,11 @@ class Simulation:
             self.volume_data,
             self.last_trade_price_data,
             self.fundamental_ticks,
+            self.revenue_data,
+            self.earnings_data,
+            self.book_value_data,
+            self.company_cash_data,
+            self.debt_data
         )
 
     def reset(self):

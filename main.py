@@ -5,6 +5,9 @@ from traders.random_trader import RandomTrader
 from traders.market_maker import MarketMaker
 from traders.fair_value_trader import FairValueTrader
 from traders.momentum_trader import MomentumTrader
+from traders.persistent_trader import PersistentTrader
+
+from company.company import Company
 
 import random
 
@@ -18,6 +21,8 @@ from collections import defaultdict
 exchange = Exchange()
 
 traders = []
+
+company = Company("ABC Incorporated", "Technology", 10000000, 2000000, 1000000, 3600000, 8000000, 1000000, 0.5)
 
 names_1 = [
     "James", "Michael", "William", "David", "John",
@@ -55,29 +60,34 @@ names_3 = [
 money = [1000, 2000, 5000, 8000, 10000, 20000, 50000]
 
 for _ in range(5):
-    traders.append(MarketMaker("MarketMaker", 250000, 2500, 100))
+    traders.append(MarketMaker("MarketMaker", 250000, 50000, 100))
 
 for _ in range(60):
     cash = random.choice(money)
 
-    traders.append(RandomTrader(names_1[_], cash, cash // 100, 0)) 
+    traders.append(RandomTrader(names_1[_], cash, 0, 0)) 
 
 for _ in range(20):
     cash = random.choice(money)
 
-    traders.append(FairValueTrader(names_2[_], cash, cash // 100, 0))
+    traders.append(FairValueTrader(names_2[_], cash, 0, 0))
 
 for _ in range(15):
     cash = random.choice(money)
 
-    traders.append(MomentumTrader(names_3[_], cash, cash // 100, 0))
+    traders.append(MomentumTrader(names_3[_], cash, 0, 0))
+
+for _ in range(10):
+    cash = random.choice(money)
+
+    traders.append(PersistentTrader(names_1[_], cash, 0, 0))
 
 
-simulation = Simulation(exchange, traders, 117000)
-# simulation = Simulation(exchange, traders, 468000)
-# simulation = Simulation(exchange, traders, 5616000)
+# simulation = Simulation(exchange, traders, 117000, company)
+simulation = Simulation(exchange, traders, 468000, company)
+# simulation = Simulation(exchange, traders, 5896800, company)
 
-bid_data, ask_data, mid_data, fundamental_price, spread, volume, last_trade_price, fundamental_ticks = simulation.run()
+bid_data, ask_data, mid_data, fundamental_price, spread, volume, last_trade_price, fundamental_ticks, revenue, earnings, book_value, company_cash, debt = simulation.run()
 
 trade_counts = {}
 
@@ -107,6 +117,8 @@ for pair, count in sorted(pairs.items(), key=lambda x: x[1], reverse=True):
 trade_ticks = [trade.tick for trade in exchange.trade_history]
 trade_prices = [trade.price for trade in exchange.trade_history]
 
+print("Trades:", len(exchange.trade_history))
+print("Last price:", exchange.get_last_trade_price())
 
 event_ticks = range(len(fundamental_price))
 
@@ -140,6 +152,3 @@ plt.legend()
 
 plt.tight_layout()
 plt.show()
-
-print("Trades:", len(exchange.trade_history))
-print("Last price:", exchange.get_last_trade_price())

@@ -52,7 +52,7 @@ class RandomTrader:
 
             return Action(Side.BUY, market_state.best_ask, quantity, OrderType.MARKET)
         elif roll < 0.10:
-            max_quantity = min(self.shares, 5)
+            max_quantity = int(min(self.shares, 5))
 
             if max_quantity <= 0:
                 return None
