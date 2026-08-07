@@ -1,4 +1,6 @@
 import random
+from company.sentiment import Sentiment
+
 
 class Company:
     def __init__(self, name, industry, money, debt, earnings, revenue, book_value, total_shares, dividend):
@@ -38,6 +40,8 @@ class Company:
         self.market_price = None
 
         self.update_fundamental_value()
+
+        self.sentiment = Sentiment()
 
     def update_fundamental_value(self):
         self.earnings_per_share = (self.earnings / max(self.shares_outstanding, 1))
@@ -96,3 +100,29 @@ class Company:
         self.price_to_earnings = (market_price / max(eps, 0.000001))
 
         self.price_to_book = (market_price / max(bvps, 0.000001))
+
+    def __str__(self):
+        return (
+            f"Order: "
+            f"{self.name}, "
+            f"{self.money}, "
+            f"{self.debt}, "
+            f"{self.revenue}, "
+            f"{self.earnings}, "
+            f"{self.book_value},"
+            f"{self.fundamental_value},"
+            f"{self.market_price}"
+        )
+    
+    def __repr__(self):
+        return (
+            f"Order: "
+            f"{self.name}, "
+            f"{self.money}, "
+            f"{self.debt}, "
+            f"{self.revenue}, "
+            f"{self.earnings}, "
+            f"{self.book_value},"
+            f"{self.fundamental_value},"
+            f"{self.market_price}"
+        )

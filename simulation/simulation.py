@@ -67,7 +67,8 @@ class Simulation:
             recent_prices=self.exchange.recent_prices,
             current_tick=self.current_tick,
             fundamental_price=self.company.fundamental_value,
-            volume=self.exchange.current_volume
+            volume=self.exchange.current_volume, 
+            company=self.company
         )
 
     def process_trade(self, trade):
@@ -123,6 +124,8 @@ class Simulation:
     def initialize_events(self):
         self.event_queue.clear()
         self.event_counter = count()
+
+        self.company.sentiment.set(0.0)
 
         for trader in self.traders:
             first_tick = random.randint(0, 5)
@@ -180,6 +183,7 @@ class Simulation:
     def run(self):
         self.initialize_events()
 
+
         while self.event_queue:
 
             event = heapq.heappop(self.event_queue)
@@ -189,12 +193,15 @@ class Simulation:
 
             self.process_event(event)
 
+            self.company.sentiment.update(random.randrange(-0.1, 0.1))
+
             market_state = self.build_market_state()
 
             if (market_state.best_bid is not None and market_state.best_ask is not None):
                 mid = (market_state.best_bid + market_state.best_ask) / 2
             else:
                 mid = None
+                
 
             self.bid_data.append(market_state.best_bid)
 

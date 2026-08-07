@@ -83,11 +83,13 @@ for _ in range(10):
     traders.append(PersistentTrader(names_1[_], cash, 0, 0))
 
 
-# simulation = Simulation(exchange, traders, 117000, company)
-simulation = Simulation(exchange, traders, 468000, company)
+simulation = Simulation(exchange, traders, 117000, company)
+# simulation = Simulation(exchange, traders, 468000, company)
 # simulation = Simulation(exchange, traders, 5896800, company)
 
 bid_data, ask_data, mid_data, fundamental_price, spread, volume, last_trade_price, fundamental_ticks, revenue, earnings, book_value, company_cash, debt = simulation.run()
+
+# print(company)
 
 trade_counts = {}
 
@@ -122,7 +124,7 @@ print("Last price:", exchange.get_last_trade_price())
 
 event_ticks = range(len(fundamental_price))
 
-STEP = max(1, len(trade_ticks) // 11.7)
+# STEP = max(1, len(trade_ticks) // 11.7)
 
 plt.figure(figsize=(15, 7))
 
