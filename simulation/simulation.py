@@ -5,6 +5,7 @@ from traders.market_maker import MarketMaker
 from traders.momentum_trader import MomentumTrader
 from traders.fair_value_trader import FairValueTrader
 from traders.persistent_trader import PersistentTrader
+from traders.sentiment_trader import SentimentTrader
 
 from exchange.order import Order
 from exchange.enums import Side
@@ -21,7 +22,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class Simulation:
-    def __init__(self, exchange: Exchange, traders: list[RandomTrader | MarketMaker | FairValueTrader | MomentumTrader | PersistentTrader], ticks, company: Company):
+    def __init__(self, exchange: Exchange, traders: list[RandomTrader | MarketMaker | FairValueTrader | MomentumTrader | PersistentTrader | SentimentTrader], ticks, company: Company):
         self.exchange = exchange
 
         self.traders = traders
@@ -57,6 +58,9 @@ class Simulation:
 
         self.company_update_interval = 23400
         self.next_company_update = self.company_update_interval
+
+        self.sentiment_update_interval = 60
+        self.next_sentiment_update = self.sentiment_update_interval
         
     def build_market_state(self):
         return MarketState(
@@ -138,10 +142,14 @@ class Simulation:
         self.current_tick = event.tick
 
         while self.current_tick >= self.next_company_update:
-
             self.company.update()
 
             self.next_company_update += self.company_update_interval
+
+        while self.current_tick >= self.next_sentiment_update:
+            self.company.sentiment.update()
+
+            self.next_sentiment_update += self.sentiment_update_interval
 
         trader = event.trader
 
@@ -192,8 +200,6 @@ class Simulation:
                 break
 
             self.process_event(event)
-
-            self.company.sentiment.update(random.randrange(-0.1, 0.1))
 
             market_state = self.build_market_state()
 

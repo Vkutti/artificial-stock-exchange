@@ -6,6 +6,9 @@ from traders.market_maker import MarketMaker
 from traders.fair_value_trader import FairValueTrader
 from traders.momentum_trader import MomentumTrader
 from traders.persistent_trader import PersistentTrader
+from traders.sentiment_trader import SentimentTrader
+
+from exchange.enums import Side
 
 from company.company import Company
 
@@ -36,7 +39,31 @@ names_1 = [
     "Hudson", "Jasper", "Kai", "Landon", "Liam",
     "Mason", "Nathaniel", "Oliver", "Parker", "Preston",
     "Reid", "Rowan", "Silas", "Theo", "Tristan",
-    "Wesley", "Wyatt", "Zane", "Kieran", "Emmett"
+    "Wesley", "Wyatt", "Zane", "Kieran", "Emmett", 
+    "Austin", "Dylan", "Hunter", "Jordan", "Ethan",
+    "Logan", "Noah", "Caleb", "Luke", "Connor",
+    "Owen", "Eli", "Isaac", "Gabriel", "Julian",
+    "Miles", "Dominic", "Vincent", "Victor", "Oscar",
+    "Leon", "Joel", "Xavier", "Cole", "Blake",
+    "Spencer", "Gavin", "Grant", "Trevor", "Max", 
+    "James", "Michael", "William", "David", "John",
+    "Robert", "Joseph", "Thomas", "Charles", "Daniel",
+    "Matthew", "Anthony", "Mark", "Donald", "Steven",
+    "Paul", "Andrew", "Joshua", "Kenneth", "Kevin",
+    "Brian", "George", "Edward", "Ronald", "Timothy",
+    "Jason", "Jeffrey", "Ryan", "Jacob", "Nicholas", 
+    "Aiden", "Asher", "Cameron", "Cooper", "Damian",
+    "Evan", "Felix", "Finn", "Graham", "Harrison",
+    "Hudson", "Jasper", "Kai", "Landon", "Liam",
+    "Mason", "Nathaniel", "Oliver", "Parker", "Preston",
+    "Reid", "Rowan", "Silas", "Theo", "Tristan",
+    "Wesley", "Wyatt", "Zane", "Kieran", "Emmett", 
+    "Austin", "Dylan", "Hunter", "Jordan", "Ethan",
+    "Logan", "Noah", "Caleb", "Luke", "Connor",
+    "Owen", "Eli", "Isaac", "Gabriel", "Julian",
+    "Miles", "Dominic", "Vincent", "Victor", "Oscar",
+    "Leon", "Joel", "Xavier", "Cole", "Blake",
+    "Spencer", "Gavin", "Grant", "Trevor", "Max", 
 ]
 
 names_2 = [
@@ -45,7 +72,25 @@ names_2 = [
     "Tyler", "Zachary", "Eric", "Brandon", "Jonathan",
     "Scott", "Gregory", "Frank", "Raymond", "Jerry",
     "Dennis", "Walter", "Henry", "Douglas", "Peter",
-    "Harold", "Carl", "Arthur", "Lawrence", "Sean"
+    "Harold", "Carl", "Arthur", "Lawrence", "Sean", 
+    "James", "Michael", "William", "David", "John",
+    "Robert", "Joseph", "Thomas", "Charles", "Daniel",
+    "Matthew", "Anthony", "Mark", "Donald", "Steven",
+    "Paul", "Andrew", "Joshua", "Kenneth", "Kevin",
+    "Brian", "George", "Edward", "Ronald", "Timothy",
+    "Jason", "Jeffrey", "Ryan", "Jacob", "Nicholas", 
+    "Aiden", "Asher", "Cameron", "Cooper", "Damian",
+    "Evan", "Felix", "Finn", "Graham", "Harrison",
+    "Hudson", "Jasper", "Kai", "Landon", "Liam",
+    "Mason", "Nathaniel", "Oliver", "Parker", "Preston",
+    "Reid", "Rowan", "Silas", "Theo", "Tristan",
+    "Wesley", "Wyatt", "Zane", "Kieran", "Emmett", 
+    "Austin", "Dylan", "Hunter", "Jordan", "Ethan",
+    "Logan", "Noah", "Caleb", "Luke", "Connor",
+    "Owen", "Eli", "Isaac", "Gabriel", "Julian",
+    "Miles", "Dominic", "Vincent", "Victor", "Oscar",
+    "Leon", "Joel", "Xavier", "Cole", "Blake",
+    "Spencer", "Gavin", "Grant", "Trevor", "Max", 
 ]
 
 names_3 = [
@@ -54,12 +99,30 @@ names_3 = [
     "Owen", "Eli", "Isaac", "Gabriel", "Julian",
     "Miles", "Dominic", "Vincent", "Victor", "Oscar",
     "Leon", "Joel", "Xavier", "Cole", "Blake",
-    "Spencer", "Gavin", "Grant", "Trevor", "Max"
+    "Spencer", "Gavin", "Grant", "Trevor", "Max", 
+    "James", "Michael", "William", "David", "John",
+    "Robert", "Joseph", "Thomas", "Charles", "Daniel",
+    "Matthew", "Anthony", "Mark", "Donald", "Steven",
+    "Paul", "Andrew", "Joshua", "Kenneth", "Kevin",
+    "Brian", "George", "Edward", "Ronald", "Timothy",
+    "Jason", "Jeffrey", "Ryan", "Jacob", "Nicholas", 
+    "Aiden", "Asher", "Cameron", "Cooper", "Damian",
+    "Evan", "Felix", "Finn", "Graham", "Harrison",
+    "Hudson", "Jasper", "Kai", "Landon", "Liam",
+    "Mason", "Nathaniel", "Oliver", "Parker", "Preston",
+    "Reid", "Rowan", "Silas", "Theo", "Tristan",
+    "Wesley", "Wyatt", "Zane", "Kieran", "Emmett", 
+    "Austin", "Dylan", "Hunter", "Jordan", "Ethan",
+    "Logan", "Noah", "Caleb", "Luke", "Connor",
+    "Owen", "Eli", "Isaac", "Gabriel", "Julian",
+    "Miles", "Dominic", "Vincent", "Victor", "Oscar",
+    "Leon", "Joel", "Xavier", "Cole", "Blake",
+    "Spencer", "Gavin", "Grant", "Trevor", "Max", 
 ]
 
 money = [1000, 2000, 5000, 8000, 10000, 20000, 50000]
 
-for _ in range(5):
+for _ in range(10):
     traders.append(MarketMaker("MarketMaker", 250000, 50000, 100))
 
 for _ in range(60):
@@ -67,25 +130,43 @@ for _ in range(60):
 
     traders.append(RandomTrader(names_1[_], cash, 0, 0)) 
 
-for _ in range(20):
+for _ in range(50):
     cash = random.choice(money)
 
     traders.append(FairValueTrader(names_2[_], cash, 0, 0))
 
-for _ in range(15):
+for _ in range(40):
     cash = random.choice(money)
 
     traders.append(MomentumTrader(names_3[_], cash, 0, 0))
 
-for _ in range(10):
+for _ in range(30):
     cash = random.choice(money)
 
     traders.append(PersistentTrader(names_1[_], cash, 0, 0))
 
+for _ in range(30):
+    cash = random.choice(money)
 
-simulation = Simulation(exchange, traders, 117000, company)
-# simulation = Simulation(exchange, traders, 468000, company)
+    traders.append(SentimentTrader(names_2[_], cash, 0, 0))
+
+
+# simulation = Simulation(exchange, traders, 117000, company)
+simulation = Simulation(exchange, traders, 468000, company)
+# simulation = Simulation(exchange, traders, 1404000, company)
+# simulation = Simulation(exchange, traders, 2808000, company)
 # simulation = Simulation(exchange, traders, 5896800, company)
+
+# Store each trader's starting portfolio value
+initial_portfolio_values = {}
+
+initial_price = company.fundamental_value
+
+for trader in traders:
+    initial_portfolio_values[trader.trader_id] = (
+        trader.money +
+        trader.shares * initial_price
+    )
 
 bid_data, ask_data, mid_data, fundamental_price, spread, volume, last_trade_price, fundamental_ticks, revenue, earnings, book_value, company_cash, debt = simulation.run()
 
@@ -106,6 +187,66 @@ for trader in traders:
 
 pairs = defaultdict(int)
 
+final_price = exchange.get_last_trade_price()
+
+if final_price is None:
+    final_price = company.fundamental_value
+
+
+# Cancel outstanding orders so that reserved
+# cash/shares are returned to the trader.
+for trader in traders:
+
+    cancelled_orders = exchange.cancel_trader_orders(
+        trader.trader_id
+    )
+
+    for order in cancelled_orders:
+
+        if order.side == Side.BUY:
+            trader.money += (
+                order.price *
+                order.remaining_quantity
+            )
+
+        else:
+            trader.shares += order.remaining_quantity
+
+
+pnl_stats = []
+
+for trader in traders:
+    initial_value = initial_portfolio_values[
+        trader.trader_id
+    ]
+
+    final_value = (
+        trader.money +
+        trader.shares * final_price
+    )
+
+    pnl = final_value - initial_value
+
+    if initial_value > 0:
+        return_pct = (pnl / initial_value) * 100
+    else:
+        return_pct = 0
+
+    pnl_stats.append({
+        "name": trader.name,
+        "type": type(trader).__name__,
+        "initial_value": initial_value,
+        "final_value": final_value,
+        "pnl": pnl,
+        "return_pct": return_pct,
+        "cash": trader.money,
+        "shares": trader.shares,
+        "trades": trade_counts.get(
+            trader.trader_id,
+            0
+        )
+    })
+
 for trade in exchange.trade_history:
     buyer = type(simulation.trader_map[trade.buy_trader_id]).__name__
     seller = type(simulation.trader_map[trade.sell_trader_id]).__name__
@@ -121,6 +262,69 @@ trade_prices = [trade.price for trade in exchange.trade_history]
 
 print("Trades:", len(exchange.trade_history))
 print("Last price:", exchange.get_last_trade_price())
+
+print("\n========== TRADER P&L ==========")
+
+for stats in sorted(
+    pnl_stats,
+    key=lambda x: x["pnl"],
+    reverse=True
+):
+
+    print(
+        f"{stats['name']:15} "
+        f"{stats['type']:20} "
+        f"P&L: ${stats['pnl']:>10,.2f} "
+        f"Return: {stats['return_pct']:>7.2f}% "
+        f"Trades: {stats['trades']}"
+    )
+
+# ==========================================
+# P&L BY TRADER TYPE
+# ==========================================
+
+type_stats = defaultdict(list)
+
+for stats in pnl_stats:
+    type_stats[stats["type"]].append(stats)
+
+
+print("\n========== P&L BY STRATEGY ==========")
+
+for trader_type, stats_list in sorted(
+    type_stats.items()
+):
+
+    total_pnl = sum(
+        stats["pnl"]
+        for stats in stats_list
+    )
+
+    average_pnl = (
+        total_pnl /
+        len(stats_list)
+    )
+
+    average_return = (
+        sum(
+            stats["return_pct"]
+            for stats in stats_list
+        )
+        / len(stats_list)
+    )
+
+    total_trades = sum(
+        stats["trades"]
+        for stats in stats_list
+    )
+
+    print(
+        f"{trader_type:20} "
+        f"Traders: {len(stats_list):3} "
+        f"Avg P&L: ${average_pnl:>10,.2f} "
+        f"Avg Return: {average_return:>7.2f}% "
+        f"Trades: {total_trades:,}"
+    )
 
 event_ticks = range(len(fundamental_price))
 

@@ -14,7 +14,7 @@ class RandomTrader:
         self.shares = shares
         self.orders = orders
 
-        self.activity_rate = random.uniform(0.01, 0.02)
+        self.activity_rate = random.uniform(0.05, 0.15)
 
         self.order_ttl = random.randint(30, 300)
 
@@ -31,7 +31,7 @@ class RandomTrader:
         elif market_state.last_trade_price is not None:
             reference_price = (market_state.last_trade_price)
         else:
-            reference_price = 100
+            reference_price = 20
 
         reference_price += random.gauss(0, 1)
 

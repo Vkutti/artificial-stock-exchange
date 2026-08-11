@@ -17,7 +17,7 @@ class MomentumTrader:
         self.shares = shares
         self.orders = orders
 
-        self.activity_rate = random.uniform(0.02, 0.08)
+        self.activity_rate = random.uniform(0.05, 0.2)
 
         self.order_ttl = random.randint(30, 300)
 

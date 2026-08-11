@@ -37,7 +37,7 @@ class FairValueTrader:
         elif market_state.last_trade_price is not None:
             current_price = (market_state.last_trade_price)
         else:
-            current_price = 100
+            current_price = 20
 
         if current_price < fair_value - self.threshold:
             if market_state.best_ask is None:

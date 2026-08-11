@@ -14,21 +14,45 @@ class SentimentTrader:
             self.shares = shares
             self.orders = orders
 
-            self.activity_rate = random.uniform(0.05, 0.15)
+            self.activity_rate = random.uniform(0.05, 0.2)
 
             self.order_ttl = random.randint(30, 300)
 
-            self.average_wait = random.randint(10, 35)
+            self.average_wait = random.randint(5, 20)
 
     def decide_action(self, market_state: MarketState):
         if random.random() > self.activity_rate:
             return None
         
-        company_sentiment = market_state.company.sentiment
 
-        if company_sentiment < 0:
-            return
-        elif company_sentiment > 0:
-            return
+        short_term = market_state.company.sentiment.history[-5:]
+        long_term = market_state.company.sentiment.history[-50:]
+
+        short_avg = sum(short_term) / len(short_term)
+        long_avg = sum(long_term) / len(long_term)
+
+        signal = 0.7 * short_avg + 0.3 * long_avg
+
+        if len(market_state.company.sentiment.history) < 50:
+            signal = 0
+        
+        if (market_state.best_bid is not None and market_state.best_ask is not None):
+            current_price = (market_state.best_bid + market_state.best_ask) / 2
+        elif market_state.last_trade_price is not None:
+            current_price = (market_state.last_trade_price)
+        else:
+            current_price = 20
+
+        max_affordable = int((0.15 * self.money) // current_price)
+
+        if max_affordable <= 0:
+            return None
+
+        max_quantity = random.randint(1, max_affordable)
+
+        if signal < 0:
+            return Action(Side.SELL, current_price, max_quantity, OrderType.MARKET)
+        elif signal > 0:
+            return Action(Side.BUY, current_price, max_quantity, OrderType.MARKET)
         else:
             return None
