@@ -23,7 +23,7 @@ class SentimentTrader:
     def decide_action(self, market_state: MarketState):
         if random.random() > self.activity_rate:
             return None
-        
+    
 
         short_term = market_state.company.sentiment.history[-5:]
         long_term = market_state.company.sentiment.history[-50:]
@@ -43,7 +43,11 @@ class SentimentTrader:
         else:
             current_price = 20
 
-        max_affordable = int((0.15 * self.money) // current_price)
+
+        if (market_state.best_ask == None):
+            return None
+
+        max_affordable = int((random.uniform(0.2, 0.5) * self.money) // market_state.best_ask)
 
         if max_affordable <= 0:
             return None

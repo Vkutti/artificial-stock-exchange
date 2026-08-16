@@ -1,5 +1,6 @@
 import random
 from company.sentiment import Sentiment
+from company.company_event import CompanyEvent
 
 
 class Company:
@@ -53,6 +54,8 @@ class Company:
         self.fundamental_value = max(earnings_value, 0.01)
 
     def update(self):
+        self.money, self.debt, self.revenue = CompanyEvent(self.money, self.debt, self.revenue).event()
+
         revenue_growth = random.gauss(self.expected_revenue_growth, self.revenue_volatility)
 
         revenue_growth = max(-0.20, min(0.20, revenue_growth))

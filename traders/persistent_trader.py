@@ -14,7 +14,7 @@ class PersistentTrader:
             self.shares = shares
             self.orders = orders
 
-            self.activity_rate = random.uniform(0.05, 0.15)
+            self.activity_rate = random.uniform(0.005, 0.02)
 
             self.order_ttl = random.randint(30, 300)
 
@@ -30,13 +30,16 @@ class PersistentTrader:
             current_price = (market_state.last_trade_price)
         else:
             current_price = 20
+
+        if (market_state.best_ask == None):
+            return None
         
-        max_quantity = int((0.15 * self.money) // current_price)
+        quantity = int((self.money * random.uniform(0.2, 0.5)) // market_state.best_ask)
         
-        if max_quantity <= 0:
+        if quantity <= 0:
             return None
         
         if market_state.best_ask is None:
             return None
         
-        return Action(Side.BUY, market_state.best_ask, max_quantity, OrderType.LIMIT)
+        return Action(Side.BUY, market_state.best_ask, quantity, OrderType.LIMIT)

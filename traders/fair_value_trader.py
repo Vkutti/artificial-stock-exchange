@@ -15,7 +15,7 @@ class FairValueTrader:
         self.shares = shares
         self.orders = orders
 
-        self.activity_rate = random.uniform(0.01, 0.05)
+        self.activity_rate = random.uniform(0.05, 0.25)
 
         self.order_ttl = random.randint(30, 300)
 
@@ -39,23 +39,23 @@ class FairValueTrader:
         else:
             current_price = 20
 
-        if current_price < fair_value - self.threshold:
+        if current_price <= fair_value - self.threshold:
             if market_state.best_ask is None:
                 return None
 
-            quantity = self.money // market_state.best_ask
+            quantity = int((self.money * random.uniform(0.2, 0.5)) // current_price)
 
             if quantity <= 0:
                 return None
 
             return Action(Side.BUY, market_state.best_ask, quantity, OrderType.MARKET)
-        elif current_price > fair_value + self.threshold:
-            quantity = self.shares
+        elif current_price >= fair_value + self.threshold:
+            if market_state.best_bid is None:
+                return None
+            
+            quantity = int(self.shares * random.uniform(0.2, 0.5))
 
             if quantity <= 0:
-                return None
-
-            if market_state.best_bid is None:
                 return None
 
             return Action(Side.SELL, market_state.best_bid, quantity, OrderType.MARKET)

@@ -14,12 +14,12 @@ class RandomTrader:
         self.shares = shares
         self.orders = orders
 
-        self.activity_rate = random.uniform(0.05, 0.15)
+        self.activity_rate = random.uniform(0.01, 0.1)
 
         self.order_ttl = random.randint(30, 300)
 
         self.next_action_tick = 0
-        self.average_wait = random.randint(5, 45)
+        self.average_wait = random.randint(15, 45)
 
     def decide_action(self, market_state: MarketState):
         if random.random() > self.activity_rate:
@@ -33,54 +33,53 @@ class RandomTrader:
         else:
             reference_price = 20
 
-        reference_price += random.gauss(0, 1)
+        reference_price += random.gauss(-1, 1)
 
         reference_price = max(1, int(reference_price))
 
         roll = random.random()
 
+        if (market_state.best_ask == None):
+            return None
+
         if roll < 0.05:
             if market_state.best_ask is None:
                 return None
 
-            max_quantity = min(self.money // market_state.best_ask, 5)
+            quantity = int((self.money * random.uniform(0.2, 0.5)) // reference_price)
 
-            if max_quantity <= 0:
+            if quantity <= 0:
                 return None
 
-            quantity = random.randint(1, int(max_quantity))
+            quantity = random.randint(1, int(quantity))
 
             return Action(Side.BUY, market_state.best_ask, quantity, OrderType.MARKET)
         elif roll < 0.10:
-            max_quantity = int(min(self.shares, 5))
+            quantity = int(self.shares * random.uniform(0.2, 0.5))
 
-            if max_quantity <= 0:
+            if quantity <= 0:
                 return None
 
-            quantity = random.randint(1, max_quantity)
-
-            price = (market_state.best_bid if market_state.best_bid else reference_price)
+            price = (market_state.best_bid if market_state.best_bid else market_state.best_ask)
 
             return Action(Side.SELL, price, quantity, OrderType.MARKET)
         elif roll < 0.55:
             price = max(1, reference_price - random.randint(1,3))
 
-            max_quantity = min(self.money // price, 10)
+            quantity = int((self.money * random.uniform(0.2, 0.5)) // market_state.best_ask)
 
-            if max_quantity <= 0:
+            if quantity <= 0:
                 return None
 
-            quantity = random.randint(1, int(max_quantity))
+            quantity = random.randint(1, int(quantity))
 
             return Action(Side.BUY, price, quantity, OrderType.LIMIT)
         else:
-            max_quantity = min(self.shares, 10)
-
-            if max_quantity <= 0:
-                return None
-
             price = (reference_price + random.randint(1,3))
 
-            quantity = random.randint(1, int(max_quantity))
+            quantity = int(self.shares * random.uniform(0.2, 0.5))
+
+            if quantity <= 0:
+                return None
 
             return Action(Side.SELL, price, quantity, OrderType.LIMIT)

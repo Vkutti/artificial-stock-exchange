@@ -36,37 +36,38 @@ class MomentumTrader:
         elif market_state.last_trade_price is not None:
             current_price = market_state.last_trade_price
         else:
-            return None
+            current_price = 20
         
         if len(market_state.recent_prices) < 20:
             return None
 
+        if (market_state.best_ask == None):
+            return None   
+        
         moving_average = (sum(market_state.recent_prices[-20:]) / 20)
 
         signal = (current_price - moving_average)
 
-        if signal > self.threshold:
+        if signal >= self.threshold:
             if market_state.best_ask is None:
                 return None
 
-            max_quantity = self.money // market_state.best_ask
+            quantity = int((self.money * random.uniform(0.2, 0.5)) // market_state.best_ask)
 
-            if max_quantity <= 0:
+            if quantity <= 0:
                 return None
 
-            quantity = random.randint(1, int(max_quantity))
 
             return Action(Side.BUY, market_state.best_ask, quantity, OrderType.MARKET)
-        elif signal < -self.threshold:
+        elif signal <= -self.threshold:
             if market_state.best_bid is None:
                 return None
 
-            max_quantity = self.shares
+            quantity = int(self.shares * random.uniform(0.2, 0.5))
 
-            if max_quantity <= 0:
+            if quantity <= 0:
                 return None
 
-            quantity = random.randint(1, int(max_quantity))
 
             return Action(Side.SELL, market_state.best_bid, quantity, OrderType.MARKET)
 

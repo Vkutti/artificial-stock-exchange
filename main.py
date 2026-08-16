@@ -120,7 +120,7 @@ names_3 = [
     "Spencer", "Gavin", "Grant", "Trevor", "Max", 
 ]
 
-money = [1000, 2000, 5000, 8000, 10000, 20000, 50000]
+money = [1000, 2000, 5000, 8000, 10000, 20000, 50000, 100000]
 
 for _ in range(10):
     traders.append(MarketMaker("MarketMaker", 250000, 50000, 100))
@@ -151,8 +151,8 @@ for _ in range(30):
     traders.append(SentimentTrader(names_2[_], cash, 0, 0))
 
 
-# simulation = Simulation(exchange, traders, 117000, company)
-simulation = Simulation(exchange, traders, 468000, company)
+simulation = Simulation(exchange, traders, 117000, company)
+# simulation = Simulation(exchange, traders, 468000, company)
 # simulation = Simulation(exchange, traders, 1404000, company)
 # simulation = Simulation(exchange, traders, 2808000, company)
 # simulation = Simulation(exchange, traders, 5896800, company)
@@ -193,8 +193,6 @@ if final_price is None:
     final_price = company.fundamental_value
 
 
-# Cancel outstanding orders so that reserved
-# cash/shares are returned to the trader.
 for trader in traders:
 
     cancelled_orders = exchange.cancel_trader_orders(
@@ -279,9 +277,6 @@ for stats in sorted(
         f"Trades: {stats['trades']}"
     )
 
-# ==========================================
-# P&L BY TRADER TYPE
-# ==========================================
 
 type_stats = defaultdict(list)
 
