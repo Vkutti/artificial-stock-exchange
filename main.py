@@ -20,7 +20,6 @@ import pandas as pd
 import mplfinance as mpf
 from collections import defaultdict
 
-
 exchange = Exchange()
 
 traders = []
@@ -157,16 +156,12 @@ simulation = Simulation(exchange, traders, 117000, company)
 # simulation = Simulation(exchange, traders, 2808000, company)
 # simulation = Simulation(exchange, traders, 5896800, company)
 
-# Store each trader's starting portfolio value
 initial_portfolio_values = {}
 
 initial_price = company.fundamental_value
 
 for trader in traders:
-    initial_portfolio_values[trader.trader_id] = (
-        trader.money +
-        trader.shares * initial_price
-    )
+    initial_portfolio_values[trader.trader_id] = (trader.money + trader.shares * initial_price)
 
 bid_data, ask_data, mid_data, fundamental_price, spread, volume, last_trade_price, fundamental_ticks, revenue, earnings, book_value, company_cash, debt = simulation.run()
 

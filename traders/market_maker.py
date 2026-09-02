@@ -71,16 +71,17 @@ class MarketMaker:
                 0.2 * market_mid
             )
 
-        prices = market_state.recent_prices[-50:]
+        prices = np.array(market_state.recent_prices[-50:])
 
         if len(prices) > 5:
-            volatility = np.std(prices)
+            returns = np.diff(prices) / prices[:-1]
+            volatility = np.std(returns)
         else:
             volatility = 0
 
         spread = max(
             self.base_spread,
-            self.base_spread + volatility
+            self.base_spread + volatility * fair
         )
 
         inventory_error = (
@@ -127,22 +128,8 @@ class MarketMaker:
 
         actions = []
 
-        actions.append(
-            Action(
-                Side.BUY,
-                bid,
-                bid_size,
-                OrderType.LIMIT
-            )
-        )
+        actions.append(Action(Side.BUY, bid, bid_size, OrderType.LIMIT))
 
-        actions.append(
-            Action(
-                Side.SELL,
-                ask,
-                ask_size,
-                OrderType.LIMIT
-            )
-        )
+        actions.append(Action(Side.SELL, ask, ask_size, OrderType.LIMIT))
 
         return actions

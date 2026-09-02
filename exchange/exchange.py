@@ -116,11 +116,20 @@ class Exchange:
 
             resting_order = price_level[0]
 
+            if resting_order.trader_id == order.trader_id:
+                price_level.pop(0)
+                if len(price_level) == 0:
+                    del self.order_book[opposite_side][best_price]
+                continue
+
+
             trade_quantity = min(order.remaining_quantity, resting_order.remaining_quantity)
 
             order.remaining_quantity -= trade_quantity
 
             resting_order.remaining_quantity -= trade_quantity
+
+            
 
             trade = self.create_trade(order, resting_order, best_price, trade_quantity, current_tick)
 

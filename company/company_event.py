@@ -13,8 +13,10 @@ class CompanyEvent:
         prob = random.random()
 
         if 0 < prob < 0.1:
+            self.money *= self.money_effect
             return self.money, self.debt, self.revenue
         elif 0.11 < prob < 0.2:
+            self.debt *= self.debt_effect
             return self.money, self.debt, self.revenue
         elif 0.21 < prob < 0.3:
             self.revenue *= self.revenue_effect
