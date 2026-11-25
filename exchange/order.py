@@ -21,6 +21,11 @@ class Order:
 
         self.placed_tick = None
         self.expiration_tick = None
+        self.symbol = None
+
+        # Exact collateral deducted at submit time (for precise refunds)
+        self.reserved_cash = 0.0
+        self.reserved_shares = 0
 
     def __str__(self):
         return (

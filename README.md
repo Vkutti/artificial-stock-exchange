@@ -2,166 +2,110 @@
 
 A Python-based limit order book simulator that models a financial market populated by multiple autonomous trading agents.
 
-The goal of this project is to build a realistic market simulation that can be used to study market microstructure, agent interactions, price discovery, liquidity, and algorithmic trading strategies.
-
-This is an active project and new trader types, market mechanics, and analytics are continuously being added.
+The goal of this project is to build a realistic market simulation that can be used to study market microstructure, agent interactions, price discovery, liquidity, and algorithmic trading strategies across trading days.
 
 ---
 
 ## Overview
 
-The simulator implements a central limit order book where independent trading agents continuously submit limit and market orders.
+Independent agents submit limit and market orders into a central limit order book. Price emerges from order flow—there is no scripted path. A listed `Company` supplies a PE-based fundamental; news, social, and economic events move sentiment (and, for news/macro, fundamentals) on a calibrated multi-day cadence.
 
-Each trader follows its own decision-making process while interacting with every other participant through the exchange.
+### Time model
 
-The market evolves entirely from these interactions—there is no scripted price movement.
+- **1 simulation tick = 1 trading minute**
+- **NYSE-style session:** 09:30–16:00 → **390 trading minutes per day**
+- Configure length with **`days=`** (e.g. `Simulation(..., days=5)`)
+- Plots use a **trading-days** axis
+- Optional `playback_delay_sec` for live demo pacing
 
-Current simulation includes:
+### Multi-symbol scaffold
 
-- Central Limit Order Book (CLOB)
-- Order matching engine
-- Market orders
-- Limit orders
-- Order expiration (TTL)
-- Trade history
-- Bid / Ask tracking
-- Mid-price tracking
-- Volume tracking
-- Fundamental value simulation
+The exchange hosts **per-symbol order books** (no cross-matching). `main.py` currently lists one name (`ABC`); adding more listings is the next step toward an NYSE-style multi-company market.
 
 ---
 
-## Current Status
+## Features
 
-This project is actively under development.
-
-Recent work includes:
-- Agent scheduling using stochastic waiting times
-- Inventory-aware market makers
-- Fundamental value process
-- Momentum and fair value traders
-
-Upcoming work focuses on improving market realism with additional trader behaviors, transaction costs, and richer market microstructure.
-
----
-
-## Trader Types
-
-### Market Maker
-
-Provides continuous liquidity by quoting both bid and ask prices.
-
-Features:
-
-- Inventory-aware quoting
-- Dynamic bid/ask adjustment
-- Inventory skew
-- Fixed spread management
-- Quote refresh intervals
+- Price-time priority CLOB (multi-symbol ready)
+- Market orders (sweep; remainder cancelled) and limit orders
+- TTL, cancel, self-trade prevention with exact collateral refunds
+- Transaction fees on fills
+- Company fundamentals with **dailyized** growth and mild PE/growth mean-reversion
+- Calibrated news / social / economic events (stable over weeks, not death spirals)
+- Heterogeneous agents: MM, noise, fair value, momentum, persistent, sentiment, news, index fund
+- Diagnostics: FV path, events/day, fees, cash/share conservation
 
 ---
 
-### Random (Noise) Trader
+## Running
 
-Represents uninformed market participants.
+```bash
+python main.py
+pytest
+```
 
-Features:
+In [`main.py`](main.py):
 
-- Random buy/sell decisions
-- Market and limit orders
-- Randomized order prices
-- Random order sizes
-- Individual trading frequency
+```python
+DAYS = 5      # also try 1, 21, 63
+```
 
----
-
-### Fair Value Trader
-
-Attempts to trade whenever the market price deviates from the simulated fundamental value.
-
-Features:
-
-- Individual valuation thresholds
-- Fundamental price comparison
-- Mean-reversion behavior
+Dependencies: see [`requirements.txt`](requirements.txt) (`numpy`, `matplotlib`, `pandas`, `mplfinance`, `pytest`).
 
 ---
 
-### Momentum Trader
+## Trader types
 
-Attempts to exploit short-term price trends.
-
-Features:
-
-- Recent price analysis
-- Momentum detection
-- Trend following
-- Market order execution
-
----
-
-## Exchange Features
-
-- Price-time priority matching
-- Partial fills
-- Order cancellation
-- Order expiration
-- Trade recording
-- Best bid / ask updates
-- Spread calculation
-- Volume tracking
+| Trader | Role |
+|--------|------|
+| Market Maker | Inventory-aware two-sided quotes (minute refresh) |
+| Random | Uninformed flow |
+| Fair Value | Trades gaps vs fundamental |
+| Momentum | Short-term trend following |
+| Persistent | Steady accumulation (lifts the offer) |
+| Sentiment | Smoothed sentiment + recent headlines |
+| News | One reaction per news/macro event |
+| Index Fund | Slow passive buy flow |
 
 ---
 
-## Market Simulation
+## Company & events
 
-Each trader acts independently according to an exponentially distributed waiting time.
+Each listing is a `Company` with a `symbol`, sector multipliers, and financials. Company updates run **once per trading day** with dailyized growth (not annual shocks every day).
 
-At every simulation step:
+| Source | Cadence (approx.) | Effect |
+|--------|-------------------|--------|
+| Sentiment | every ~15 minutes | Regime random walk |
+| News | ~1 per day | Mild fundamental + sentiment (±3% FV cap) |
+| Social | ~2 per day | Sentiment only |
+| Economic | ~weekly | Mild PE / growth |
+| Company update | once per day | Dailyized earnings path + mean-reversion |
 
-1. Traders whose waiting time has elapsed become active.
-2. Active traders observe the current market.
-3. Traders decide whether to submit one or more orders.
-4. Orders are matched through the exchange.
-5. Expired orders are removed.
-6. Market statistics are recorded.
-
----
-
-## Visualization
-
-The simulator records several market metrics during execution.
-
-Examples include:
-
-- Mid Price
-- Bid Price
-- Ask Price
-- Spread
-- Fundamental Price
-- Trading Volume
-
-These metrics can be plotted using Matplotlib.
+Event templates are **sign-balanced** so multi-week runs behave like a mild random walk around fundamental rather than a forced crash.
 
 ---
 
-## Technologies
+## Architecture (high level)
 
-- Python
-- Matplotlib
-- NumPy
+```
+traders/          agent strategies (decide_action → Action)
+exchange/         Exchange + per-symbol OrderBook, Order, Trade, MarketState
+company/          Company, Sector, Sentiment, news/social/economic events
+simulation/       SimClock, Simulation (event heap, days=, fees, metrics)
+main.py           population, DAYS, P&L, day-axis plot
+tests/            exchange, clock, symbols, accounting, events, traders
+```
+
+---
+
+## Current status / roadmap
+
+**Done:** calendar-minute engine, multi-day stability, fees + collateral correctness, news/index traders, multi-symbol books scaffold.
+
+**Next:** multiple simultaneous listings, correlated sector shocks, richer microstructure (auctions/halts), deeper day-level analytics.
 
 ---
 
 ## Purpose
 
-This project is intended as a learning and research platform for:
-
-- Quantitative Finance
-- Market Microstructure
-- Algorithmic Trading
-- Agent-Based Modeling
-- Simulation Systems
-- Exchange Design
-
-The long-term goal is to create a realistic experimental environment for developing and testing trading strategies.
+Learning and research platform for quantitative finance, market microstructure, algorithmic trading, agent-based modeling, and exchange design.

@@ -7,18 +7,18 @@ from exchange.enums import Side, OrderType
 
 class PersistentTrader:
     def __init__(self, name, money, shares, orders):
-            self.name = name
-            self.trader_id = uuid.uuid4()
+        self.name = name
+        self.trader_id = uuid.uuid4()
 
-            self.money = money
-            self.shares = shares
-            self.orders = orders
+        self.money = money
+        self.shares = shares
+        self.orders = orders
 
-            self.activity_rate = random.uniform(0.005, 0.02)
+        self.activity_rate = random.uniform(0.005, 0.02)
 
-            self.order_ttl = random.randint(30, 300)
-
-            self.average_wait = random.randint(5, 25)
+        self.order_ttl = random.randint(30, 120)
+        self.average_wait = random.randint(10, 40)
+        self.symbol = None
 
     def decide_action(self, market_state: MarketState):
         if random.random() > self.activity_rate:

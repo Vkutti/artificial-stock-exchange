@@ -1,237 +1,113 @@
-from itertools import count
 from exchange.order import Order
-from exchange.enums import Side, OrderStatus
-from exchange.trade import Trade
-import time
+from exchange.enums import OrderType
+from exchange.order_book import OrderBook
+
 
 class Exchange:
-    _id_generator = count(1)
+    """Multi-symbol exchange. Each listed symbol has its own order book."""
 
-    def __init__(self):
-
-        self.order_book = {
-            Side.BUY: {},
-            Side.SELL: {}
-        }
-
+    def __init__(self, fee_rate=0.0, default_symbol=None):
+        self.books = {}
+        self.next_order_id = 1
+        self.fee_rate = fee_rate
+        self.default_symbol = default_symbol
         self.trade_history = []
 
-        self.next_order_id = 1
+    def list_symbol(self, symbol):
+        if symbol not in self.books:
+            self.books[symbol] = OrderBook(symbol)
+            if self.default_symbol is None:
+                self.default_symbol = symbol
+        return self.books[symbol]
 
-        self.recent_prices = []
+    def _resolve_symbol(self, symbol=None, order=None):
+        if symbol is not None:
+            return symbol
+        if order is not None and getattr(order, "symbol", None):
+            return order.symbol
+        if self.default_symbol is not None:
+            return self.default_symbol
+        if len(self.books) == 1:
+            return next(iter(self.books))
+        if not self.books:
+            return "DEFAULT"
+        raise ValueError("symbol required when multiple books are listed")
 
-        self.current_volume = 0
+    def get_book(self, symbol=None):
+        symbol = self._resolve_symbol(symbol)
+        if symbol not in self.books:
+            self.list_symbol(symbol)
+        return self.books[symbol]
+
+    @property
+    def order_book(self):
+        """Backward-compatible view of the default symbol book."""
+        return self.get_book().order_book
+
+    @property
+    def recent_prices(self):
+        return self.get_book().recent_prices
+
+    @property
+    def current_volume(self):
+        return self.get_book().current_volume
 
     def validate_order(self, order: Order):
+        if order.type == OrderType.MARKET:
+            if order.quantity <= 0:
+                raise ValueError("Quantity Invalid")
+            return
         if order.price <= 0:
             raise ValueError("Price Invalid")
-
         if order.quantity <= 0:
             raise ValueError("Quantity Invalid")
 
-    def add_order_to_book(self, order: Order):
-        side_book = self.order_book[order.side]
+    def get_best_bid(self, symbol=None):
+        return self.get_book(symbol).get_best_bid()
 
-        if order.price not in side_book:
-            side_book[order.price] = []
+    def get_best_ask(self, symbol=None):
+        return self.get_book(symbol).get_best_ask()
 
-        side_book[order.price].append(order)
+    def get_last_trade_price(self, symbol=None):
+        return self.get_book(symbol).get_last_trade_price()
 
-    def get_best_price(self, order: Order):
-        if order.side == Side.BUY:
-            sell_book = self.order_book[Side.SELL]
+    def get_spread(self, symbol=None):
+        return self.get_book(symbol).get_spread()
 
-            if not sell_book:
-                return None
-
-            return min(sell_book.keys())
-        else:
-            buy_book = self.order_book[Side.BUY]
-
-            if not buy_book:
-                return None
-
-            return max(buy_book.keys())
-
-    def get_best_bid(self):
-        buy_book = self.order_book[Side.BUY]
-
-        if not buy_book:
-            return None
-
-        return max(buy_book.keys())
-
-    def get_best_ask(self):
-        sell_book = self.order_book[Side.SELL]
-
-        if not sell_book:
-            return None
-
-        return min(sell_book.keys())
-
-    def get_last_trade_price(self):
-        if not self.trade_history:
-            return None
-
-        return self.trade_history[-1].price
-
-    def get_spread(self):
-        bid = self.get_best_bid()
-        ask = self.get_best_ask()
-
-        if bid is None or ask is None:
-            return None
-
-        return ask - bid
-
-    def create_trade(self, order: Order, other_order: Order, price, quantity, current_tick):
-        if order.side == Side.BUY:
-            return Trade(order.trader_id, other_order.trader_id, price, quantity, time.time(), current_tick)
-        else:
-            return Trade(other_order.trader_id, order.trader_id, price, quantity, time.time(), current_tick)
-
-    def match_order(self, order: Order, current_tick):
-        trades = []
-
-        while order.remaining_quantity > 0:
-            best_price = self.get_best_price(order)
-
-            if best_price is None:
-                break
-
-            if order.side == Side.BUY:
-                if order.price < best_price:
-                    break
-            else:
-                if order.price > best_price:
-                    break
-
-            opposite_side = (Side.SELL if order.side == Side.BUY else Side.BUY)
-
-            price_level = (self.order_book[opposite_side][best_price])
-
-            if not price_level:
-                del self.order_book[opposite_side][best_price]
-                continue
-
-            resting_order = price_level[0]
-
-            if resting_order.trader_id == order.trader_id:
-                price_level.pop(0)
-                if len(price_level) == 0:
-                    del self.order_book[opposite_side][best_price]
-                continue
-
-
-            trade_quantity = min(order.remaining_quantity, resting_order.remaining_quantity)
-
-            order.remaining_quantity -= trade_quantity
-
-            resting_order.remaining_quantity -= trade_quantity
-
-            
-
-            trade = self.create_trade(order, resting_order, best_price, trade_quantity, current_tick)
-
-            self.trade_history.append(trade)
-
-            self.recent_prices.append(trade.price)
-
-            if len(self.recent_prices) > 1000:
-                self.recent_prices.pop(0)
-
-            self.current_volume += (trade_quantity)
-
-            trades.append(trade)
-
-            if resting_order.remaining_quantity == 0:
-                price_level.pop(0)
-
-                if len(price_level) == 0:
-                    del self.order_book[opposite_side][best_price]
-
-        if order.remaining_quantity == 0:
-            order.status = OrderStatus.FILLED
-        elif order.remaining_quantity < order.quantity:
-            order.status = OrderStatus.PARTIALLY_FILLED
-        else:
-            order.status = OrderStatus.NEW
-
-        return trades
-
-    def check_match(self, order: Order):
-        best_price = self.get_best_price(order)
-
-        if best_price is None:
-            return False
-
-        if order.side == Side.BUY:
-            return order.price >= best_price
-        else:
-            return order.price <= best_price
-
-    def submit_order(self, order: Order, current_tick):
+    def submit_order(self, order: Order, current_tick, symbol=None):
         self.validate_order(order)
+        symbol = self._resolve_symbol(symbol, order)
+        order.symbol = symbol
+        self.list_symbol(symbol)
 
         order.id = self.next_order_id
-
         self.next_order_id += 1
 
-        trades = []
+        book = self.books[symbol]
+        trades, cancelled = book.submit_order(order, current_tick)
+        self.trade_history.extend(trades)
+        return trades, cancelled
 
-        if self.check_match(order):
-            trades = self.match_order(order, current_tick)
+    def cancel_expired_orders(self, current_tick, symbol=None):
+        if symbol is not None:
+            return self.get_book(symbol).cancel_expired_orders(current_tick)
 
-        if order.remaining_quantity > 0:
-            self.add_order_to_book(order)
-
-        return trades
-
-    def cancel_expired_orders(self, current_tick):
         cancelled = []
-
-        for side in (Side.BUY, Side.SELL):
-            side_book = self.order_book[side]
-
-            for price in list(side_book.keys()):
-                active_orders = []
-
-                for order in side_book[price]:
-                    if (current_tick >= order.expiration_tick):
-                        order.status = (OrderStatus.CANCELLED)
-
-                        cancelled.append(order)
-                    else:
-                        active_orders.append(order)
-
-                if active_orders:
-                    side_book[price] = active_orders
-                else:
-                    del side_book[price]
-
-
-
+        for book in self.books.values():
+            cancelled.extend(book.cancel_expired_orders(current_tick))
         return cancelled
-    
-    def cancel_trader_orders(self, trader_id):
+
+    def cancel_trader_orders(self, trader_id, symbol=None):
+        if symbol is not None:
+            return self.get_book(symbol).cancel_trader_orders(trader_id)
+
         cancelled = []
-
-        for side in (Side.BUY, Side.SELL):
-            side_book = self.order_book[side]
-
-            for price in list(side_book.keys()):
-                remaining_orders = []
-
-                for order in side_book[price]:
-                    if order.trader_id == trader_id:
-                        order.status = OrderStatus.CANCELLED
-                        cancelled.append(order)
-                    else:
-                        remaining_orders.append(order)
-
-                if remaining_orders:
-                    side_book[price] = remaining_orders
-                else:
-                    del side_book[price]
-
+        for book in self.books.values():
+            cancelled.extend(book.cancel_trader_orders(trader_id))
         return cancelled
+
+    def clear(self):
+        for book in self.books.values():
+            book.clear()
+        self.trade_history = []
+        self.next_order_id = 1
