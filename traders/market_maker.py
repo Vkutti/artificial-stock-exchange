@@ -3,6 +3,7 @@ import uuid
 from exchange.market_state import MarketState
 from traders.action import Action
 from exchange.enums import Side, OrderType
+from exchange.ticks import DEFAULT_TICK_SIZE, round_to_tick, spread_from_bps
 
 import random
 import numpy as np
@@ -19,8 +20,12 @@ class MarketMaker:
 
         self.target_inventory = shares
 
-        self.base_spread = 2
-        self.inventory_factor = 5
+        # Relative spread in basis points of mid (~0.35%; keeps NBBO ~10–80 bps)
+        self.base_spread_bps = 35.0
+        self.max_spread_bps = 150.0
+        # Inventory skew in bps of mid per unit inventory ratio
+        self.inventory_skew_bps = 12.0
+        self.tick_size = DEFAULT_TICK_SIZE
 
         # Times are in trading minutes
         self.order_ttl = 5
@@ -32,7 +37,8 @@ class MarketMaker:
         self.min_size = 5
         self.max_size = 20
 
-        self.fair_value_offset = random.gauss(0, 2)
+        # Offset as fraction of fundamental (~±0.5%)
+        self.fair_value_offset_bps = random.gauss(0, 50)
 
     def should_refresh_quotes(self, tick):
         return tick - self.last_quote_tick >= self.quote_interval
@@ -52,35 +58,48 @@ class MarketMaker:
         elif market_state.last_trade_price is not None:
             market_mid = market_state.last_trade_price
 
-        fundamental = market_state.fundamental_price + self.fair_value_offset
+        fv = market_state.fundamental_price
+        fundamental = fv * (1.0 + self.fair_value_offset_bps / 10000.0)
 
         if market_mid is None:
             fair = fundamental
         else:
             fair = 0.8 * fundamental + 0.2 * market_mid
 
-        prices = np.array(market_state.recent_prices[-50:])
+        fair = max(self.tick_size, fair)
+
+        prices = np.array(market_state.recent_prices[-50:], dtype=float)
 
         if len(prices) > 5:
-            returns = np.diff(prices) / prices[:-1]
-            volatility = np.std(returns)
+            returns = np.diff(prices) / np.maximum(prices[:-1], 1e-9)
+            volatility = float(np.std(returns))
         else:
-            volatility = 0
+            volatility = 0.0
 
-        spread = max(
-            self.base_spread,
-            self.base_spread + volatility * fair * 1.5,
+        # Widen with realized vol; keep within max_spread_bps
+        vol_bps = min(self.max_spread_bps, volatility * 10000.0 * 0.5)
+        spread_bps = min(self.max_spread_bps, max(10.0, self.base_spread_bps + vol_bps))
+        # At least enough ticks to realize ~10 bps at current fair
+        min_ticks = max(2, int(np.ceil((fair * 0.0010) / self.tick_size)))
+        spread = spread_from_bps(
+            fair,
+            spread_bps,
+            tick_size=self.tick_size,
+            min_ticks=min_ticks,
+            max_bps=self.max_spread_bps,
         )
 
         inventory_error = self.shares - self.target_inventory
         inventory_ratio = inventory_error / max(self.target_inventory, 1)
-        skew = inventory_ratio * self.inventory_factor
+        skew = fair * (inventory_ratio * self.inventory_skew_bps / 10000.0)
 
         bid = fair - spread / 2 - skew
         ask = fair + spread / 2 - skew
 
-        bid = max(1, round(bid))
-        ask = max(bid + 1, round(ask))
+        bid = round_to_tick(max(self.tick_size, bid), self.tick_size)
+        ask = round_to_tick(max(bid + self.tick_size, ask), self.tick_size)
+        if ask <= bid:
+            ask = round_to_tick(bid + self.tick_size, self.tick_size)
 
         base = random.randint(self.min_size, self.max_size)
         bid_size = base

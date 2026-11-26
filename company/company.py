@@ -93,13 +93,13 @@ class Company:
         dividend_payout = self.earnings * self.dividend * 0.30
         self.money += retained_earnings - dividend_payout
 
-        interest_expense = self.debt * (0.05 / 252.0)
+        rate = getattr(self, "risk_free_rate", 0.05)
+        interest_expense = self.debt * (rate / 252.0)
         self.money -= interest_expense
 
         self.book_value += retained_earnings - interest_expense - dividend_payout
         self.book_value = max(self.book_value, 0)
 
-        # Pull PE / growth / vol gently back toward baselines (stops event death spirals)
         self.pe_ratio += 0.15 * (self.base_pe_ratio - self.pe_ratio)
         self.expected_revenue_growth += 0.15 * (
             self.base_expected_revenue_growth - self.expected_revenue_growth
@@ -108,6 +108,13 @@ class Company:
             self.base_revenue_volatility - self.revenue_volatility
         )
 
+        self.update_fundamental_value()
+
+    def apply_economy(self, economy):
+        self.risk_free_rate = economy.risk_free_rate
+        rate_gap = economy.risk_free_rate - economy.base_rate
+        target_pe = self.base_pe_ratio * max(0.7, 1.0 - 4.0 * rate_gap)
+        self.pe_ratio += 0.25 * (target_pe - self.pe_ratio)
         self.update_fundamental_value()
 
 

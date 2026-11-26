@@ -23,7 +23,8 @@ class IndexFundTrader:
         self.symbol = None
 
     def decide_action(self, market_state: MarketState):
-        if random.random() > self.activity_rate:
+        flow = getattr(market_state, "flow_multiplier", 1.0)
+        if random.random() > self.activity_rate * flow:
             return None
 
         if market_state.best_ask is None:
@@ -36,7 +37,7 @@ class IndexFundTrader:
         else:
             current_price = market_state.best_ask
 
-        fraction = random.uniform(0.02, 0.05)
+        fraction = random.uniform(0.02, 0.05) * max(0.5, flow)
         quantity = int((fraction * self.money) // current_price)
         if quantity <= 0:
             return None

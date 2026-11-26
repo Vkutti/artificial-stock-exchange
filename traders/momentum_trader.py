@@ -20,7 +20,8 @@ class MomentumTrader:
         self.activity_rate = random.uniform(0.05, 0.2)
 
         self.order_ttl = random.randint(30, 120)
-        self.threshold = random.uniform(1, 3)
+        # Signal threshold in bps of price vs 20-bar MA
+        self.threshold_bps = random.uniform(30, 100)
         self.next_action_tick = 0
         self.average_wait = random.randint(5, 20)
         self.symbol = None
@@ -35,15 +36,18 @@ class MomentumTrader:
         elif market_state.last_trade_price is not None:
             current_price = market_state.last_trade_price
         else:
-            current_price = 20
+            current_price = market_state.fundamental_price or 20
 
         if len(market_state.recent_prices) < 20:
             return None
 
         moving_average = sum(market_state.recent_prices[-20:]) / 20
-        signal = current_price - moving_average
+        if moving_average <= 0:
+            return None
 
-        if signal >= self.threshold:
+        signal_bps = (current_price - moving_average) / moving_average * 10000.0
+
+        if signal_bps >= self.threshold_bps:
             if market_state.best_ask is None:
                 return None
 
@@ -53,7 +57,7 @@ class MomentumTrader:
 
             return Action(Side.BUY, market_state.best_ask, quantity, OrderType.MARKET)
 
-        if signal <= -self.threshold:
+        if signal_bps <= -self.threshold_bps:
             if market_state.best_bid is None:
                 return None
 

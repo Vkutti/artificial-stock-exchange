@@ -37,6 +37,47 @@ def test_economic_templates_are_sign_balanced():
     assert bull == bear
 
 
+def test_social_templates_are_sign_balanced():
+    from company.social_event import SOCIAL_TEMPLATES
+
+    bull = sum(1 for t in SOCIAL_TEMPLATES if t[1] > 0)
+    bear = sum(1 for t in SOCIAL_TEMPLATES if t[2] < 0)
+    assert bull == bear
+
+
+def _mean_template_midpoint(templates):
+    return sum((lo + hi) / 2 for _, lo, hi, _ in templates) / len(templates)
+
+
+def test_template_mean_magnitudes_near_zero():
+    from company.social_event import SOCIAL_TEMPLATES
+
+    assert abs(_mean_template_midpoint(NEWS_TEMPLATES)) < 0.005
+    assert abs(_mean_template_midpoint(ECONOMIC_TEMPLATES)) < 0.005
+    assert abs(_mean_template_midpoint(SOCIAL_TEMPLATES)) < 0.005
+
+
+def test_earnings_affecting_news_sign_counts_match():
+    earnings_kinds = {
+        "earnings_beat",
+        "earnings_miss",
+        "guidance_raise",
+        "guidance_cut",
+    }
+    bull = sum(
+        1
+        for kind, lo, hi, _ in NEWS_TEMPLATES
+        if kind in earnings_kinds and lo > 0
+    )
+    bear = sum(
+        1
+        for kind, lo, hi, _ in NEWS_TEMPLATES
+        if kind in earnings_kinds and hi < 0
+    )
+    assert bull == bear
+    assert bull >= 2
+
+
 def test_news_event_moves_sentiment_and_fundamentals():
     company = Company("ABC", "Technology", 1e6, 1e5, 1e5, 5e5, 2e6, 1e6, 0.2)
     event = generate_news_event(10, company.name)
@@ -125,7 +166,9 @@ def test_21_day_event_path_not_systematically_crushed():
         for day in range(21):
             for _ in range(MINUTES_PER_DAY // 15):
                 company.sentiment.update()
-            apply_news_event(company, generate_news_event(day * MINUTES_PER_DAY, company.name))
+            # ~0.67 news/day cadence
+            if seed % 3 != day % 3:
+                apply_news_event(company, generate_news_event(day * MINUTES_PER_DAY, company.name))
             apply_social_event(company, generate_social_event(day * MINUTES_PER_DAY, company.name))
             if day % 5 == 0:
                 apply_economic_event(company, generate_economic_event(day * MINUTES_PER_DAY))
@@ -136,3 +179,43 @@ def test_21_day_event_path_not_systematically_crushed():
     frac_crushed = sum(1 for r in rets if r < -0.40) / len(rets)
     assert mean_ret > -0.20
     assert frac_crushed < 0.25
+
+
+def test_252_day_fv_monte_carlo_mean_return_band():
+    """Year-length fundamental paths should not systematically lose ~50%."""
+    rets = []
+    for seed in range(40):
+        random.seed(seed)
+        company = Company(
+            "ABC Incorporated",
+            "Technology",
+            10000000,
+            2000000,
+            1000000,
+            3600000,
+            8000000,
+            1000000,
+            0.5,
+            symbol="ABC",
+        )
+        start = company.fundamental_value
+        for day in range(252):
+            company.update()
+            # ~2/3 of days get news (matches rarer cadence)
+            if random.random() < 0.67:
+                apply_news_event(
+                    company, generate_news_event(day * MINUTES_PER_DAY, company.name)
+                )
+            if random.random() < 0.5:
+                apply_social_event(
+                    company, generate_social_event(day * MINUTES_PER_DAY, company.name)
+                )
+            if day % 5 == 0:
+                apply_economic_event(
+                    company, generate_economic_event(day * MINUTES_PER_DAY)
+                )
+        rets.append(company.fundamental_value / start - 1)
+
+    mean_ret = sum(rets) / len(rets)
+    assert -0.15 <= mean_ret <= 0.25
+    assert sum(1 for r in rets if r < -0.50) / len(rets) < 0.20

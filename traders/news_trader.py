@@ -7,8 +7,6 @@ from exchange.enums import Side, OrderType
 
 
 class NewsTrader:
-    """Aggressively trades on recent news and economic headlines."""
-
     def __init__(self, name, money, shares, orders):
         self.name = name
         self.trader_id = uuid.uuid4()
@@ -22,34 +20,39 @@ class NewsTrader:
         self.average_wait = random.randint(8, 25)
         self.symbol = None
 
-        self.reaction_window = 60  # minutes
-        self.min_magnitude = 0.05
+        self.reaction_window = 60
+        self.min_intensity = 0.4
         self.reacted_event_ids = set()
 
     def decide_action(self, market_state: MarketState):
-        if random.random() > self.activity_rate:
+        if random.random() > self.activity_rate * market_state.flow_multiplier:
             return None
 
-        relevant = [
-            event for event in market_state.recent_events
-            if event.source in ("news", "economic")
-            and market_state.current_tick - event.tick <= self.reaction_window
-            and abs(event.magnitude) >= self.min_magnitude
-            and event.event_id not in self.reacted_event_ids
-        ]
+        relevant = []
+        for event in market_state.recent_events:
+            if event.source not in ("news", "economic"):
+                continue
+            if market_state.current_tick - event.tick > self.reaction_window:
+                continue
+            if event.intensity < self.min_intensity:
+                continue
+            eid = (event.tick, event.kind, event.headline)
+            if eid in self.reacted_event_ids:
+                continue
+            relevant.append(event)
 
         if not relevant:
             return None
 
         event = max(
             relevant,
-            key=lambda e: abs(e.magnitude) / (1 + market_state.current_tick - e.tick),
+            key=lambda e: e.intensity / (1 + market_state.current_tick - e.tick),
         )
-        self.reacted_event_ids.add(event.event_id)
+        self.reacted_event_ids.add((event.tick, event.kind, event.headline))
 
-        intensity = min(0.7, abs(event.magnitude) * 2.0)
+        intensity = min(0.7, event.intensity)
 
-        if event.magnitude > 0:
+        if event.sign > 0:
             if market_state.best_ask is None:
                 return None
 

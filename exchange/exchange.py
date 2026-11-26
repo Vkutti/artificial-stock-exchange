@@ -1,17 +1,19 @@
 from exchange.order import Order
 from exchange.enums import OrderType
 from exchange.order_book import OrderBook
+from exchange.ticks import DEFAULT_TICK_SIZE, round_to_tick
 
 
 class Exchange:
     """Multi-symbol exchange. Each listed symbol has its own order book."""
 
-    def __init__(self, fee_rate=0.0, default_symbol=None):
+    def __init__(self, fee_rate=0.0, default_symbol=None, tick_size=DEFAULT_TICK_SIZE):
         self.books = {}
         self.next_order_id = 1
         self.fee_rate = fee_rate
         self.default_symbol = default_symbol
         self.trade_history = []
+        self.tick_size = tick_size
 
     def list_symbol(self, symbol):
         if symbol not in self.books:
@@ -62,6 +64,12 @@ class Exchange:
         if order.quantity <= 0:
             raise ValueError("Quantity Invalid")
 
+    def snap_limit_price(self, order: Order):
+        """Snap resting limit prices onto the exchange tick grid."""
+        if order.type == OrderType.MARKET:
+            return
+        order.price = round_to_tick(order.price, self.tick_size)
+
     def get_best_bid(self, symbol=None):
         return self.get_book(symbol).get_best_bid()
 
@@ -76,6 +84,7 @@ class Exchange:
 
     def submit_order(self, order: Order, current_tick, symbol=None):
         self.validate_order(order)
+        self.snap_limit_price(order)
         symbol = self._resolve_symbol(symbol, order)
         order.symbol = symbol
         self.list_symbol(symbol)

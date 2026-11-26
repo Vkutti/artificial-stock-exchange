@@ -94,6 +94,12 @@ class OrderBook:
 
     def _crosses(self, order, best_price):
         if order.type == OrderType.MARKET:
+            if order.side == Side.BUY:
+                if getattr(order, "reserved_cash", 0) > 0:
+                    return order.price >= best_price
+                return True
+            if getattr(order, "reserved_shares", 0) > 0:
+                return order.price <= best_price
             return True
         if order.side == Side.BUY:
             return order.price >= best_price

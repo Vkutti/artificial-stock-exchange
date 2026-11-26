@@ -22,13 +22,13 @@ class SentimentTrader:
         self.symbol = None
 
     def decide_action(self, market_state: MarketState):
-        if random.random() > self.activity_rate:
+        if random.random() > self.activity_rate * market_state.flow_multiplier:
             return None
 
-        history = market_state.company.sentiment.history
+        history = market_state.sentiment_history
 
         if len(history) < 50:
-            signal = 0.0
+            signal = market_state.sentiment_value * 0.5
         else:
             short_term = history[-5:]
             long_term = history[-50:]

@@ -1,111 +1,61 @@
 # Artificial Stock Exchange with Trading Agents
 
-A Python-based limit order book simulator that models a financial market populated by multiple autonomous trading agents.
+Python limit-order-book market with heterogeneous agents, multi-name listings, and a NYSE-style trading-minute clock.
 
-The goal of this project is to build a realistic market simulation that can be used to study market microstructure, agent interactions, price discovery, liquidity, and algorithmic trading strategies across trading days.
+## Time & session
 
----
+- 1 tick = 1 trading minute; 09:30–16:00 → 390 minutes/day
+- Configure with `DAYS` in `main.py` (`5`, `21`, `63`, `252`)
+- Open/close auction prints; continuous trading between
+- Per-symbol circuit breakers (~±7% vs prior close)
 
-## Overview
+## Market mechanics
 
-Independent agents submit limit and market orders into a central limit order book. Price emerges from order flow—there is no scripted path. A listed `Company` supplies a PE-based fundamental; news, social, and economic events move sentiment (and, for news/macro, fundamentals) on a calibrated multi-day cadence.
+- Price-time CLOB, LIMIT + MARKET (market buys capped by reserved `ask×1.05`)
+- `$0.01` tick grid; bps spreads on market makers
+- Fees, collateral reserve/refund, self-trade prevention
+- No negative cash on fills; `reset()` refunds resting collateral
 
-### Time model
+## Information model
 
-- **1 simulation tick = 1 trading minute**
-- **NYSE-style session:** 09:30–16:00 → **390 trading minutes per day**
-- Configure length with **`days=`** (e.g. `Simulation(..., days=5)`)
-- Plots use a **trading-days** axis
-- Optional `playback_delay_sec` for live demo pacing
+Agents see a **public** view only: BBO, tape copy, sentiment snapshot, symbol-filtered headlines (sign/intensity, not raw shock size), noisy private FV estimate (`fv_bias`). They do **not** receive the live `Company` object or true fundamental.
 
-### Multi-symbol scaffold
+## Return drivers
 
-The exchange hosts **per-symbol order books** (no cross-matching). `main.py` currently lists one name (`ABC`); adding more listings is the next step toward an NYSE-style multi-company market.
+| Driver | Implementation |
+|--------|----------------|
+| Order flow | CLOB matching across agent types |
+| Fundamentals | Dailyized PE×EPS path per company |
+| Macro / rates | Shared `Economy.risk_free_rate` → interest + PE |
+| Flow regimes | `Economy.flow_multiplier` scales participation |
+| News / social | Sign-balanced firm events (tagged by symbol) |
+| Sector | Init multipliers; macro hits all names |
 
----
+## Listings
 
-## Features
+`main.py` runs three names by default: **ABC** (Technology), **NBK** (Finance), **HLX** (Healthcare), each with dedicated MMs and flow traders.
 
-- Price-time priority CLOB (multi-symbol ready)
-- Market orders (sweep; remainder cancelled) and limit orders
-- TTL, cancel, self-trade prevention with exact collateral refunds
-- Transaction fees on fills
-- Company fundamentals with **dailyized** growth and mild PE/growth mean-reversion
-- Calibrated news / social / economic events (stable over weeks, not death spirals)
-- Heterogeneous agents: MM, noise, fair value, momentum, persistent, sentiment, news, index fund
-- Diagnostics: FV path, events/day, fees, cash/share conservation
-
----
-
-## Running
+## Run
 
 ```bash
 python main.py
 pytest
 ```
 
-In [`main.py`](main.py):
+Year gate: set `DAYS = 252`, then check printed sanity flags (FV return, vol, spread bps, conservation, auctions, no negative cash).
 
-```python
-DAYS = 5      # also try 1, 21, 63
-```
-
-Dependencies: see [`requirements.txt`](requirements.txt) (`numpy`, `matplotlib`, `pandas`, `mplfinance`, `pytest`).
-
----
-
-## Trader types
-
-| Trader | Role |
-|--------|------|
-| Market Maker | Inventory-aware two-sided quotes (minute refresh) |
-| Random | Uninformed flow |
-| Fair Value | Trades gaps vs fundamental |
-| Momentum | Short-term trend following |
-| Persistent | Steady accumulation (lifts the offer) |
-| Sentiment | Smoothed sentiment + recent headlines |
-| News | One reaction per news/macro event |
-| Index Fund | Slow passive buy flow |
-
----
-
-## Company & events
-
-Each listing is a `Company` with a `symbol`, sector multipliers, and financials. Company updates run **once per trading day** with dailyized growth (not annual shocks every day).
-
-| Source | Cadence (approx.) | Effect |
-|--------|-------------------|--------|
-| Sentiment | every ~15 minutes | Regime random walk |
-| News | ~1 per day | Mild fundamental + sentiment (±3% FV cap) |
-| Social | ~2 per day | Sentiment only |
-| Economic | ~weekly | Mild PE / growth |
-| Company update | once per day | Dailyized earnings path + mean-reversion |
-
-Event templates are **sign-balanced** so multi-week runs behave like a mild random walk around fundamental rather than a forced crash.
-
----
-
-## Architecture (high level)
+## Layout
 
 ```
-traders/          agent strategies (decide_action → Action)
-exchange/         Exchange + per-symbol OrderBook, Order, Trade, MarketState
-company/          Company, Sector, Sentiment, news/social/economic events
-simulation/       SimClock, Simulation (event heap, days=, fees, metrics)
-main.py           population, DAYS, P&L, day-axis plot
-tests/            exchange, clock, symbols, accounting, events, traders
+exchange/     OrderBook, ticks, MarketState / PublicHeadline
+company/      Company, Economy, sector, news/social/economic events
+traders/      MM, noise, FV, momentum, persistent, sentiment, news, index
+simulation/   SimClock, Simulation (events, auctions, halts)
+tests/        accounting, exchange, events, traders, phase2
 ```
 
----
+## Roadmap status
 
-## Current status / roadmap
+**Done:** Phase 1 realism (ticks/bps/events) + Phase 2 (integrity, observation contract, economy/flow, multi-name, auctions, breakers).
 
-**Done:** calendar-minute engine, multi-day stability, fees + collateral correctness, news/index traders, multi-symbol books scaffold.
-
-**Next:** multiple simultaneous listings, correlated sector shocks, richer microstructure (auctions/halts), deeper day-level analytics.
-
----
-
-## Purpose
-
-Learning and research platform for quantitative finance, market microstructure, algorithmic trading, agent-based modeling, and exchange design.
+**Later:** short selling, ex-div to holders, earnings calendar vs consensus, options, maker–taker fees.

@@ -18,8 +18,9 @@ class FairValueTrader:
         self.activity_rate = random.uniform(0.05, 0.25)
 
         self.order_ttl = random.randint(30, 120)
-        self.fair_value_offset = random.gauss(0, 5)
-        self.threshold = random.uniform(1, 3)
+        # Belief offset and entry gap in bps of fundamental
+        self.fair_value_offset_bps = random.gauss(0, 50)
+        self.threshold_bps = random.uniform(50, 150)
         self.next_action_tick = 0
         self.average_wait = random.randint(5, 20)
         self.symbol = None
@@ -27,17 +28,19 @@ class FairValueTrader:
     def decide_action(self, market_state: MarketState):
         if random.random() > self.activity_rate:
             return None
-        
-        fair_value = (market_state.fundamental_price + self.fair_value_offset)
 
-        if (market_state.best_bid is not None and market_state.best_ask is not None):
+        fv = market_state.fundamental_price or 20
+        fair_value = fv * (1.0 + self.fair_value_offset_bps / 10000.0)
+        threshold = abs(fv) * (self.threshold_bps / 10000.0)
+
+        if market_state.best_bid is not None and market_state.best_ask is not None:
             current_price = (market_state.best_bid + market_state.best_ask) / 2
         elif market_state.last_trade_price is not None:
-            current_price = (market_state.last_trade_price)
+            current_price = market_state.last_trade_price
         else:
-            current_price = 20
+            current_price = fv
 
-        if current_price <= fair_value - self.threshold:
+        if current_price <= fair_value - threshold:
             if market_state.best_ask is None:
                 return None
 
@@ -47,10 +50,11 @@ class FairValueTrader:
                 return None
 
             return Action(Side.BUY, market_state.best_ask, quantity, OrderType.MARKET)
-        elif current_price >= fair_value + self.threshold:
+
+        if current_price >= fair_value + threshold:
             if market_state.best_bid is None:
                 return None
-            
+
             quantity = int(self.shares * random.uniform(0.2, 0.5))
 
             if quantity <= 0:

@@ -112,3 +112,18 @@ def test_best_bid_ask_and_spread():
     assert exchange.get_best_bid() == 98
     assert exchange.get_best_ask() == 102
     assert exchange.get_spread() == 4
+
+
+def test_limit_price_snaps_to_tick():
+    from exchange.ticks import round_to_tick
+
+    assert round_to_tick(10.124) == 10.12
+    assert round_to_tick(10.126) == 10.13
+    assert round_to_tick(0.004) == 0.01
+
+    exchange = Exchange(tick_size=0.01)
+    order = _limit("b", Side.BUY, 24.126, 1)
+    exchange.submit_order(order, 0)
+
+    assert order.price == 24.13
+    assert exchange.get_best_bid() == 24.13

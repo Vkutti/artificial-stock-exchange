@@ -21,20 +21,13 @@ class PersistentTrader:
         self.symbol = None
 
     def decide_action(self, market_state: MarketState):
-        if random.random() > self.activity_rate:
+        if random.random() > self.activity_rate * getattr(market_state, "flow_multiplier", 1.0):
             return None
-        
-        if (market_state.best_bid is not None and market_state.best_ask is not None):
-            current_price = (market_state.best_bid + market_state.best_ask) / 2
-        elif market_state.last_trade_price is not None:
-            current_price = (market_state.last_trade_price)
-        else:
-            current_price = 20
 
-        if (market_state.best_ask == None):
+        if market_state.best_ask is None:
             return None
-        
-        quantity = int((self.money * random.uniform(0.2, 0.5)) // market_state.best_ask)
+
+        quantity = int((self.money * random.uniform(0.1, 0.25)) // market_state.best_ask)
         
         if quantity <= 0:
             return None

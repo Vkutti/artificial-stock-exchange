@@ -2,7 +2,7 @@ import random
 from company.news_event import MarketEvent
 
 
-# Balanced macro set (equal bull/bear count)
+# Balanced macro set with matched |lo|/|hi| ranges
 ECONOMIC_TEMPLATES = [
     ("rate_hike", -0.04, -0.02, "Interest rates rose, pressuring valuations"),
     ("rate_cut", 0.02, 0.04, "Interest rates fell, supporting valuations"),
@@ -35,7 +35,14 @@ def apply_economic_event(company, event: MarketEvent):
     company.sentiment.set(company.sentiment.value + event.magnitude * 0.3)
 
 
-def generate_economic_event(tick):
+def generate_economic_event(tick, symbol=None):
     kind, lo, hi, headline = random.choice(ECONOMIC_TEMPLATES)
     magnitude = random.uniform(lo, hi)
-    return MarketEvent(tick=tick, kind=kind, magnitude=magnitude, headline=headline, source="economic")
+    return MarketEvent(
+        tick=tick,
+        kind=kind,
+        magnitude=magnitude,
+        headline=headline,
+        source="economic",
+        symbol=symbol,
+    )
