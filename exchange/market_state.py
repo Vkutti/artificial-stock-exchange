@@ -1,7 +1,7 @@
 class PublicHeadline:
-    __slots__ = ("tick", "kind", "source", "headline", "symbol", "sign", "intensity")
+    __slots__ = ("tick", "kind", "source", "headline", "symbol", "sign", "intensity", "sector")
 
-    def __init__(self, tick, kind, source, headline, symbol, sign, intensity):
+    def __init__(self, tick, kind, source, headline, symbol, sign, intensity, sector=None):
         self.tick = tick
         self.kind = kind
         self.source = source
@@ -9,6 +9,7 @@ class PublicHeadline:
         self.symbol = symbol
         self.sign = sign
         self.intensity = intensity
+        self.sector = sector
 
     @property
     def magnitude(self):
@@ -38,6 +39,10 @@ class MarketState:
         session_phase="continuous",
         flow_multiplier=1.0,
         risk_free_rate=0.05,
+        bid_depth=None,
+        ask_depth=None,
+        liquidity_stress=1.0,
+        sector=None,
     ):
         self.best_bid = best_bid
         self.best_ask = best_ask
@@ -59,3 +64,7 @@ class MarketState:
         self.session_phase = session_phase
         self.flow_multiplier = flow_multiplier
         self.risk_free_rate = risk_free_rate
+        self.bid_depth = list(bid_depth) if bid_depth is not None else []
+        self.ask_depth = list(ask_depth) if ask_depth is not None else []
+        self.liquidity_stress = liquidity_stress
+        self.sector = sector

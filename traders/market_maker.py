@@ -76,10 +76,12 @@ class MarketMaker:
         else:
             volatility = 0.0
 
-        # Widen with realized vol; keep within max_spread_bps
+        stress = getattr(market_state, "liquidity_stress", 1.0) or 1.0
         vol_bps = min(self.max_spread_bps, volatility * 10000.0 * 0.5)
-        spread_bps = min(self.max_spread_bps, max(10.0, self.base_spread_bps + vol_bps))
-        # At least enough ticks to realize ~10 bps at current fair
+        spread_bps = min(
+            self.max_spread_bps,
+            max(10.0, self.base_spread_bps + vol_bps) * stress,
+        )
         min_ticks = max(2, int(np.ceil((fair * 0.0010) / self.tick_size)))
         spread = spread_from_bps(
             fair,
@@ -102,18 +104,16 @@ class MarketMaker:
             ask = round_to_tick(bid + self.tick_size, self.tick_size)
 
         base = random.randint(self.min_size, self.max_size)
-        bid_size = base
-        ask_size = base
+        size_scale = 1.0 / max(1.0, stress)
+        bid_size = max(1, int(base * size_scale))
+        ask_size = max(1, int(base * size_scale))
 
         if inventory_ratio > 0:
-            ask_size = int(base * 1.5)
-            bid_size = int(base * 0.5)
+            ask_size = max(1, int(ask_size * 1.5))
+            bid_size = max(1, int(bid_size * 0.5))
         elif inventory_ratio < 0:
-            bid_size = int(base * 1.5)
-            ask_size = int(base * 0.5)
-
-        bid_size = max(1, bid_size)
-        ask_size = max(1, ask_size)
+            bid_size = max(1, int(bid_size * 1.5))
+            ask_size = max(1, int(ask_size * 0.5))
 
         actions = []
 

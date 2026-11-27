@@ -1,0 +1,2788 @@
+/Users/venkatkutti/.matplotlib is not a writable directory
+Matplotlib created a temporary cache directory at /var/folders/k2/g4nb4y8s1x7bmdqcbryjv92h0000gn/T/matplotlib-pwdfan9z because there was an issue with the default path ({configdir}); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+Matplotlib is building the font cache; this may take a moment.
+
+--- seed 1 ---
+('MarketMaker', 'MarketMaker') 25015
+('MarketMaker', 'RandomTrader') 5843
+('FairValueTrader', 'MarketMaker') 2379
+('MarketMaker', 'MomentumTrader') 900
+('MarketMaker', 'MeanReversionTrader') 876
+('MarketMaker', 'PersistentTrader') 828
+('AttentionTrader', 'MarketMaker') 645
+('FairValueTrader', 'RandomTrader') 397
+('MarketMaker', 'SentimentTrader') 240
+('MeanReversionTrader', 'RandomTrader') 156
+('MarketMaker', 'NewsTrader') 131
+('AttentionTrader', 'RandomTrader') 130
+('MomentumTrader', 'RandomTrader') 99
+('RandomTrader', 'RandomTrader') 71
+('RandomTrader', 'SentimentTrader') 47
+('BreakoutTrader', 'MarketMaker') 33
+('FairValueTrader', 'PersistentTrader') 29
+('IndexFundTrader', 'MarketMaker') 21
+('NewsTrader', 'RandomTrader') 19
+('PersistentTrader', 'RandomTrader') 17
+('MeanReversionTrader', 'PersistentTrader') 8
+('IndexFundTrader', 'RandomTrader') 7
+('MomentumTrader', 'PersistentTrader') 7
+('AttentionTrader', 'PersistentTrader') 6
+('PersistentTrader', 'SentimentTrader') 5
+('BreakoutTrader', 'RandomTrader') 4
+('NewsTrader', 'PersistentTrader') 3
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           1
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 23.6144
+Last ABC:       23.35
+Trades:         37916
+Auctions:       301 (matched qty 1994)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 259, 'liquidity': 7, 'news': 70, 'economic': 3, 'sector': 4} (total 343)
+Rate:           4.72%
+Flow mult:      0.80
+Liq. stress:    1.00
+Total fees:     $7,447.91
+Initial MTM:    $14,922,941.80
+Final MTM:      $14,998,354.97
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->23.61 last=23.35 trades=5097
+NBK: FV 16.20->16.44 last=16.59 trades=4280
+HLX: FV 15.40->17.43 last=17.26 trades=6508
+VLT: FV 9.60->9.55 last=9.31 trades=6365
+ORB: FV 11.00->11.62 last=11.79 trades=5635
+FRG: FV 12.35->12.12 last=12.01 trades=4504
+NVA: FV 10.80->11.13 last=10.9 trades=5527
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -143.69 Avg Return:   -0.42% Trades: 781
+BreakoutTrader       Traders:  15 Avg P&L: $     41.43 Avg Return:    0.13% Trades: 37
+FairValueTrader      Traders:  36 Avg P&L: $    105.80 Avg Return:   -0.10% Trades: 2,805
+IndexFundTrader      Traders:  14 Avg P&L: $    160.20 Avg Return:    0.23% Trades: 28
+MarketMaker          Traders:  21 Avg P&L: $  3,450.17 Avg Return:    0.85% Trades: 61,926
+MeanReversionTrader  Traders:  18 Avg P&L: $     77.69 Avg Return:   -0.26% Trades: 1,040
+MomentumTrader       Traders:  24 Avg P&L: $   -159.46 Avg Return:   -2.84% Trades: 1,006
+NewsTrader           Traders:  18 Avg P&L: $    -68.86 Avg Return:    0.13% Trades: 153
+PersistentTrader     Traders:  18 Avg P&L: $     12.07 Avg Return:    0.60% Trades: 903
+RandomTrader         Traders:  48 Avg P&L: $     54.42 Avg Return:    0.23% Trades: 6,861
+SentimentTrader      Traders:  18 Avg P&L: $    -40.00 Avg Return:   -0.07% Trades: 292
+
+========== YEAR REALISM CHECK ==========
+Price annual return:     -1.26%
+FV annual return:        -1.61%
+Ann. daily vol:          24.46%
+Max drawdown:            -7.81%
+Avg spread (bps):         55.0
+NewsTrader fills:          153
+Trades / day:           1805.5
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+PASS  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 2 ---
+('MarketMaker', 'MarketMaker') 23931
+('MarketMaker', 'RandomTrader') 10151
+('FairValueTrader', 'MarketMaker') 2050
+('AttentionTrader', 'MarketMaker') 1119
+('MarketMaker', 'MeanReversionTrader') 970
+('MarketMaker', 'MomentumTrader') 822
+('FairValueTrader', 'RandomTrader') 558
+('MarketMaker', 'PersistentTrader') 526
+('MarketMaker', 'SentimentTrader') 394
+('AttentionTrader', 'RandomTrader') 252
+('MarketMaker', 'NewsTrader') 142
+('MeanReversionTrader', 'RandomTrader') 129
+('RandomTrader', 'SentimentTrader') 101
+('MomentumTrader', 'RandomTrader') 91
+('RandomTrader', 'RandomTrader') 84
+('IndexFundTrader', 'MarketMaker') 41
+('BreakoutTrader', 'MarketMaker') 34
+('NewsTrader', 'RandomTrader') 24
+('FairValueTrader', 'PersistentTrader') 22
+('PersistentTrader', 'RandomTrader') 13
+('IndexFundTrader', 'RandomTrader') 7
+('PersistentTrader', 'SentimentTrader') 4
+('AttentionTrader', 'PersistentTrader') 4
+('MeanReversionTrader', 'PersistentTrader') 3
+('BreakoutTrader', 'RandomTrader') 1
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           2
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 22.3177
+Last ABC:       22.29
+Trades:         41473
+Auctions:       301 (matched qty 2994)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 245, 'liquidity': 5, 'news': 70, 'sector': 3, 'economic': 3} (total 326)
+Rate:           5.00%
+Flow mult:      0.93
+Liq. stress:    1.00
+Total fees:     $9,789.48
+Initial MTM:    $15,520,262.00
+Final MTM:      $15,409,622.48
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->22.32 last=22.29 trades=6257
+NBK: FV 16.20->16.96 last=16.99 trades=6197
+HLX: FV 15.40->15.67 last=15.62 trades=5502
+VLT: FV 9.60->9.37 last=9.5 trades=5560
+ORB: FV 11.00->10.11 last=9.88 trades=6509
+FRG: FV 12.35->11.78 last=12.15 trades=5760
+NVA: FV 10.80->10.65 last=10.65 trades=5688
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -589.50 Avg Return:   -2.27% Trades: 1,375
+BreakoutTrader       Traders:  15 Avg P&L: $     -4.90 Avg Return:   -0.77% Trades: 35
+FairValueTrader      Traders:  36 Avg P&L: $   -219.40 Avg Return:   -0.97% Trades: 2,630
+IndexFundTrader      Traders:  14 Avg P&L: $    -61.54 Avg Return:   -0.29% Trades: 48
+MarketMaker          Traders:  21 Avg P&L: $ -3,113.25 Avg Return:   -0.68% Trades: 64,111
+MeanReversionTrader  Traders:  18 Avg P&L: $   -368.46 Avg Return:   -1.63% Trades: 1,102
+MomentumTrader       Traders:  24 Avg P&L: $   -325.27 Avg Return:   -2.76% Trades: 913
+NewsTrader           Traders:  18 Avg P&L: $   -189.73 Avg Return:   -0.56% Trades: 166
+PersistentTrader     Traders:  18 Avg P&L: $    -29.47 Avg Return:   -0.79% Trades: 572
+RandomTrader         Traders:  48 Avg P&L: $   -174.16 Avg Return:   -0.83% Trades: 11,495
+SentimentTrader      Traders:  18 Avg P&L: $    -46.74 Avg Return:   -0.42% Trades: 499
+
+========== YEAR REALISM CHECK ==========
+Price annual return:     -8.54%
+FV annual return:        -7.01%
+Ann. daily vol:          25.52%
+Max drawdown:            -8.54%
+Avg spread (bps):         85.2
+NewsTrader fills:          166
+Trades / day:           1974.9
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+FAIL  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 3 ---
+('MarketMaker', 'MarketMaker') 24667
+('MarketMaker', 'RandomTrader') 8581
+('FairValueTrader', 'MarketMaker') 1724
+('MarketMaker', 'MomentumTrader') 819
+('MarketMaker', 'PersistentTrader') 737
+('AttentionTrader', 'MarketMaker') 568
+('FairValueTrader', 'RandomTrader') 500
+('MarketMaker', 'MeanReversionTrader') 482
+('MarketMaker', 'SentimentTrader') 335
+('MarketMaker', 'NewsTrader') 162
+('AttentionTrader', 'RandomTrader') 143
+('RandomTrader', 'RandomTrader') 110
+('MeanReversionTrader', 'RandomTrader') 109
+('RandomTrader', 'SentimentTrader') 77
+('MomentumTrader', 'RandomTrader') 68
+('IndexFundTrader', 'MarketMaker') 48
+('BreakoutTrader', 'MarketMaker') 37
+('NewsTrader', 'RandomTrader') 34
+('FairValueTrader', 'PersistentTrader') 27
+('PersistentTrader', 'RandomTrader') 25
+('IndexFundTrader', 'RandomTrader') 18
+('AttentionTrader', 'PersistentTrader') 4
+('BreakoutTrader', 'RandomTrader') 4
+('MeanReversionTrader', 'PersistentTrader') 4
+('PersistentTrader', 'SentimentTrader') 4
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           3
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 23.4852
+Last ABC:       23.47
+Trades:         39287
+Auctions:       301 (matched qty 4538)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 203, 'news': 77, 'economic': 4, 'liquidity': 5, 'sector': 3} (total 292)
+Rate:           5.00%
+Flow mult:      0.63
+Liq. stress:    1.00
+Total fees:     $8,257.65
+Initial MTM:    $16,454,204.65
+Final MTM:      $16,400,741.02
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->23.49 last=23.47 trades=5627
+NBK: FV 16.20->15.35 last=15.38 trades=5686
+HLX: FV 15.40->14.91 last=14.84 trades=6138
+VLT: FV 9.60->10.98 last=11.09 trades=4303
+ORB: FV 11.00->11.14 last=11.16 trades=5709
+FRG: FV 12.35->11.75 last=11.68 trades=6592
+NVA: FV 10.80->10.90 last=10.91 trades=5232
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -214.42 Avg Return:   -1.86% Trades: 715
+BreakoutTrader       Traders:  15 Avg P&L: $   -160.82 Avg Return:   -0.37% Trades: 41
+FairValueTrader      Traders:  36 Avg P&L: $    -99.03 Avg Return:   -0.10% Trades: 2,251
+IndexFundTrader      Traders:  14 Avg P&L: $      6.17 Avg Return:   -0.00% Trades: 66
+MarketMaker          Traders:  21 Avg P&L: $ -1,005.28 Avg Return:   -0.09% Trades: 62,827
+MeanReversionTrader  Traders:  18 Avg P&L: $    -55.65 Avg Return:   -0.50% Trades: 595
+MomentumTrader       Traders:  24 Avg P&L: $   -214.39 Avg Return:   -2.82% Trades: 887
+NewsTrader           Traders:  18 Avg P&L: $    -75.69 Avg Return:   -0.44% Trades: 196
+PersistentTrader     Traders:  18 Avg P&L: $   -182.32 Avg Return:   -0.36% Trades: 801
+RandomTrader         Traders:  48 Avg P&L: $   -148.96 Avg Return:   -0.70% Trades: 9,779
+SentimentTrader      Traders:  18 Avg P&L: $   -294.67 Avg Return:   -0.68% Trades: 416
+
+========== YEAR REALISM CHECK ==========
+Price annual return:     -0.67%
+FV annual return:        -2.15%
+Ann. daily vol:          21.27%
+Max drawdown:            -5.88%
+Avg spread (bps):         68.2
+NewsTrader fills:          196
+Trades / day:           1870.8
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+PASS  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 4 ---
+('MarketMaker', 'MarketMaker') 22996
+('MarketMaker', 'RandomTrader') 8753
+('FairValueTrader', 'MarketMaker') 1986
+('MarketMaker', 'MeanReversionTrader') 896
+('MarketMaker', 'MomentumTrader') 825
+('AttentionTrader', 'MarketMaker') 800
+('MarketMaker', 'PersistentTrader') 718
+('FairValueTrader', 'RandomTrader') 569
+('MarketMaker', 'SentimentTrader') 461
+('MeanReversionTrader', 'RandomTrader') 219
+('AttentionTrader', 'RandomTrader') 196
+('RandomTrader', 'SentimentTrader') 156
+('MomentumTrader', 'RandomTrader') 109
+('MarketMaker', 'NewsTrader') 96
+('RandomTrader', 'RandomTrader') 63
+('BreakoutTrader', 'MarketMaker') 51
+('IndexFundTrader', 'MarketMaker') 40
+('NewsTrader', 'RandomTrader') 32
+('FairValueTrader', 'PersistentTrader') 21
+('PersistentTrader', 'RandomTrader') 17
+('AttentionTrader', 'PersistentTrader') 14
+('IndexFundTrader', 'RandomTrader') 8
+('MeanReversionTrader', 'PersistentTrader') 5
+('PersistentTrader', 'SentimentTrader') 4
+('BreakoutTrader', 'RandomTrader') 2
+('NewsTrader', 'PersistentTrader') 2
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           4
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 22.1031
+Last ABC:       22.03
+Trades:         39039
+Auctions:       301 (matched qty 2100)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'liquidity': 6, 'social': 217, 'news': 77, 'economic': 4, 'sector': 4} (total 308)
+Rate:           4.87%
+Flow mult:      0.98
+Liq. stress:    1.00
+Total fees:     $8,415.11
+Initial MTM:    $15,104,911.80
+Final MTM:      $15,032,606.83
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->22.10 last=22.03 trades=5685
+NBK: FV 16.20->15.86 last=16.02 trades=6270
+HLX: FV 15.40->15.06 last=15.18 trades=5193
+VLT: FV 9.60->10.08 last=9.88 trades=4778
+ORB: FV 11.00->10.80 last=10.65 trades=6692
+FRG: FV 12.35->12.80 last=13.09 trades=5945
+NVA: FV 10.80->10.89 last=11.07 trades=4476
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -375.15 Avg Return:   -2.33% Trades: 1,010
+BreakoutTrader       Traders:  15 Avg P&L: $   -173.43 Avg Return:   -0.38% Trades: 53
+FairValueTrader      Traders:  36 Avg P&L: $    -88.00 Avg Return:   -0.37% Trades: 2,576
+IndexFundTrader      Traders:  14 Avg P&L: $     -2.17 Avg Return:   -0.28% Trades: 48
+MarketMaker          Traders:  21 Avg P&L: $ -1,483.89 Avg Return:   -0.17% Trades: 60,618
+MeanReversionTrader  Traders:  18 Avg P&L: $   -132.80 Avg Return:   -0.84% Trades: 1,120
+MomentumTrader       Traders:  24 Avg P&L: $   -203.68 Avg Return:   -3.70% Trades: 934
+NewsTrader           Traders:  18 Avg P&L: $   -198.15 Avg Return:   -0.41% Trades: 130
+PersistentTrader     Traders:  18 Avg P&L: $   -366.67 Avg Return:   -0.67% Trades: 781
+RandomTrader         Traders:  48 Avg P&L: $   -164.30 Avg Return:   -0.68% Trades: 10,187
+SentimentTrader      Traders:  18 Avg P&L: $   -243.57 Avg Return:   -0.96% Trades: 621
+
+========== YEAR REALISM CHECK ==========
+Price annual return:     -5.88%
+FV annual return:        -7.90%
+Ann. daily vol:          23.67%
+Max drawdown:           -10.32%
+Avg spread (bps):         48.6
+NewsTrader fills:          130
+Trades / day:           1859.0
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+PASS  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 5 ---
+('MarketMaker', 'MarketMaker') 25192
+('MarketMaker', 'RandomTrader') 8086
+('FairValueTrader', 'MarketMaker') 2066
+('MarketMaker', 'MomentumTrader') 1003
+('MarketMaker', 'PersistentTrader') 960
+('AttentionTrader', 'MarketMaker') 823
+('MarketMaker', 'MeanReversionTrader') 783
+('MarketMaker', 'SentimentTrader') 453
+('FairValueTrader', 'RandomTrader') 444
+('AttentionTrader', 'RandomTrader') 173
+('MeanReversionTrader', 'RandomTrader') 151
+('MomentumTrader', 'RandomTrader') 109
+('RandomTrader', 'SentimentTrader') 105
+('MarketMaker', 'NewsTrader') 96
+('RandomTrader', 'RandomTrader') 62
+('BreakoutTrader', 'MarketMaker') 43
+('FairValueTrader', 'PersistentTrader') 31
+('IndexFundTrader', 'MarketMaker') 26
+('PersistentTrader', 'RandomTrader') 22
+('NewsTrader', 'RandomTrader') 20
+('AttentionTrader', 'PersistentTrader') 13
+('MeanReversionTrader', 'PersistentTrader') 13
+('PersistentTrader', 'SentimentTrader') 13
+('MomentumTrader', 'PersistentTrader') 8
+('IndexFundTrader', 'RandomTrader') 7
+('BreakoutTrader', 'RandomTrader') 3
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           5
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 24.2919
+Last ABC:       23.7
+Trades:         40705
+Auctions:       301 (matched qty 2210)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 245, 'news': 77, 'liquidity': 7, 'sector': 4, 'economic': 4} (total 337)
+Rate:           4.20%
+Flow mult:      0.97
+Liq. stress:    1.00
+Total fees:     $8,807.08
+Initial MTM:    $15,950,031.35
+Final MTM:      $16,045,724.12
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->24.29 last=23.7 trades=6727
+NBK: FV 16.20->16.68 last=16.72 trades=4866
+HLX: FV 15.40->16.25 last=16.1 trades=5883
+VLT: FV 9.60->9.32 last=9.41 trades=5598
+ORB: FV 11.00->11.90 last=12.01 trades=5702
+FRG: FV 12.35->12.45 last=12.58 trades=6327
+NVA: FV 10.80->11.18 last=11.26 trades=5602
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -105.13 Avg Return:   -0.29% Trades: 1,009
+BreakoutTrader       Traders:  15 Avg P&L: $     32.63 Avg Return:   -0.21% Trades: 46
+FairValueTrader      Traders:  36 Avg P&L: $     53.67 Avg Return:    1.61% Trades: 2,541
+IndexFundTrader      Traders:  14 Avg P&L: $     64.34 Avg Return:    0.23% Trades: 33
+MarketMaker          Traders:  21 Avg P&L: $  4,567.62 Avg Return:    1.14% Trades: 64,723
+MeanReversionTrader  Traders:  18 Avg P&L: $    -27.64 Avg Return:    0.16% Trades: 947
+MomentumTrader       Traders:  24 Avg P&L: $   -397.11 Avg Return:   -2.23% Trades: 1,120
+NewsTrader           Traders:  18 Avg P&L: $     33.41 Avg Return:    0.47% Trades: 116
+PersistentTrader     Traders:  18 Avg P&L: $    -31.57 Avg Return:    0.15% Trades: 1,060
+RandomTrader         Traders:  48 Avg P&L: $    112.12 Avg Return:    0.44% Trades: 9,244
+SentimentTrader      Traders:  18 Avg P&L: $    146.70 Avg Return:    0.22% Trades: 571
+
+========== YEAR REALISM CHECK ==========
+Price annual return:     -1.04%
+FV annual return:         1.22%
+Ann. daily vol:          32.75%
+Max drawdown:            -5.53%
+Avg spread (bps):         95.0
+NewsTrader fills:          116
+Trades / day:           1938.3
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+FAIL  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 6 ---
+('MarketMaker', 'MarketMaker') 24907
+('MarketMaker', 'RandomTrader') 8665
+('FairValueTrader', 'MarketMaker') 1804
+('MarketMaker', 'MomentumTrader') 1363
+('MarketMaker', 'MeanReversionTrader') 1001
+('MarketMaker', 'PersistentTrader') 980
+('AttentionTrader', 'MarketMaker') 946
+('FairValueTrader', 'RandomTrader') 457
+('MarketMaker', 'SentimentTrader') 411
+('AttentionTrader', 'RandomTrader') 195
+('MeanReversionTrader', 'RandomTrader') 193
+('MarketMaker', 'NewsTrader') 144
+('RandomTrader', 'SentimentTrader') 105
+('MomentumTrader', 'RandomTrader') 104
+('RandomTrader', 'RandomTrader') 70
+('IndexFundTrader', 'MarketMaker') 50
+('NewsTrader', 'RandomTrader') 32
+('BreakoutTrader', 'MarketMaker') 27
+('FairValueTrader', 'PersistentTrader') 26
+('AttentionTrader', 'PersistentTrader') 21
+('PersistentTrader', 'RandomTrader') 20
+('MeanReversionTrader', 'PersistentTrader') 16
+('IndexFundTrader', 'RandomTrader') 12
+('MomentumTrader', 'PersistentTrader') 7
+('PersistentTrader', 'SentimentTrader') 6
+('NewsTrader', 'PersistentTrader') 5
+('BreakoutTrader', 'RandomTrader') 1
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           6
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 24.3251
+Last ABC:       23.97
+Trades:         41568
+Auctions:       301 (matched qty 2830)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'news': 84, 'social': 224, 'sector': 6, 'liquidity': 5, 'economic': 4} (total 323)
+Rate:           3.86%
+Flow mult:      1.11
+Liq. stress:    1.00
+Total fees:     $9,354.41
+Initial MTM:    $16,280,073.00
+Final MTM:      $16,368,294.76
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->24.33 last=23.97 trades=6082
+NBK: FV 16.20->17.69 last=17.83 trades=6573
+HLX: FV 15.40->15.54 last=15.66 trades=6296
+VLT: FV 9.60->9.34 last=9.56 trades=5751
+ORB: FV 11.00->10.56 last=10.51 trades=4616
+FRG: FV 12.35->12.57 last=12.49 trades=5993
+NVA: FV 10.80->11.35 last=11.27 trades=6257
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -123.28 Avg Return:   -0.30% Trades: 1,162
+BreakoutTrader       Traders:  15 Avg P&L: $    120.60 Avg Return:    0.17% Trades: 28
+FairValueTrader      Traders:  36 Avg P&L: $    227.82 Avg Return:    0.66% Trades: 2,287
+IndexFundTrader      Traders:  14 Avg P&L: $     79.23 Avg Return:    0.22% Trades: 62
+MarketMaker          Traders:  21 Avg P&L: $  3,294.13 Avg Return:    0.75% Trades: 65,205
+MeanReversionTrader  Traders:  18 Avg P&L: $     20.07 Avg Return:    0.45% Trades: 1,210
+MomentumTrader       Traders:  24 Avg P&L: $    -51.74 Avg Return:   -2.25% Trades: 1,474
+NewsTrader           Traders:  18 Avg P&L: $     -7.26 Avg Return:    0.46% Trades: 181
+PersistentTrader     Traders:  18 Avg P&L: $    412.69 Avg Return:    1.11% Trades: 1,081
+RandomTrader         Traders:  48 Avg P&L: $     63.46 Avg Return:    0.36% Trades: 9,924
+SentimentTrader      Traders:  18 Avg P&L: $     17.29 Avg Return:    0.58% Trades: 522
+
+========== YEAR REALISM CHECK ==========
+Price annual return:      1.05%
+FV annual return:         1.35%
+Ann. daily vol:          22.51%
+Max drawdown:            -3.33%
+Avg spread (bps):         58.3
+NewsTrader fills:          181
+Trades / day:           1979.4
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+PASS  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 7 ---
+('MarketMaker', 'MarketMaker') 24359
+('MarketMaker', 'RandomTrader') 8968
+('FairValueTrader', 'MarketMaker') 1475
+('MarketMaker', 'PersistentTrader') 1331
+('MarketMaker', 'MomentumTrader') 1175
+('AttentionTrader', 'MarketMaker') 851
+('MarketMaker', 'MeanReversionTrader') 666
+('FairValueTrader', 'RandomTrader') 418
+('MarketMaker', 'SentimentTrader') 402
+('AttentionTrader', 'RandomTrader') 246
+('MomentumTrader', 'RandomTrader') 154
+('MeanReversionTrader', 'RandomTrader') 153
+('RandomTrader', 'SentimentTrader') 115
+('MarketMaker', 'NewsTrader') 104
+('RandomTrader', 'RandomTrader') 93
+('BreakoutTrader', 'MarketMaker') 49
+('FairValueTrader', 'PersistentTrader') 39
+('IndexFundTrader', 'MarketMaker') 26
+('PersistentTrader', 'RandomTrader') 23
+('NewsTrader', 'RandomTrader') 17
+('MeanReversionTrader', 'PersistentTrader') 15
+('IndexFundTrader', 'RandomTrader') 8
+('AttentionTrader', 'PersistentTrader') 6
+('BreakoutTrader', 'RandomTrader') 5
+('NewsTrader', 'PersistentTrader') 5
+('MomentumTrader', 'PersistentTrader') 4
+('PersistentTrader', 'SentimentTrader') 3
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           7
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 23.3465
+Last ABC:       23.44
+Trades:         40710
+Auctions:       301 (matched qty 3522)
+Halts:          {'ABC': 1, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 238, 'news': 56, 'liquidity': 5, 'sector': 4, 'economic': 3} (total 306)
+Rate:           5.02%
+Flow mult:      1.13
+Liq. stress:    1.00
+Total fees:     $8,808.88
+Initial MTM:    $15,864,679.90
+Final MTM:      $15,781,217.74
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->23.35 last=23.44 trades=6188
+NBK: FV 16.20->15.17 last=14.94 trades=5064
+HLX: FV 15.40->15.16 last=15.41 trades=5174
+VLT: FV 9.60->9.59 last=9.72 trades=6018
+ORB: FV 11.00->11.00 last=10.91 trades=6574
+FRG: FV 12.35->12.03 last=12.24 trades=5644
+NVA: FV 10.80->10.76 last=11.04 trades=6048
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -287.19 Avg Return:   -2.74% Trades: 1,103
+BreakoutTrader       Traders:  15 Avg P&L: $    -97.50 Avg Return:   -0.55% Trades: 54
+FairValueTrader      Traders:  36 Avg P&L: $    -38.91 Avg Return:   -0.83% Trades: 1,932
+IndexFundTrader      Traders:  14 Avg P&L: $   -125.71 Avg Return:   -0.20% Trades: 34
+MarketMaker          Traders:  21 Avg P&L: $ -1,895.04 Avg Return:   -0.38% Trades: 63,765
+MeanReversionTrader  Traders:  18 Avg P&L: $    -32.77 Avg Return:   -0.49% Trades: 834
+MomentumTrader       Traders:  24 Avg P&L: $   -628.76 Avg Return:   -3.52% Trades: 1,333
+NewsTrader           Traders:  18 Avg P&L: $    -37.94 Avg Return:   -0.49% Trades: 126
+PersistentTrader     Traders:  18 Avg P&L: $   -398.70 Avg Return:   -0.94% Trades: 1,426
+RandomTrader         Traders:  48 Avg P&L: $   -194.33 Avg Return:   -0.81% Trades: 10,293
+SentimentTrader      Traders:  18 Avg P&L: $   -103.77 Avg Return:   -0.60% Trades: 520
+
+========== YEAR REALISM CHECK ==========
+Price annual return:     -4.56%
+FV annual return:        -2.72%
+Ann. daily vol:          35.95%
+Max drawdown:            -8.32%
+Avg spread (bps):        125.5
+NewsTrader fills:          126
+Trades / day:           1938.6
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+FAIL  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 8 ---
+('MarketMaker', 'MarketMaker') 23890
+('MarketMaker', 'RandomTrader') 8974
+('FairValueTrader', 'MarketMaker') 2145
+('AttentionTrader', 'MarketMaker') 999
+('MarketMaker', 'MomentumTrader') 893
+('MarketMaker', 'PersistentTrader') 652
+('FairValueTrader', 'RandomTrader') 506
+('MarketMaker', 'MeanReversionTrader') 497
+('MarketMaker', 'SentimentTrader') 429
+('AttentionTrader', 'RandomTrader') 253
+('RandomTrader', 'SentimentTrader') 143
+('MarketMaker', 'NewsTrader') 139
+('MeanReversionTrader', 'RandomTrader') 137
+('MomentumTrader', 'RandomTrader') 119
+('RandomTrader', 'RandomTrader') 88
+('NewsTrader', 'RandomTrader') 36
+('BreakoutTrader', 'MarketMaker') 28
+('IndexFundTrader', 'MarketMaker') 24
+('PersistentTrader', 'RandomTrader') 21
+('AttentionTrader', 'PersistentTrader') 13
+('FairValueTrader', 'PersistentTrader') 9
+('MeanReversionTrader', 'PersistentTrader') 7
+('PersistentTrader', 'SentimentTrader') 5
+('IndexFundTrader', 'RandomTrader') 4
+('NewsTrader', 'PersistentTrader') 4
+('MomentumTrader', 'PersistentTrader') 3
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           8
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 23.9951
+Last ABC:       23.92
+Trades:         40018
+Auctions:       301 (matched qty 2020)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 252, 'liquidity': 6, 'sector': 4, 'news': 70, 'economic': 3} (total 335)
+Rate:           5.00%
+Flow mult:      0.96
+Liq. stress:    1.00
+Total fees:     $9,450.55
+Initial MTM:    $15,273,439.30
+Final MTM:      $15,095,677.08
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->24.00 last=23.92 trades=5228
+NBK: FV 16.20->15.18 last=14.85 trades=5761
+HLX: FV 15.40->14.83 last=14.77 trades=6326
+VLT: FV 9.60->8.43 last=8.35 trades=5571
+ORB: FV 11.00->10.67 last=10.77 trades=5011
+FRG: FV 12.35->11.60 last=11.58 trades=5615
+NVA: FV 10.80->11.37 last=11.41 trades=6506
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -469.53 Avg Return:   -2.59% Trades: 1,265
+BreakoutTrader       Traders:  15 Avg P&L: $    -46.80 Avg Return:   -0.50% Trades: 28
+FairValueTrader      Traders:  36 Avg P&L: $   -443.29 Avg Return:   -1.55% Trades: 2,660
+IndexFundTrader      Traders:  14 Avg P&L: $    -52.01 Avg Return:   -0.35% Trades: 28
+MarketMaker          Traders:  21 Avg P&L: $ -5,179.06 Avg Return:   -1.25% Trades: 62,560
+MeanReversionTrader  Traders:  18 Avg P&L: $   -273.62 Avg Return:   -0.79% Trades: 641
+MomentumTrader       Traders:  24 Avg P&L: $   -396.08 Avg Return:   -4.32% Trades: 1,015
+NewsTrader           Traders:  18 Avg P&L: $   -122.77 Avg Return:   -0.76% Trades: 179
+PersistentTrader     Traders:  18 Avg P&L: $   -499.65 Avg Return:   -1.93% Trades: 714
+RandomTrader         Traders:  48 Avg P&L: $   -351.34 Avg Return:   -1.19% Trades: 10,369
+SentimentTrader      Traders:  18 Avg P&L: $   -115.10 Avg Return:   -1.09% Trades: 577
+
+========== YEAR REALISM CHECK ==========
+Price annual return:     -0.37%
+FV annual return:        -0.02%
+Ann. daily vol:          17.61%
+Max drawdown:            -4.64%
+Avg spread (bps):         49.0
+NewsTrader fills:          179
+Trades / day:           1905.6
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+PASS  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 9 ---
+('MarketMaker', 'MarketMaker') 26250
+('MarketMaker', 'RandomTrader') 6132
+('FairValueTrader', 'MarketMaker') 2115
+('MarketMaker', 'MomentumTrader') 966
+('AttentionTrader', 'MarketMaker') 782
+('MarketMaker', 'MeanReversionTrader') 753
+('MarketMaker', 'PersistentTrader') 607
+('MarketMaker', 'SentimentTrader') 391
+('FairValueTrader', 'RandomTrader') 338
+('AttentionTrader', 'RandomTrader') 163
+('MeanReversionTrader', 'RandomTrader') 136
+('MomentumTrader', 'RandomTrader') 107
+('MarketMaker', 'NewsTrader') 103
+('RandomTrader', 'SentimentTrader') 85
+('BreakoutTrader', 'MarketMaker') 59
+('RandomTrader', 'RandomTrader') 52
+('IndexFundTrader', 'MarketMaker') 28
+('PersistentTrader', 'RandomTrader') 22
+('NewsTrader', 'RandomTrader') 20
+('FairValueTrader', 'PersistentTrader') 19
+('MeanReversionTrader', 'PersistentTrader') 15
+('AttentionTrader', 'PersistentTrader') 7
+('IndexFundTrader', 'RandomTrader') 5
+('NewsTrader', 'PersistentTrader') 4
+('PersistentTrader', 'SentimentTrader') 3
+('BreakoutTrader', 'RandomTrader') 3
+('MomentumTrader', 'PersistentTrader') 1
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           9
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 26.3931
+Last ABC:       26.62
+Trades:         39166
+Auctions:       301 (matched qty 1152)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'sector': 5, 'social': 238, 'news': 84, 'liquidity': 5, 'economic': 2} (total 334)
+Rate:           5.00%
+Flow mult:      0.73
+Liq. stress:    1.00
+Total fees:     $7,670.83
+Initial MTM:    $15,162,101.30
+Final MTM:      $15,174,200.95
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->26.39 last=26.62 trades=5160
+NBK: FV 16.20->15.47 last=15.39 trades=6179
+HLX: FV 15.40->14.79 last=15.05 trades=6390
+VLT: FV 9.60->9.09 last=8.86 trades=5000
+ORB: FV 11.00->10.40 last=10.62 trades=5155
+FRG: FV 12.35->12.94 last=12.73 trades=5639
+NVA: FV 10.80->10.78 last=10.84 trades=5643
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $     16.43 Avg Return:   -0.67% Trades: 952
+BreakoutTrader       Traders:  15 Avg P&L: $   -222.19 Avg Return:    0.08% Trades: 62
+FairValueTrader      Traders:  36 Avg P&L: $   -122.91 Avg Return:    0.02% Trades: 2,472
+IndexFundTrader      Traders:  14 Avg P&L: $   -112.82 Avg Return:   -0.16% Trades: 33
+MarketMaker          Traders:  21 Avg P&L: $  1,641.56 Avg Return:    0.13% Trades: 64,436
+MeanReversionTrader  Traders:  18 Avg P&L: $   -115.03 Avg Return:   -0.43% Trades: 904
+MomentumTrader       Traders:  24 Avg P&L: $   -221.69 Avg Return:   -1.80% Trades: 1,074
+NewsTrader           Traders:  18 Avg P&L: $    -89.33 Avg Return:   -0.26% Trades: 127
+PersistentTrader     Traders:  18 Avg P&L: $   -173.05 Avg Return:   -0.63% Trades: 678
+RandomTrader         Traders:  48 Avg P&L: $    -37.91 Avg Return:   -0.62% Trades: 7,115
+SentimentTrader      Traders:  18 Avg P&L: $     36.17 Avg Return:   -0.10% Trades: 479
+
+========== YEAR REALISM CHECK ==========
+Price annual return:      7.21%
+FV annual return:         9.97%
+Ann. daily vol:          21.71%
+Max drawdown:            -3.75%
+Avg spread (bps):         53.2
+NewsTrader fills:          127
+Trades / day:           1865.0
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+PASS  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 10 ---
+('MarketMaker', 'MarketMaker') 24150
+('MarketMaker', 'RandomTrader') 7792
+('FairValueTrader', 'MarketMaker') 2006
+('MarketMaker', 'PersistentTrader') 1682
+('MarketMaker', 'MomentumTrader') 884
+('AttentionTrader', 'MarketMaker') 783
+('MarketMaker', 'MeanReversionTrader') 718
+('FairValueTrader', 'RandomTrader') 516
+('MarketMaker', 'SentimentTrader') 318
+('AttentionTrader', 'RandomTrader') 224
+('MeanReversionTrader', 'RandomTrader') 167
+('MarketMaker', 'NewsTrader') 124
+('MomentumTrader', 'RandomTrader') 100
+('RandomTrader', 'SentimentTrader') 81
+('RandomTrader', 'RandomTrader') 70
+('FairValueTrader', 'PersistentTrader') 64
+('PersistentTrader', 'RandomTrader') 32
+('IndexFundTrader', 'MarketMaker') 31
+('NewsTrader', 'RandomTrader') 27
+('BreakoutTrader', 'MarketMaker') 20
+('AttentionTrader', 'PersistentTrader') 16
+('IndexFundTrader', 'RandomTrader') 14
+('MeanReversionTrader', 'PersistentTrader') 13
+('PersistentTrader', 'SentimentTrader') 6
+('NewsTrader', 'PersistentTrader') 3
+('MomentumTrader', 'PersistentTrader') 1
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           10
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 24.5805
+Last ABC:       24.8
+Trades:         39842
+Auctions:       301 (matched qty 2655)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 2, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 224, 'economic': 3, 'news': 70, 'sector': 4, 'liquidity': 5} (total 306)
+Rate:           4.71%
+Flow mult:      0.92
+Liq. stress:    1.00
+Total fees:     $8,593.16
+Initial MTM:    $15,876,209.90
+Final MTM:      $15,957,013.41
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->24.58 last=24.8 trades=4918
+NBK: FV 16.20->16.96 last=17.11 trades=4547
+HLX: FV 15.40->15.89 last=16.13 trades=5935
+VLT: FV 9.60->9.29 last=9.32 trades=5465
+ORB: FV 11.00->11.10 last=11.26 trades=6613
+FRG: FV 12.35->12.23 last=12.25 trades=5934
+NVA: FV 10.80->10.29 last=10.22 trades=6430
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -156.84 Avg Return:   -1.10% Trades: 1,023
+BreakoutTrader       Traders:  15 Avg P&L: $    -23.45 Avg Return:   -0.13% Trades: 20
+FairValueTrader      Traders:  36 Avg P&L: $    -18.23 Avg Return:   -0.59% Trades: 2,586
+IndexFundTrader      Traders:  14 Avg P&L: $     -5.76 Avg Return:    0.05% Trades: 45
+MarketMaker          Traders:  21 Avg P&L: $  3,656.75 Avg Return:    0.75% Trades: 62,658
+MeanReversionTrader  Traders:  18 Avg P&L: $    135.28 Avg Return:    0.25% Trades: 898
+MomentumTrader       Traders:  24 Avg P&L: $   -148.86 Avg Return:   -3.38% Trades: 985
+NewsTrader           Traders:  18 Avg P&L: $    186.31 Avg Return:    0.24% Trades: 154
+PersistentTrader     Traders:  18 Avg P&L: $    100.14 Avg Return:   -0.01% Trades: 1,817
+RandomTrader         Traders:  48 Avg P&L: $      3.55 Avg Return:   -0.18% Trades: 9,093
+SentimentTrader      Traders:  18 Avg P&L: $    181.33 Avg Return:    0.30% Trades: 405
+
+========== YEAR REALISM CHECK ==========
+Price annual return:      2.73%
+FV annual return:         2.42%
+Ann. daily vol:          21.14%
+Max drawdown:            -3.72%
+Avg spread (bps):         31.5
+NewsTrader fills:          154
+Trades / day:           1897.2
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+PASS  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 11 ---
+('MarketMaker', 'MarketMaker') 25474
+('MarketMaker', 'RandomTrader') 9413
+('FairValueTrader', 'MarketMaker') 1942
+('MarketMaker', 'MomentumTrader') 921
+('MarketMaker', 'PersistentTrader') 803
+('MarketMaker', 'MeanReversionTrader') 711
+('AttentionTrader', 'MarketMaker') 660
+('FairValueTrader', 'RandomTrader') 479
+('MarketMaker', 'SentimentTrader') 348
+('AttentionTrader', 'RandomTrader') 148
+('MeanReversionTrader', 'RandomTrader') 140
+('MarketMaker', 'NewsTrader') 117
+('MomentumTrader', 'RandomTrader') 115
+('RandomTrader', 'SentimentTrader') 97
+('BreakoutTrader', 'MarketMaker') 74
+('RandomTrader', 'RandomTrader') 73
+('NewsTrader', 'RandomTrader') 30
+('IndexFundTrader', 'MarketMaker') 23
+('FairValueTrader', 'PersistentTrader') 21
+('PersistentTrader', 'RandomTrader') 21
+('MeanReversionTrader', 'PersistentTrader') 9
+('PersistentTrader', 'SentimentTrader') 8
+('AttentionTrader', 'PersistentTrader') 6
+('BreakoutTrader', 'RandomTrader') 5
+('IndexFundTrader', 'RandomTrader') 5
+('MomentumTrader', 'PersistentTrader') 4
+('NewsTrader', 'PersistentTrader') 1
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           11
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 24.2257
+Last ABC:       24.07
+Trades:         41648
+Auctions:       301 (matched qty 4238)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 217, 'news': 77, 'economic': 3, 'sector': 4, 'liquidity': 5} (total 306)
+Rate:           4.66%
+Flow mult:      1.01
+Liq. stress:    1.00
+Total fees:     $9,576.02
+Initial MTM:    $15,238,979.40
+Final MTM:      $15,303,092.69
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->24.23 last=24.07 trades=7170
+NBK: FV 16.20->16.58 last=16.88 trades=4253
+HLX: FV 15.40->15.71 last=16.0 trades=6181
+VLT: FV 9.60->10.95 last=10.89 trades=6632
+ORB: FV 11.00->10.06 last=10.04 trades=6116
+FRG: FV 12.35->12.16 last=12.19 trades=6316
+NVA: FV 10.80->10.60 last=10.66 trades=4980
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $    158.70 Avg Return:   -1.33% Trades: 814
+BreakoutTrader       Traders:  15 Avg P&L: $    111.08 Avg Return:    0.00% Trades: 79
+FairValueTrader      Traders:  36 Avg P&L: $     41.05 Avg Return:    0.50% Trades: 2,442
+IndexFundTrader      Traders:  14 Avg P&L: $     59.36 Avg Return:    0.08% Trades: 28
+MarketMaker          Traders:  21 Avg P&L: $  2,887.95 Avg Return:    0.68% Trades: 65,960
+MeanReversionTrader  Traders:  18 Avg P&L: $     12.46 Avg Return:    0.10% Trades: 860
+MomentumTrader       Traders:  24 Avg P&L: $   -173.92 Avg Return:   -3.49% Trades: 1,040
+NewsTrader           Traders:  18 Avg P&L: $    103.20 Avg Return:    0.18% Trades: 148
+PersistentTrader     Traders:  18 Avg P&L: $     85.91 Avg Return:    0.47% Trades: 873
+RandomTrader         Traders:  48 Avg P&L: $   -101.03 Avg Return:   -0.10% Trades: 10,599
+SentimentTrader      Traders:  18 Avg P&L: $    139.22 Avg Return:    0.12% Trades: 453
+
+========== YEAR REALISM CHECK ==========
+Price annual return:     -0.41%
+FV annual return:         0.94%
+Ann. daily vol:          27.21%
+Max drawdown:            -4.84%
+Avg spread (bps):        121.4
+NewsTrader fills:          148
+Trades / day:           1983.2
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+FAIL  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 12 ---
+('MarketMaker', 'MarketMaker') 23531
+('MarketMaker', 'RandomTrader') 8800
+('FairValueTrader', 'MarketMaker') 1666
+('AttentionTrader', 'MarketMaker') 1116
+('MarketMaker', 'MomentumTrader') 1007
+('MarketMaker', 'PersistentTrader') 840
+('MarketMaker', 'MeanReversionTrader') 689
+('FairValueTrader', 'RandomTrader') 449
+('MarketMaker', 'SentimentTrader') 414
+('AttentionTrader', 'RandomTrader') 276
+('MarketMaker', 'NewsTrader') 143
+('MeanReversionTrader', 'RandomTrader') 135
+('MomentumTrader', 'RandomTrader') 111
+('RandomTrader', 'SentimentTrader') 102
+('RandomTrader', 'RandomTrader') 67
+('IndexFundTrader', 'MarketMaker') 42
+('BreakoutTrader', 'MarketMaker') 38
+('FairValueTrader', 'PersistentTrader') 27
+('NewsTrader', 'RandomTrader') 23
+('PersistentTrader', 'RandomTrader') 18
+('PersistentTrader', 'SentimentTrader') 9
+('MeanReversionTrader', 'PersistentTrader') 7
+('AttentionTrader', 'PersistentTrader') 7
+('IndexFundTrader', 'RandomTrader') 6
+('NewsTrader', 'PersistentTrader') 4
+('BreakoutTrader', 'RandomTrader') 2
+('MomentumTrader', 'PersistentTrader') 2
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           12
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 23.3186
+Last ABC:       22.84
+Trades:         39531
+Auctions:       301 (matched qty 1782)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'news': 70, 'social': 224, 'economic': 3, 'sector': 4, 'liquidity': 5} (total 306)
+Rate:           5.00%
+Flow mult:      1.06
+Liq. stress:    1.00
+Total fees:     $9,898.12
+Initial MTM:    $16,533,896.45
+Final MTM:      $16,570,816.65
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->23.32 last=22.84 trades=5535
+NBK: FV 16.20->17.77 last=18.26 trades=5702
+HLX: FV 15.40->16.48 last=16.6 trades=5903
+VLT: FV 9.60->9.47 last=9.65 trades=5801
+ORB: FV 11.00->10.69 last=10.8 trades=4812
+FRG: FV 12.35->12.12 last=12.18 trades=6478
+NVA: FV 10.80->9.48 last=9.93 trades=5300
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -109.35 Avg Return:   -1.64% Trades: 1,399
+BreakoutTrader       Traders:  15 Avg P&L: $    426.56 Avg Return:   -0.00% Trades: 40
+FairValueTrader      Traders:  36 Avg P&L: $     49.57 Avg Return:   -0.32% Trades: 2,142
+IndexFundTrader      Traders:  14 Avg P&L: $    370.34 Avg Return:    0.13% Trades: 48
+MarketMaker          Traders:  21 Avg P&L: $  1,391.68 Avg Return:    0.33% Trades: 61,817
+MeanReversionTrader  Traders:  18 Avg P&L: $     44.73 Avg Return:    0.16% Trades: 831
+MomentumTrader       Traders:  24 Avg P&L: $   -247.83 Avg Return:   -2.03% Trades: 1,120
+NewsTrader           Traders:  18 Avg P&L: $     67.21 Avg Return:    0.01% Trades: 170
+PersistentTrader     Traders:  18 Avg P&L: $    173.21 Avg Return:    1.05% Trades: 914
+RandomTrader         Traders:  48 Avg P&L: $    -59.85 Avg Return:    0.00% Trades: 10,056
+SentimentTrader      Traders:  18 Avg P&L: $    -19.13 Avg Return:    0.58% Trades: 525
+
+========== YEAR REALISM CHECK ==========
+Price annual return:     -1.45%
+FV annual return:        -2.84%
+Ann. daily vol:          25.50%
+Max drawdown:            -4.07%
+Avg spread (bps):         62.2
+NewsTrader fills:          170
+Trades / day:           1882.4
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+PASS  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 13 ---
+('MarketMaker', 'MarketMaker') 27281
+('MarketMaker', 'RandomTrader') 7108
+('FairValueTrader', 'MarketMaker') 2177
+('MarketMaker', 'MomentumTrader') 1384
+('AttentionTrader', 'MarketMaker') 866
+('MarketMaker', 'MeanReversionTrader') 804
+('MarketMaker', 'PersistentTrader') 509
+('FairValueTrader', 'RandomTrader') 460
+('MarketMaker', 'SentimentTrader') 342
+('AttentionTrader', 'RandomTrader') 172
+('MomentumTrader', 'RandomTrader') 170
+('MeanReversionTrader', 'RandomTrader') 131
+('MarketMaker', 'NewsTrader') 105
+('RandomTrader', 'SentimentTrader') 70
+('RandomTrader', 'RandomTrader') 47
+('BreakoutTrader', 'MarketMaker') 37
+('IndexFundTrader', 'MarketMaker') 35
+('NewsTrader', 'RandomTrader') 23
+('FairValueTrader', 'PersistentTrader') 17
+('PersistentTrader', 'RandomTrader') 13
+('MeanReversionTrader', 'PersistentTrader') 11
+('MomentumTrader', 'PersistentTrader') 8
+('AttentionTrader', 'PersistentTrader') 7
+('IndexFundTrader', 'RandomTrader') 6
+('NewsTrader', 'PersistentTrader') 4
+('BreakoutTrader', 'RandomTrader') 3
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           13
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 25.2000
+Last ABC:       25.5
+Trades:         41790
+Auctions:       301 (matched qty 1750)
+Halts:          {'ABC': 0, 'NBK': 12, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'news': 84, 'social': 224, 'liquidity': 6, 'sector': 5, 'economic': 3} (total 322)
+Rate:           4.65%
+Flow mult:      0.96
+Liq. stress:    1.00
+Total fees:     $8,750.84
+Initial MTM:    $15,158,300.45
+Final MTM:      $15,359,304.69
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->25.20 last=25.5 trades=5771
+NBK: FV 16.20->16.20 last=16.88 trades=7104
+HLX: FV 15.40->16.57 last=16.58 trades=5593
+VLT: FV 9.60->9.87 last=9.89 trades=6497
+ORB: FV 11.00->10.99 last=11.11 trades=4530
+FRG: FV 12.35->12.00 last=12.04 trades=5665
+NVA: FV 10.80->11.99 last=12.01 trades=6630
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $    155.72 Avg Return:   -0.17% Trades: 1,045
+BreakoutTrader       Traders:  15 Avg P&L: $    249.44 Avg Return:    0.46% Trades: 40
+FairValueTrader      Traders:  36 Avg P&L: $     84.35 Avg Return:    0.89% Trades: 2,654
+IndexFundTrader      Traders:  14 Avg P&L: $    238.79 Avg Return:    0.38% Trades: 41
+MarketMaker          Traders:  21 Avg P&L: $  8,106.02 Avg Return:    1.84% Trades: 67,929
+MeanReversionTrader  Traders:  18 Avg P&L: $    232.79 Avg Return:    0.44% Trades: 946
+MomentumTrader       Traders:  24 Avg P&L: $   -320.39 Avg Return:   -3.68% Trades: 1,562
+NewsTrader           Traders:  18 Avg P&L: $    242.52 Avg Return:    0.49% Trades: 132
+PersistentTrader     Traders:  18 Avg P&L: $    444.04 Avg Return:    1.14% Trades: 569
+RandomTrader         Traders:  48 Avg P&L: $    113.84 Avg Return:    0.75% Trades: 8,250
+SentimentTrader      Traders:  18 Avg P&L: $    222.09 Avg Return:    0.79% Trades: 412
+
+========== YEAR REALISM CHECK ==========
+Price annual return:      6.12%
+FV annual return:         5.00%
+Ann. daily vol:          30.03%
+Max drawdown:            -3.20%
+Avg spread (bps):         70.5
+NewsTrader fills:          132
+Trades / day:           1990.0
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+PASS  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 14 ---
+('MarketMaker', 'MarketMaker') 25329
+('MarketMaker', 'RandomTrader') 8816
+('FairValueTrader', 'MarketMaker') 2215
+('MarketMaker', 'MomentumTrader') 1056
+('AttentionTrader', 'MarketMaker') 1030
+('MarketMaker', 'MeanReversionTrader') 876
+('FairValueTrader', 'RandomTrader') 675
+('MarketMaker', 'PersistentTrader') 598
+('MarketMaker', 'SentimentTrader') 417
+('AttentionTrader', 'RandomTrader') 259
+('MeanReversionTrader', 'RandomTrader') 226
+('MomentumTrader', 'RandomTrader') 168
+('MarketMaker', 'NewsTrader') 152
+('RandomTrader', 'SentimentTrader') 109
+('RandomTrader', 'RandomTrader') 99
+('FairValueTrader', 'PersistentTrader') 43
+('IndexFundTrader', 'MarketMaker') 41
+('BreakoutTrader', 'MarketMaker') 38
+('NewsTrader', 'RandomTrader') 31
+('PersistentTrader', 'RandomTrader') 19
+('IndexFundTrader', 'RandomTrader') 11
+('AttentionTrader', 'PersistentTrader') 10
+('MomentumTrader', 'PersistentTrader') 6
+('MeanReversionTrader', 'PersistentTrader') 5
+('PersistentTrader', 'SentimentTrader') 4
+('NewsTrader', 'PersistentTrader') 1
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           14
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 24.1142
+Last ABC:       24.740000000000002
+Trades:         42234
+Auctions:       301 (matched qty 1991)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 266, 'liquidity': 8, 'news': 77, 'economic': 2, 'sector': 3} (total 356)
+Rate:           4.92%
+Flow mult:      1.02
+Liq. stress:    1.00
+Total fees:     $9,314.96
+Initial MTM:    $15,628,724.35
+Final MTM:      $15,666,773.03
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->24.11 last=24.740000000000002 trades=6019
+NBK: FV 16.20->16.41 last=16.12 trades=5750
+HLX: FV 15.40->15.08 last=15.15 trades=6381
+VLT: FV 9.60->10.11 last=10.18 trades=5137
+ORB: FV 11.00->11.19 last=11.5 trades=5809
+FRG: FV 12.35->11.70 last=12.01 trades=6694
+NVA: FV 10.80->10.52 last=10.74 trades=6444
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -186.06 Avg Return:   -1.53% Trades: 1,299
+BreakoutTrader       Traders:  15 Avg P&L: $     22.03 Avg Return:   -0.06% Trades: 38
+FairValueTrader      Traders:  36 Avg P&L: $    -43.68 Avg Return:    0.23% Trades: 2,933
+IndexFundTrader      Traders:  14 Avg P&L: $     59.40 Avg Return:    0.02% Trades: 52
+MarketMaker          Traders:  21 Avg P&L: $  2,815.90 Avg Return:    0.64% Trades: 65,897
+MeanReversionTrader  Traders:  18 Avg P&L: $   -135.39 Avg Return:   -0.50% Trades: 1,107
+MomentumTrader       Traders:  24 Avg P&L: $   -383.57 Avg Return:   -2.89% Trades: 1,230
+NewsTrader           Traders:  18 Avg P&L: $    -19.84 Avg Return:    0.08% Trades: 184
+PersistentTrader     Traders:  18 Avg P&L: $   -109.20 Avg Return:    0.01% Trades: 686
+RandomTrader         Traders:  48 Avg P&L: $    -96.62 Avg Return:   -0.56% Trades: 10,512
+SentimentTrader      Traders:  18 Avg P&L: $     39.95 Avg Return:   -0.01% Trades: 530
+
+========== YEAR REALISM CHECK ==========
+Price annual return:      4.70%
+FV annual return:         0.48%
+Ann. daily vol:          45.79%
+Max drawdown:            -8.37%
+Avg spread (bps):        108.9
+NewsTrader fills:          184
+Trades / day:           2011.1
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+FAIL  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 15 ---
+('MarketMaker', 'MarketMaker') 24247
+('MarketMaker', 'RandomTrader') 7530
+('FairValueTrader', 'MarketMaker') 1841
+('MarketMaker', 'MomentumTrader') 1333
+('MarketMaker', 'MeanReversionTrader') 978
+('MarketMaker', 'PersistentTrader') 811
+('AttentionTrader', 'MarketMaker') 766
+('MarketMaker', 'SentimentTrader') 495
+('FairValueTrader', 'RandomTrader') 455
+('AttentionTrader', 'RandomTrader') 197
+('MeanReversionTrader', 'RandomTrader') 192
+('MarketMaker', 'NewsTrader') 177
+('MomentumTrader', 'RandomTrader') 145
+('RandomTrader', 'SentimentTrader') 102
+('RandomTrader', 'RandomTrader') 73
+('NewsTrader', 'RandomTrader') 47
+('BreakoutTrader', 'MarketMaker') 44
+('IndexFundTrader', 'MarketMaker') 41
+('FairValueTrader', 'PersistentTrader') 30
+('MeanReversionTrader', 'PersistentTrader') 13
+('IndexFundTrader', 'RandomTrader') 11
+('PersistentTrader', 'RandomTrader') 10
+('AttentionTrader', 'PersistentTrader') 6
+('BreakoutTrader', 'RandomTrader') 3
+('MomentumTrader', 'PersistentTrader') 2
+('PersistentTrader', 'SentimentTrader') 1
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           15
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 24.7339
+Last ABC:       24.94
+Trades:         39550
+Auctions:       301 (matched qty 2831)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 238, 'news': 84, 'liquidity': 5, 'sector': 5, 'economic': 3} (total 335)
+Rate:           4.65%
+Flow mult:      1.39
+Liq. stress:    1.00
+Total fees:     $8,627.28
+Initial MTM:    $14,890,225.10
+Final MTM:      $15,074,878.80
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->24.73 last=24.94 trades=6329
+NBK: FV 16.20->16.45 last=16.7 trades=5455
+HLX: FV 15.40->15.82 last=16.12 trades=4971
+VLT: FV 9.60->10.01 last=10.02 trades=5623
+ORB: FV 11.00->11.76 last=11.83 trades=5584
+FRG: FV 12.35->12.97 last=13.21 trades=5991
+NVA: FV 10.80->10.88 last=10.68 trades=5597
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $    138.22 Avg Return:   -0.13% Trades: 969
+BreakoutTrader       Traders:  15 Avg P&L: $    214.99 Avg Return:    0.27% Trades: 47
+FairValueTrader      Traders:  36 Avg P&L: $    231.53 Avg Return:    1.28% Trades: 2,326
+IndexFundTrader      Traders:  14 Avg P&L: $    114.74 Avg Return:    0.41% Trades: 52
+MarketMaker          Traders:  21 Avg P&L: $  7,320.63 Avg Return:    1.70% Trades: 62,510
+MeanReversionTrader  Traders:  18 Avg P&L: $     10.34 Avg Return:    0.41% Trades: 1,183
+MomentumTrader       Traders:  24 Avg P&L: $    -68.62 Avg Return:   -2.73% Trades: 1,480
+NewsTrader           Traders:  18 Avg P&L: $    208.55 Avg Return:    0.52% Trades: 224
+PersistentTrader     Traders:  18 Avg P&L: $    291.11 Avg Return:    1.24% Trades: 873
+RandomTrader         Traders:  48 Avg P&L: $    101.88 Avg Return:    0.72% Trades: 8,838
+SentimentTrader      Traders:  18 Avg P&L: $    180.97 Avg Return:    0.60% Trades: 598
+
+========== YEAR REALISM CHECK ==========
+Price annual return:      0.32%
+FV annual return:         3.06%
+Ann. daily vol:          34.57%
+Max drawdown:            -7.04%
+Avg spread (bps):        125.7
+NewsTrader fills:          224
+Trades / day:           1883.3
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+FAIL  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 16 ---
+('MarketMaker', 'MarketMaker') 25918
+('MarketMaker', 'RandomTrader') 7750
+('FairValueTrader', 'MarketMaker') 1908
+('MarketMaker', 'MomentumTrader') 1608
+('MarketMaker', 'PersistentTrader') 939
+('AttentionTrader', 'MarketMaker') 933
+('MarketMaker', 'MeanReversionTrader') 896
+('MarketMaker', 'SentimentTrader') 590
+('FairValueTrader', 'RandomTrader') 382
+('MomentumTrader', 'RandomTrader') 190
+('AttentionTrader', 'RandomTrader') 190
+('MeanReversionTrader', 'RandomTrader') 146
+('MarketMaker', 'NewsTrader') 136
+('RandomTrader', 'SentimentTrader') 120
+('RandomTrader', 'RandomTrader') 69
+('IndexFundTrader', 'MarketMaker') 58
+('BreakoutTrader', 'MarketMaker') 38
+('NewsTrader', 'RandomTrader') 34
+('PersistentTrader', 'RandomTrader') 32
+('FairValueTrader', 'PersistentTrader') 20
+('MomentumTrader', 'PersistentTrader') 12
+('MeanReversionTrader', 'PersistentTrader') 10
+('IndexFundTrader', 'RandomTrader') 9
+('AttentionTrader', 'PersistentTrader') 8
+('PersistentTrader', 'SentimentTrader') 5
+('NewsTrader', 'PersistentTrader') 4
+('BreakoutTrader', 'RandomTrader') 1
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           16
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 24.7600
+Last ABC:       24.7
+Trades:         42006
+Auctions:       301 (matched qty 1450)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 231, 'sector': 4, 'news': 63, 'economic': 3, 'liquidity': 6} (total 307)
+Rate:           5.30%
+Flow mult:      1.38
+Liq. stress:    1.00
+Total fees:     $8,332.64
+Initial MTM:    $14,924,268.50
+Final MTM:      $14,853,354.20
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->24.76 last=24.7 trades=5867
+NBK: FV 16.20->16.05 last=16.44 trades=6411
+HLX: FV 15.40->14.57 last=14.46 trades=5617
+VLT: FV 9.60->9.80 last=9.68 trades=6255
+ORB: FV 11.00->9.91 last=9.79 trades=6084
+FRG: FV 12.35->12.61 last=12.84 trades=5782
+NVA: FV 10.80->10.37 last=10.19 trades=5990
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -322.40 Avg Return:   -1.41% Trades: 1,131
+BreakoutTrader       Traders:  15 Avg P&L: $   -224.61 Avg Return:   -0.55% Trades: 39
+FairValueTrader      Traders:  36 Avg P&L: $   -129.29 Avg Return:   -1.34% Trades: 2,310
+IndexFundTrader      Traders:  14 Avg P&L: $   -118.63 Avg Return:   -0.32% Trades: 67
+MarketMaker          Traders:  21 Avg P&L: $ -1,454.31 Avg Return:   -0.46% Trades: 66,692
+MeanReversionTrader  Traders:  18 Avg P&L: $   -256.96 Avg Return:   -0.56% Trades: 1,052
+MomentumTrader       Traders:  24 Avg P&L: $   -335.45 Avg Return:   -5.03% Trades: 1,810
+NewsTrader           Traders:  18 Avg P&L: $    -67.60 Avg Return:   -0.44% Trades: 174
+PersistentTrader     Traders:  18 Avg P&L: $   -186.17 Avg Return:   -0.93% Trades: 1,030
+RandomTrader         Traders:  48 Avg P&L: $   -129.65 Avg Return:   -0.35% Trades: 8,992
+SentimentTrader      Traders:  18 Avg P&L: $   -132.57 Avg Return:   -0.77% Trades: 715
+
+========== YEAR REALISM CHECK ==========
+Price annual return:      1.52%
+FV annual return:         3.17%
+Ann. daily vol:          24.32%
+Max drawdown:            -5.81%
+Avg spread (bps):         74.5
+NewsTrader fills:          174
+Trades / day:           2000.3
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+PASS  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 17 ---
+('MarketMaker', 'MarketMaker') 25526
+('MarketMaker', 'RandomTrader') 9524
+('MarketMaker', 'MomentumTrader') 1413
+('FairValueTrader', 'MarketMaker') 1305
+('MarketMaker', 'MeanReversionTrader') 1281
+('AttentionTrader', 'MarketMaker') 1037
+('MarketMaker', 'PersistentTrader') 696
+('FairValueTrader', 'RandomTrader') 424
+('MarketMaker', 'SentimentTrader') 345
+('MeanReversionTrader', 'RandomTrader') 299
+('AttentionTrader', 'RandomTrader') 296
+('MomentumTrader', 'RandomTrader') 194
+('MarketMaker', 'NewsTrader') 192
+('RandomTrader', 'SentimentTrader') 107
+('RandomTrader', 'RandomTrader') 79
+('BreakoutTrader', 'MarketMaker') 51
+('NewsTrader', 'RandomTrader') 44
+('FairValueTrader', 'PersistentTrader') 36
+('IndexFundTrader', 'MarketMaker') 33
+('PersistentTrader', 'RandomTrader') 20
+('MeanReversionTrader', 'PersistentTrader') 15
+('IndexFundTrader', 'RandomTrader') 11
+('AttentionTrader', 'PersistentTrader') 10
+('PersistentTrader', 'SentimentTrader') 4
+('BreakoutTrader', 'RandomTrader') 2
+('NewsTrader', 'PersistentTrader') 1
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           17
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 25.1390
+Last ABC:       25.69
+Trades:         42945
+Auctions:       301 (matched qty 2452)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 231, 'liquidity': 6, 'sector': 5, 'news': 77, 'economic': 3} (total 322)
+Rate:           5.13%
+Flow mult:      1.12
+Liq. stress:    1.00
+Total fees:     $10,131.07
+Initial MTM:    $15,952,465.10
+Final MTM:      $16,059,160.18
+Cash conserv:   gap=$-0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->25.14 last=25.69 trades=5781
+NBK: FV 16.20->17.51 last=17.51 trades=5923
+HLX: FV 15.40->14.80 last=15.03 trades=6293
+VLT: FV 9.60->9.06 last=9.06 trades=6302
+ORB: FV 11.00->10.57 last=10.43 trades=6670
+FRG: FV 12.35->12.35 last=12.45 trades=5794
+NVA: FV 10.80->11.44 last=11.76 trades=6182
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -214.80 Avg Return:   -1.49% Trades: 1,343
+BreakoutTrader       Traders:  15 Avg P&L: $     43.22 Avg Return:   -0.65% Trades: 53
+FairValueTrader      Traders:  36 Avg P&L: $    129.89 Avg Return:    0.25% Trades: 1,765
+IndexFundTrader      Traders:  14 Avg P&L: $    -77.93 Avg Return:    0.09% Trades: 44
+MarketMaker          Traders:  21 Avg P&L: $  5,294.32 Avg Return:    1.08% Trades: 66,929
+MeanReversionTrader  Traders:  18 Avg P&L: $    -52.12 Avg Return:    0.11% Trades: 1,595
+MomentumTrader       Traders:  24 Avg P&L: $   -357.39 Avg Return:   -3.90% Trades: 1,607
+NewsTrader           Traders:  18 Avg P&L: $    -68.61 Avg Return:    0.35% Trades: 237
+PersistentTrader     Traders:  18 Avg P&L: $     33.11 Avg Return:    0.19% Trades: 782
+RandomTrader         Traders:  48 Avg P&L: $     66.34 Avg Return:   -0.07% Trades: 11,079
+SentimentTrader      Traders:  18 Avg P&L: $     81.86 Avg Return:   -0.50% Trades: 456
+
+========== YEAR REALISM CHECK ==========
+Price annual return:      3.46%
+FV annual return:         4.75%
+Ann. daily vol:          42.68%
+Max drawdown:            -5.06%
+Avg spread (bps):        104.1
+NewsTrader fills:          237
+Trades / day:           2045.0
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+FAIL  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 18 ---
+('MarketMaker', 'MarketMaker') 26618
+('MarketMaker', 'RandomTrader') 7475
+('FairValueTrader', 'MarketMaker') 2892
+('MarketMaker', 'MeanReversionTrader') 1683
+('MarketMaker', 'MomentumTrader') 1166
+('MarketMaker', 'PersistentTrader') 1009
+('AttentionTrader', 'MarketMaker') 897
+('FairValueTrader', 'RandomTrader') 547
+('MarketMaker', 'SentimentTrader') 442
+('MeanReversionTrader', 'RandomTrader') 266
+('AttentionTrader', 'RandomTrader') 191
+('MarketMaker', 'NewsTrader') 149
+('MomentumTrader', 'RandomTrader') 138
+('RandomTrader', 'SentimentTrader') 91
+('RandomTrader', 'RandomTrader') 60
+('IndexFundTrader', 'MarketMaker') 40
+('FairValueTrader', 'PersistentTrader') 35
+('NewsTrader', 'RandomTrader') 33
+('BreakoutTrader', 'MarketMaker') 32
+('PersistentTrader', 'RandomTrader') 30
+('MeanReversionTrader', 'PersistentTrader') 26
+('IndexFundTrader', 'RandomTrader') 10
+('MomentumTrader', 'PersistentTrader') 8
+('PersistentTrader', 'SentimentTrader') 7
+('AttentionTrader', 'PersistentTrader') 7
+('BreakoutTrader', 'RandomTrader') 3
+('NewsTrader', 'PersistentTrader') 2
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           18
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 23.4375
+Last ABC:       23.11
+Trades:         43857
+Auctions:       301 (matched qty 1776)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 3, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 245, 'liquidity': 5, 'sector': 5, 'news': 84, 'economic': 3} (total 342)
+Rate:           4.51%
+Flow mult:      1.26
+Liq. stress:    1.00
+Total fees:     $8,960.47
+Initial MTM:    $15,577,642.35
+Final MTM:      $15,543,476.11
+Cash conserv:   gap=$-0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->23.44 last=23.11 trades=6424
+NBK: FV 16.20->15.44 last=15.66 trades=6175
+HLX: FV 15.40->15.40 last=15.950000000000001 trades=5933
+VLT: FV 9.60->9.91 last=9.96 trades=6433
+ORB: FV 11.00->10.53 last=10.700000000000001 trades=7393
+FRG: FV 12.35->12.57 last=12.58 trades=5076
+NVA: FV 10.80->10.84 last=10.78 trades=6423
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -278.86 Avg Return:   -2.56% Trades: 1,095
+BreakoutTrader       Traders:  15 Avg P&L: $     38.21 Avg Return:   -0.28% Trades: 35
+FairValueTrader      Traders:  36 Avg P&L: $   -367.02 Avg Return:   -1.24% Trades: 3,474
+IndexFundTrader      Traders:  14 Avg P&L: $     -5.50 Avg Return:   -0.12% Trades: 50
+MarketMaker          Traders:  21 Avg P&L: $    210.63 Avg Return:    0.14% Trades: 69,021
+MeanReversionTrader  Traders:  18 Avg P&L: $   -169.08 Avg Return:   -1.89% Trades: 1,975
+MomentumTrader       Traders:  24 Avg P&L: $   -281.90 Avg Return:   -5.44% Trades: 1,312
+NewsTrader           Traders:  18 Avg P&L: $    -22.55 Avg Return:   -0.27% Trades: 184
+PersistentTrader     Traders:  18 Avg P&L: $   -324.98 Avg Return:   -1.03% Trades: 1,124
+RandomTrader         Traders:  48 Avg P&L: $    -73.57 Avg Return:   -0.57% Trades: 8,904
+SentimentTrader      Traders:  18 Avg P&L: $   -116.35 Avg Return:   -0.38% Trades: 540
+
+========== YEAR REALISM CHECK ==========
+Price annual return:     -1.73%
+FV annual return:        -2.34%
+Ann. daily vol:          40.19%
+Max drawdown:            -7.43%
+Avg spread (bps):        100.1
+NewsTrader fills:          184
+Trades / day:           2088.4
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+FAIL  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 19 ---
+('MarketMaker', 'MarketMaker') 25464
+('MarketMaker', 'RandomTrader') 8745
+('FairValueTrader', 'MarketMaker') 2651
+('MarketMaker', 'MomentumTrader') 1104
+('MarketMaker', 'MeanReversionTrader') 1002
+('AttentionTrader', 'MarketMaker') 886
+('MarketMaker', 'PersistentTrader') 672
+('FairValueTrader', 'RandomTrader') 635
+('MarketMaker', 'SentimentTrader') 280
+('AttentionTrader', 'RandomTrader') 202
+('MeanReversionTrader', 'RandomTrader') 199
+('MomentumTrader', 'RandomTrader') 123
+('MarketMaker', 'NewsTrader') 100
+('RandomTrader', 'SentimentTrader') 83
+('RandomTrader', 'RandomTrader') 41
+('NewsTrader', 'RandomTrader') 32
+('FairValueTrader', 'PersistentTrader') 30
+('BreakoutTrader', 'MarketMaker') 28
+('IndexFundTrader', 'MarketMaker') 26
+('PersistentTrader', 'RandomTrader') 15
+('AttentionTrader', 'PersistentTrader') 9
+('PersistentTrader', 'SentimentTrader') 5
+('MeanReversionTrader', 'PersistentTrader') 4
+('IndexFundTrader', 'RandomTrader') 1
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           19
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 24.1866
+Last ABC:       24.0
+Trades:         42337
+Auctions:       301 (matched qty 2594)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 1, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 210, 'news': 70, 'economic': 3, 'liquidity': 7, 'sector': 4} (total 294)
+Rate:           5.06%
+Flow mult:      1.02
+Liq. stress:    1.00
+Total fees:     $9,272.75
+Initial MTM:    $16,370,087.80
+Final MTM:      $16,348,904.71
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->24.19 last=24.0 trades=5515
+NBK: FV 16.20->16.97 last=17.45 trades=6421
+HLX: FV 15.40->14.33 last=14.6 trades=5404
+VLT: FV 9.60->9.78 last=9.97 trades=6110
+ORB: FV 11.00->10.28 last=10.19 trades=6957
+FRG: FV 12.35->12.79 last=12.84 trades=6153
+NVA: FV 10.80->9.85 last=9.82 trades=5777
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -247.58 Avg Return:   -1.18% Trades: 1,097
+BreakoutTrader       Traders:  15 Avg P&L: $     -9.86 Avg Return:   -0.35% Trades: 28
+FairValueTrader      Traders:  36 Avg P&L: $    201.07 Avg Return:    0.12% Trades: 3,316
+IndexFundTrader      Traders:  14 Avg P&L: $    -37.42 Avg Return:    0.09% Trades: 27
+MarketMaker          Traders:  21 Avg P&L: $   -813.05 Avg Return:   -0.25% Trades: 66,422
+MeanReversionTrader  Traders:  18 Avg P&L: $    134.85 Avg Return:   -0.23% Trades: 1,205
+MomentumTrader       Traders:  24 Avg P&L: $   -215.46 Avg Return:   -2.97% Trades: 1,227
+NewsTrader           Traders:  18 Avg P&L: $    -73.87 Avg Return:   -0.13% Trades: 132
+PersistentTrader     Traders:  18 Avg P&L: $    -21.43 Avg Return:    0.10% Trades: 735
+RandomTrader         Traders:  48 Avg P&L: $    -73.41 Avg Return:   -0.44% Trades: 10,117
+SentimentTrader      Traders:  18 Avg P&L: $     56.71 Avg Return:   -0.02% Trades: 368
+
+========== YEAR REALISM CHECK ==========
+Price annual return:      3.27%
+FV annual return:         0.78%
+Ann. daily vol:          30.14%
+Max drawdown:            -6.27%
+Avg spread (bps):         66.7
+NewsTrader fills:          132
+Trades / day:           2016.0
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+PASS  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 20 ---
+('MarketMaker', 'MarketMaker') 27581
+('MarketMaker', 'RandomTrader') 5651
+('FairValueTrader', 'MarketMaker') 2985
+('MarketMaker', 'MomentumTrader') 1134
+('MarketMaker', 'MeanReversionTrader') 1120
+('AttentionTrader', 'MarketMaker') 781
+('MarketMaker', 'PersistentTrader') 591
+('MarketMaker', 'SentimentTrader') 500
+('FairValueTrader', 'RandomTrader') 443
+('MeanReversionTrader', 'RandomTrader') 175
+('AttentionTrader', 'RandomTrader') 136
+('MomentumTrader', 'RandomTrader') 124
+('MarketMaker', 'NewsTrader') 123
+('RandomTrader', 'SentimentTrader') 75
+('IndexFundTrader', 'MarketMaker') 49
+('BreakoutTrader', 'MarketMaker') 45
+('RandomTrader', 'RandomTrader') 44
+('FairValueTrader', 'PersistentTrader') 40
+('NewsTrader', 'RandomTrader') 22
+('PersistentTrader', 'RandomTrader') 15
+('MeanReversionTrader', 'PersistentTrader') 12
+('PersistentTrader', 'SentimentTrader') 10
+('AttentionTrader', 'PersistentTrader') 6
+('IndexFundTrader', 'RandomTrader') 5
+('MomentumTrader', 'PersistentTrader') 4
+('BreakoutTrader', 'RandomTrader') 2
+('NewsTrader', 'PersistentTrader') 1
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           20
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 23.3887
+Last ABC:       22.92
+Trades:         41674
+Auctions:       301 (matched qty 1319)
+Halts:          {'ABC': 0, 'NBK': 1, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'liquidity': 6, 'news': 70, 'social': 252, 'sector': 4, 'economic': 4} (total 336)
+Rate:           5.13%
+Flow mult:      1.22
+Liq. stress:    1.00
+Total fees:     $7,710.74
+Initial MTM:    $14,665,144.60
+Final MTM:      $14,546,002.73
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->23.39 last=22.92 trades=5882
+NBK: FV 16.20->16.89 last=16.47 trades=6016
+HLX: FV 15.40->14.32 last=14.25 trades=6420
+VLT: FV 9.60->8.91 last=8.84 trades=6175
+ORB: FV 11.00->9.82 last=9.89 trades=5689
+FRG: FV 12.35->12.56 last=12.700000000000001 trades=5086
+NVA: FV 10.80->12.15 last=11.86 trades=6406
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -247.19 Avg Return:   -1.70% Trades: 923
+BreakoutTrader       Traders:  15 Avg P&L: $   -278.02 Avg Return:   -0.87% Trades: 47
+FairValueTrader      Traders:  36 Avg P&L: $   -256.76 Avg Return:   -1.98% Trades: 3,468
+IndexFundTrader      Traders:  14 Avg P&L: $    -56.56 Avg Return:   -0.41% Trades: 54
+MarketMaker          Traders:  21 Avg P&L: $ -3,309.35 Avg Return:   -0.71% Trades: 68,141
+MeanReversionTrader  Traders:  18 Avg P&L: $   -248.00 Avg Return:   -1.42% Trades: 1,307
+MomentumTrader       Traders:  24 Avg P&L: $   -354.96 Avg Return:   -4.85% Trades: 1,262
+NewsTrader           Traders:  18 Avg P&L: $    -45.84 Avg Return:   -0.74% Trades: 146
+PersistentTrader     Traders:  18 Avg P&L: $   -230.84 Avg Return:   -1.10% Trades: 679
+RandomTrader         Traders:  48 Avg P&L: $   -170.86 Avg Return:   -1.02% Trades: 6,736
+SentimentTrader      Traders:  18 Avg P&L: $   -309.32 Avg Return:   -1.07% Trades: 585
+
+========== YEAR REALISM CHECK ==========
+Price annual return:     -1.67%
+FV annual return:        -2.55%
+Ann. daily vol:          27.49%
+Max drawdown:            -6.70%
+Avg spread (bps):         67.1
+NewsTrader fills:          146
+Trades / day:           1984.5
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+PASS  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 21 ---
+('MarketMaker', 'MarketMaker') 27100
+('MarketMaker', 'RandomTrader') 7237
+('FairValueTrader', 'MarketMaker') 1578
+('MarketMaker', 'MeanReversionTrader') 1070
+('AttentionTrader', 'MarketMaker') 1050
+('MarketMaker', 'MomentumTrader') 1006
+('MarketMaker', 'PersistentTrader') 685
+('MarketMaker', 'SentimentTrader') 416
+('FairValueTrader', 'RandomTrader') 322
+('AttentionTrader', 'RandomTrader') 253
+('MeanReversionTrader', 'RandomTrader') 185
+('MarketMaker', 'NewsTrader') 141
+('MomentumTrader', 'RandomTrader') 103
+('RandomTrader', 'SentimentTrader') 102
+('BreakoutTrader', 'MarketMaker') 43
+('RandomTrader', 'RandomTrader') 37
+('NewsTrader', 'RandomTrader') 30
+('IndexFundTrader', 'MarketMaker') 29
+('PersistentTrader', 'RandomTrader') 25
+('FairValueTrader', 'PersistentTrader') 19
+('AttentionTrader', 'PersistentTrader') 12
+('MeanReversionTrader', 'PersistentTrader') 10
+('IndexFundTrader', 'RandomTrader') 4
+('MomentumTrader', 'PersistentTrader') 4
+('PersistentTrader', 'SentimentTrader') 4
+('BreakoutTrader', 'RandomTrader') 2
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           21
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 24.0444
+Last ABC:       24.05
+Trades:         41467
+Auctions:       301 (matched qty 1936)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 252, 'news': 70, 'liquidity': 6, 'sector': 4, 'economic': 3} (total 335)
+Rate:           5.00%
+Flow mult:      1.23
+Liq. stress:    1.00
+Total fees:     $8,158.32
+Initial MTM:    $14,869,385.60
+Final MTM:      $14,831,950.89
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->24.04 last=24.05 trades=6488
+NBK: FV 16.20->16.62 last=16.64 trades=5611
+HLX: FV 15.40->15.38 last=15.1 trades=5389
+VLT: FV 9.60->9.58 last=9.75 trades=6247
+ORB: FV 11.00->10.69 last=10.66 trades=6303
+FRG: FV 12.35->12.61 last=12.63 trades=6184
+NVA: FV 10.80->9.68 last=9.9 trades=5245
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -347.01 Avg Return:   -1.97% Trades: 1,315
+BreakoutTrader       Traders:  15 Avg P&L: $    -68.80 Avg Return:   -0.46% Trades: 45
+FairValueTrader      Traders:  36 Avg P&L: $    -67.02 Avg Return:   -0.32% Trades: 1,919
+IndexFundTrader      Traders:  14 Avg P&L: $    -65.68 Avg Return:   -0.06% Trades: 33
+MarketMaker          Traders:  21 Avg P&L: $   -491.98 Avg Return:   -0.17% Trades: 67,455
+MeanReversionTrader  Traders:  18 Avg P&L: $    -75.97 Avg Return:   -0.87% Trades: 1,265
+MomentumTrader       Traders:  24 Avg P&L: $   -288.31 Avg Return:   -4.39% Trades: 1,113
+NewsTrader           Traders:  18 Avg P&L: $   -156.92 Avg Return:   -0.22% Trades: 171
+PersistentTrader     Traders:  18 Avg P&L: $    -54.99 Avg Return:   -0.60% Trades: 759
+RandomTrader         Traders:  48 Avg P&L: $    -80.54 Avg Return:   -0.27% Trades: 8,337
+SentimentTrader      Traders:  18 Avg P&L: $    -87.06 Avg Return:   -0.36% Trades: 522
+
+========== YEAR REALISM CHECK ==========
+Price annual return:      2.14%
+FV annual return:         0.18%
+Ann. daily vol:          43.34%
+Max drawdown:            -5.35%
+Avg spread (bps):        110.0
+NewsTrader fills:          171
+Trades / day:           1974.6
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+FAIL  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 22 ---
+('MarketMaker', 'MarketMaker') 25225
+('MarketMaker', 'RandomTrader') 7693
+('FairValueTrader', 'MarketMaker') 1482
+('MarketMaker', 'MomentumTrader') 993
+('AttentionTrader', 'MarketMaker') 889
+('MarketMaker', 'MeanReversionTrader') 625
+('MarketMaker', 'PersistentTrader') 593
+('MarketMaker', 'SentimentTrader') 582
+('FairValueTrader', 'RandomTrader') 422
+('AttentionTrader', 'RandomTrader') 227
+('MarketMaker', 'NewsTrader') 187
+('MeanReversionTrader', 'RandomTrader') 148
+('MomentumTrader', 'RandomTrader') 120
+('RandomTrader', 'SentimentTrader') 116
+('RandomTrader', 'RandomTrader') 76
+('NewsTrader', 'RandomTrader') 37
+('BreakoutTrader', 'MarketMaker') 30
+('IndexFundTrader', 'MarketMaker') 27
+('FairValueTrader', 'PersistentTrader') 18
+('PersistentTrader', 'RandomTrader') 16
+('IndexFundTrader', 'RandomTrader') 12
+('MeanReversionTrader', 'PersistentTrader') 9
+('PersistentTrader', 'SentimentTrader') 9
+('AttentionTrader', 'PersistentTrader') 4
+('MomentumTrader', 'PersistentTrader') 2
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           22
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 22.5940
+Last ABC:       23.06
+Trades:         39542
+Auctions:       301 (matched qty 1718)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 217, 'news': 84, 'economic': 4, 'liquidity': 5, 'sector': 4} (total 314)
+Rate:           4.65%
+Flow mult:      1.11
+Liq. stress:    1.00
+Total fees:     $8,194.99
+Initial MTM:    $15,607,862.25
+Final MTM:      $15,556,498.78
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->22.59 last=23.06 trades=6454
+NBK: FV 16.20->15.13 last=14.98 trades=6030
+HLX: FV 15.40->16.16 last=16.22 trades=4906
+VLT: FV 9.60->9.57 last=9.66 trades=5332
+ORB: FV 11.00->11.03 last=11.06 trades=6084
+FRG: FV 12.35->11.87 last=12.09 trades=5236
+NVA: FV 10.80->11.68 last=11.64 trades=5500
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -236.74 Avg Return:   -0.98% Trades: 1,120
+BreakoutTrader       Traders:  15 Avg P&L: $    -71.28 Avg Return:   -0.49% Trades: 30
+FairValueTrader      Traders:  36 Avg P&L: $   -111.42 Avg Return:    0.01% Trades: 1,922
+IndexFundTrader      Traders:  14 Avg P&L: $     83.64 Avg Return:   -0.15% Trades: 39
+MarketMaker          Traders:  21 Avg P&L: $   -867.45 Avg Return:   -0.08% Trades: 63,551
+MeanReversionTrader  Traders:  18 Avg P&L: $   -338.56 Avg Return:   -0.62% Trades: 782
+MomentumTrader       Traders:  24 Avg P&L: $   -362.95 Avg Return:   -2.40% Trades: 1,115
+NewsTrader           Traders:  18 Avg P&L: $    -26.81 Avg Return:   -0.01% Trades: 224
+PersistentTrader     Traders:  18 Avg P&L: $    -55.16 Avg Return:   -0.27% Trades: 651
+RandomTrader         Traders:  48 Avg P&L: $   -120.75 Avg Return:   -0.33% Trades: 8,943
+SentimentTrader      Traders:  18 Avg P&L: $   -200.57 Avg Return:   -0.01% Trades: 707
+
+========== YEAR REALISM CHECK ==========
+Price annual return:     -3.57%
+FV annual return:        -5.86%
+Ann. daily vol:          29.54%
+Max drawdown:            -6.72%
+Avg spread (bps):         98.3
+NewsTrader fills:          224
+Trades / day:           1883.0
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+FAIL  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 23 ---
+('MarketMaker', 'MarketMaker') 24637
+('MarketMaker', 'RandomTrader') 10049
+('FairValueTrader', 'MarketMaker') 2060
+('MarketMaker', 'MeanReversionTrader') 1385
+('MarketMaker', 'PersistentTrader') 1073
+('AttentionTrader', 'MarketMaker') 960
+('MarketMaker', 'MomentumTrader') 843
+('FairValueTrader', 'RandomTrader') 520
+('MarketMaker', 'SentimentTrader') 454
+('AttentionTrader', 'RandomTrader') 292
+('MeanReversionTrader', 'RandomTrader') 266
+('MarketMaker', 'NewsTrader') 151
+('RandomTrader', 'RandomTrader') 137
+('RandomTrader', 'SentimentTrader') 123
+('MomentumTrader', 'RandomTrader') 121
+('IndexFundTrader', 'MarketMaker') 60
+('NewsTrader', 'RandomTrader') 39
+('BreakoutTrader', 'MarketMaker') 37
+('PersistentTrader', 'RandomTrader') 29
+('FairValueTrader', 'PersistentTrader') 23
+('MeanReversionTrader', 'PersistentTrader') 16
+('IndexFundTrader', 'RandomTrader') 12
+('AttentionTrader', 'PersistentTrader') 11
+('PersistentTrader', 'SentimentTrader') 2
+('NewsTrader', 'PersistentTrader') 1
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           23
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 23.3291
+Last ABC:       22.84
+Trades:         43301
+Auctions:       301 (matched qty 2662)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 224, 'news': 84, 'liquidity': 4, 'sector': 4, 'economic': 2} (total 318)
+Rate:           5.57%
+Flow mult:      1.19
+Liq. stress:    1.00
+Total fees:     $9,123.06
+Initial MTM:    $16,595,280.80
+Final MTM:      $16,580,963.97
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->23.33 last=22.84 trades=6547
+NBK: FV 16.20->16.88 last=17.26 trades=5856
+HLX: FV 15.40->15.21 last=15.04 trades=6533
+VLT: FV 9.60->9.38 last=9.370000000000001 trades=5693
+ORB: FV 11.00->10.49 last=10.21 trades=6512
+FRG: FV 12.35->13.44 last=13.45 trades=5700
+NVA: FV 10.80->10.95 last=11.16 trades=6460
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -317.86 Avg Return:   -3.20% Trades: 1,263
+BreakoutTrader       Traders:  15 Avg P&L: $   -230.63 Avg Return:   -0.19% Trades: 37
+FairValueTrader      Traders:  36 Avg P&L: $   -329.14 Avg Return:   -1.13% Trades: 2,603
+IndexFundTrader      Traders:  14 Avg P&L: $    267.02 Avg Return:    0.04% Trades: 72
+MarketMaker          Traders:  21 Avg P&L: $  1,026.04 Avg Return:    0.31% Trades: 66,346
+MeanReversionTrader  Traders:  18 Avg P&L: $   -210.09 Avg Return:   -1.33% Trades: 1,667
+MomentumTrader       Traders:  24 Avg P&L: $   -269.01 Avg Return:   -3.06% Trades: 964
+NewsTrader           Traders:  18 Avg P&L: $    -72.00 Avg Return:   -0.23% Trades: 191
+PersistentTrader     Traders:  18 Avg P&L: $    -32.52 Avg Return:   -1.07% Trades: 1,155
+RandomTrader         Traders:  48 Avg P&L: $    -87.52 Avg Return:   -0.66% Trades: 11,725
+SentimentTrader      Traders:  18 Avg P&L: $   -178.07 Avg Return:   -0.65% Trades: 579
+
+========== YEAR REALISM CHECK ==========
+Price annual return:     -3.30%
+FV annual return:        -2.80%
+Ann. daily vol:          22.74%
+Max drawdown:            -6.61%
+Avg spread (bps):        103.7
+NewsTrader fills:          191
+Trades / day:           2062.0
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+FAIL  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 24 ---
+('MarketMaker', 'MarketMaker') 26042
+('MarketMaker', 'RandomTrader') 7280
+('FairValueTrader', 'MarketMaker') 1908
+('AttentionTrader', 'MarketMaker') 1016
+('MarketMaker', 'MeanReversionTrader') 971
+('MarketMaker', 'MomentumTrader') 830
+('MarketMaker', 'PersistentTrader') 571
+('FairValueTrader', 'RandomTrader') 392
+('MarketMaker', 'SentimentTrader') 376
+('AttentionTrader', 'RandomTrader') 215
+('MeanReversionTrader', 'RandomTrader') 157
+('MarketMaker', 'NewsTrader') 123
+('MomentumTrader', 'RandomTrader') 86
+('RandomTrader', 'SentimentTrader') 64
+('RandomTrader', 'RandomTrader') 51
+('NewsTrader', 'RandomTrader') 28
+('IndexFundTrader', 'MarketMaker') 27
+('BreakoutTrader', 'MarketMaker') 26
+('PersistentTrader', 'RandomTrader') 18
+('AttentionTrader', 'PersistentTrader') 12
+('MeanReversionTrader', 'PersistentTrader') 7
+('FairValueTrader', 'PersistentTrader') 5
+('MomentumTrader', 'PersistentTrader') 5
+('PersistentTrader', 'SentimentTrader') 4
+('BreakoutTrader', 'RandomTrader') 1
+('IndexFundTrader', 'RandomTrader') 1
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           24
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 22.0028
+Last ABC:       21.74
+Trades:         40216
+Auctions:       301 (matched qty 2077)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 245, 'news': 77, 'liquidity': 5, 'economic': 3, 'sector': 3} (total 333)
+Rate:           5.41%
+Flow mult:      1.15
+Liq. stress:    1.00
+Total fees:     $8,081.44
+Initial MTM:    $14,866,200.15
+Final MTM:      $14,789,820.79
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->22.00 last=21.74 trades=4920
+NBK: FV 16.20->16.17 last=16.19 trades=6079
+HLX: FV 15.40->15.54 last=15.44 trades=6324
+VLT: FV 9.60->9.96 last=10.04 trades=5938
+ORB: FV 11.00->10.60 last=10.5 trades=5552
+FRG: FV 12.35->12.67 last=12.99 trades=5519
+NVA: FV 10.80->10.66 last=10.71 trades=5884
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -233.33 Avg Return:   -2.15% Trades: 1,243
+BreakoutTrader       Traders:  15 Avg P&L: $    -61.47 Avg Return:   -0.35% Trades: 27
+FairValueTrader      Traders:  36 Avg P&L: $   -179.77 Avg Return:   -1.16% Trades: 2,305
+IndexFundTrader      Traders:  14 Avg P&L: $     -8.79 Avg Return:   -0.15% Trades: 28
+MarketMaker          Traders:  21 Avg P&L: $ -2,487.19 Avg Return:   -0.37% Trades: 65,212
+MeanReversionTrader  Traders:  18 Avg P&L: $    -27.32 Avg Return:   -0.99% Trades: 1,135
+MomentumTrader       Traders:  24 Avg P&L: $   -310.54 Avg Return:   -2.50% Trades: 921
+NewsTrader           Traders:  18 Avg P&L: $    -22.52 Avg Return:   -0.47% Trades: 151
+PersistentTrader     Traders:  18 Avg P&L: $    -99.84 Avg Return:   -0.95% Trades: 622
+RandomTrader         Traders:  48 Avg P&L: $     -1.76 Avg Return:   -0.43% Trades: 8,344
+SentimentTrader      Traders:  18 Avg P&L: $   -161.09 Avg Return:   -0.87% Trades: 444
+
+========== YEAR REALISM CHECK ==========
+Price annual return:     -9.19%
+FV annual return:        -8.32%
+Ann. daily vol:          27.43%
+Max drawdown:            -9.40%
+Avg spread (bps):         55.0
+NewsTrader fills:          151
+Trades / day:           1915.0
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+PASS  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 25 ---
+('MarketMaker', 'MarketMaker') 28164
+('MarketMaker', 'RandomTrader') 6177
+('FairValueTrader', 'MarketMaker') 2001
+('MarketMaker', 'MomentumTrader') 1242
+('MarketMaker', 'MeanReversionTrader') 1126
+('AttentionTrader', 'MarketMaker') 660
+('FairValueTrader', 'RandomTrader') 373
+('MarketMaker', 'PersistentTrader') 309
+('MarketMaker', 'SentimentTrader') 302
+('MeanReversionTrader', 'RandomTrader') 167
+('AttentionTrader', 'RandomTrader') 137
+('MarketMaker', 'NewsTrader') 119
+('MomentumTrader', 'RandomTrader') 112
+('RandomTrader', 'SentimentTrader') 69
+('RandomTrader', 'RandomTrader') 63
+('IndexFundTrader', 'MarketMaker') 33
+('BreakoutTrader', 'MarketMaker') 33
+('NewsTrader', 'RandomTrader') 28
+('MeanReversionTrader', 'PersistentTrader') 12
+('FairValueTrader', 'PersistentTrader') 11
+('PersistentTrader', 'RandomTrader') 10
+('IndexFundTrader', 'RandomTrader') 9
+('AttentionTrader', 'PersistentTrader') 4
+('PersistentTrader', 'SentimentTrader') 2
+('BreakoutTrader', 'RandomTrader') 1
+('NewsTrader', 'PersistentTrader') 1
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           25
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 24.7946
+Last ABC:       25.52
+Trades:         41165
+Auctions:       301 (matched qty 1626)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 1, 'NVA': 0}
+Events:         {'social': 245, 'news': 63, 'liquidity': 7, 'economic': 5, 'sector': 4} (total 324)
+Rate:           4.28%
+Flow mult:      0.66
+Liq. stress:    1.00
+Total fees:     $8,047.38
+Initial MTM:    $15,174,773.80
+Final MTM:      $15,274,117.52
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->24.79 last=25.52 trades=5626
+NBK: FV 16.20->17.19 last=17.43 trades=6242
+HLX: FV 15.40->15.44 last=15.36 trades=5719
+VLT: FV 9.60->9.64 last=9.94 trades=6446
+ORB: FV 11.00->10.57 last=10.52 trades=5660
+FRG: FV 12.35->12.14 last=11.95 trades=7108
+NVA: FV 10.80->11.04 last=10.94 trades=4364
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $    -95.72 Avg Return:   -0.41% Trades: 801
+BreakoutTrader       Traders:  15 Avg P&L: $    218.48 Avg Return:    0.08% Trades: 34
+FairValueTrader      Traders:  36 Avg P&L: $     -2.36 Avg Return:   -0.46% Trades: 2,385
+IndexFundTrader      Traders:  14 Avg P&L: $     62.61 Avg Return:    0.11% Trades: 42
+MarketMaker          Traders:  21 Avg P&L: $  4,446.91 Avg Return:    0.90% Trades: 68,330
+MeanReversionTrader  Traders:  18 Avg P&L: $     41.72 Avg Return:   -0.30% Trades: 1,305
+MomentumTrader       Traders:  24 Avg P&L: $   -108.51 Avg Return:   -5.43% Trades: 1,354
+NewsTrader           Traders:  18 Avg P&L: $    101.28 Avg Return:    0.49% Trades: 148
+PersistentTrader     Traders:  18 Avg P&L: $     97.37 Avg Return:    0.71% Trades: 349
+RandomTrader         Traders:  48 Avg P&L: $      0.58 Avg Return:   -0.06% Trades: 7,209
+SentimentTrader      Traders:  18 Avg P&L: $     87.52 Avg Return:   -0.13% Trades: 373
+
+========== YEAR REALISM CHECK ==========
+Price annual return:      1.79%
+FV annual return:         3.31%
+Ann. daily vol:          29.80%
+Max drawdown:            -3.99%
+Avg spread (bps):         71.9
+NewsTrader fills:          148
+Trades / day:           1960.2
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+PASS  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 26 ---
+('MarketMaker', 'MarketMaker') 26067
+('MarketMaker', 'RandomTrader') 7912
+('FairValueTrader', 'MarketMaker') 2256
+('MarketMaker', 'MomentumTrader') 883
+('MarketMaker', 'MeanReversionTrader') 831
+('AttentionTrader', 'MarketMaker') 564
+('FairValueTrader', 'RandomTrader') 530
+('MarketMaker', 'PersistentTrader') 480
+('MarketMaker', 'SentimentTrader') 359
+('MarketMaker', 'NewsTrader') 185
+('MeanReversionTrader', 'RandomTrader') 166
+('AttentionTrader', 'RandomTrader') 131
+('MomentumTrader', 'RandomTrader') 115
+('RandomTrader', 'RandomTrader') 94
+('RandomTrader', 'SentimentTrader') 74
+('BreakoutTrader', 'MarketMaker') 38
+('NewsTrader', 'RandomTrader') 37
+('IndexFundTrader', 'MarketMaker') 28
+('PersistentTrader', 'RandomTrader') 21
+('FairValueTrader', 'PersistentTrader') 15
+('IndexFundTrader', 'RandomTrader') 10
+('MeanReversionTrader', 'PersistentTrader') 9
+('MomentumTrader', 'PersistentTrader') 4
+('BreakoutTrader', 'RandomTrader') 4
+('PersistentTrader', 'SentimentTrader') 4
+('AttentionTrader', 'PersistentTrader') 4
+('NewsTrader', 'PersistentTrader') 2
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           26
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 25.7501
+Last ABC:       25.98
+Trades:         40823
+Auctions:       301 (matched qty 2122)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 238, 'news': 91, 'sector': 5, 'liquidity': 5, 'economic': 4} (total 343)
+Rate:           4.92%
+Flow mult:      0.83
+Liq. stress:    1.00
+Total fees:     $8,927.45
+Initial MTM:    $17,140,809.85
+Final MTM:      $17,399,465.04
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->25.75 last=25.98 trades=5516
+NBK: FV 16.20->16.16 last=16.27 trades=5431
+HLX: FV 15.40->16.38 last=16.48 trades=7056
+VLT: FV 9.60->9.88 last=10.06 trades=5624
+ORB: FV 11.00->12.17 last=12.08 trades=5683
+FRG: FV 12.35->13.96 last=13.75 trades=5162
+NVA: FV 10.80->10.31 last=10.08 trades=6351
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $    591.74 Avg Return:    0.94% Trades: 699
+BreakoutTrader       Traders:  15 Avg P&L: $    294.28 Avg Return:    0.48% Trades: 42
+FairValueTrader      Traders:  36 Avg P&L: $    296.40 Avg Return:    1.88% Trades: 2,801
+IndexFundTrader      Traders:  14 Avg P&L: $    204.30 Avg Return:    0.49% Trades: 38
+MarketMaker          Traders:  21 Avg P&L: $  9,440.27 Avg Return:    2.13% Trades: 65,670
+MeanReversionTrader  Traders:  18 Avg P&L: $     99.73 Avg Return:    0.28% Trades: 1,006
+MomentumTrader       Traders:  24 Avg P&L: $    257.92 Avg Return:   -0.79% Trades: 1,002
+NewsTrader           Traders:  18 Avg P&L: $    199.85 Avg Return:    0.91% Trades: 224
+PersistentTrader     Traders:  18 Avg P&L: $    524.65 Avg Return:    1.16% Trades: 539
+RandomTrader         Traders:  48 Avg P&L: $    131.08 Avg Return:    0.76% Trades: 9,188
+SentimentTrader      Traders:  18 Avg P&L: $    348.37 Avg Return:    0.59% Trades: 437
+
+========== YEAR REALISM CHECK ==========
+Price annual return:      7.00%
+FV annual return:         7.29%
+Ann. daily vol:          29.92%
+Max drawdown:            -3.21%
+Avg spread (bps):         72.8
+NewsTrader fills:          224
+Trades / day:           1944.0
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+PASS  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 27 ---
+('MarketMaker', 'MarketMaker') 26588
+('MarketMaker', 'RandomTrader') 7269
+('FairValueTrader', 'MarketMaker') 1490
+('MarketMaker', 'MomentumTrader') 1395
+('AttentionTrader', 'MarketMaker') 1362
+('MarketMaker', 'MeanReversionTrader') 1149
+('MarketMaker', 'SentimentTrader') 616
+('MarketMaker', 'PersistentTrader') 524
+('FairValueTrader', 'RandomTrader') 310
+('AttentionTrader', 'RandomTrader') 276
+('MeanReversionTrader', 'RandomTrader') 198
+('MarketMaker', 'NewsTrader') 181
+('MomentumTrader', 'RandomTrader') 164
+('RandomTrader', 'SentimentTrader') 125
+('IndexFundTrader', 'MarketMaker') 68
+('RandomTrader', 'RandomTrader') 60
+('BreakoutTrader', 'MarketMaker') 44
+('NewsTrader', 'RandomTrader') 42
+('FairValueTrader', 'PersistentTrader') 19
+('IndexFundTrader', 'RandomTrader') 18
+('PersistentTrader', 'RandomTrader') 18
+('AttentionTrader', 'PersistentTrader') 9
+('PersistentTrader', 'SentimentTrader') 4
+('MeanReversionTrader', 'PersistentTrader') 4
+('NewsTrader', 'PersistentTrader') 2
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           27
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 24.6149
+Last ABC:       25.33
+Trades:         41935
+Auctions:       301 (matched qty 1587)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 245, 'news': 70, 'liquidity': 5, 'sector': 4, 'economic': 5} (total 329)
+Rate:           4.46%
+Flow mult:      1.38
+Liq. stress:    1.00
+Total fees:     $9,280.15
+Initial MTM:    $15,343,480.35
+Final MTM:      $15,403,254.02
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->24.61 last=25.33 trades=6346
+NBK: FV 16.20->15.52 last=15.52 trades=6096
+HLX: FV 15.40->15.86 last=15.78 trades=5855
+VLT: FV 9.60->9.38 last=9.6 trades=5296
+ORB: FV 11.00->11.31 last=11.35 trades=5844
+FRG: FV 12.35->12.10 last=12.48 trades=6328
+NVA: FV 10.80->10.40 last=10.65 trades=6170
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -130.80 Avg Return:   -1.93% Trades: 1,647
+BreakoutTrader       Traders:  15 Avg P&L: $     12.61 Avg Return:    0.02% Trades: 44
+FairValueTrader      Traders:  36 Avg P&L: $     11.47 Avg Return:   -0.52% Trades: 1,819
+IndexFundTrader      Traders:  14 Avg P&L: $     52.47 Avg Return:    0.14% Trades: 86
+MarketMaker          Traders:  21 Avg P&L: $  2,891.02 Avg Return:    0.58% Trades: 67,274
+MeanReversionTrader  Traders:  18 Avg P&L: $    -47.15 Avg Return:   -0.01% Trades: 1,351
+MomentumTrader       Traders:  24 Avg P&L: $   -265.46 Avg Return:   -5.48% Trades: 1,559
+NewsTrader           Traders:  18 Avg P&L: $    186.66 Avg Return:    0.15% Trades: 225
+PersistentTrader     Traders:  18 Avg P&L: $     -4.32 Avg Return:   -0.05% Trades: 580
+RandomTrader         Traders:  48 Avg P&L: $     56.14 Avg Return:    0.06% Trades: 8,540
+SentimentTrader      Traders:  18 Avg P&L: $     51.69 Avg Return:    0.19% Trades: 745
+
+========== YEAR REALISM CHECK ==========
+Price annual return:      1.44%
+FV annual return:         2.56%
+Ann. daily vol:          25.84%
+Max drawdown:            -5.81%
+Avg spread (bps):         81.9
+NewsTrader fills:          225
+Trades / day:           1996.9
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+FAIL  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 28 ---
+('MarketMaker', 'MarketMaker') 26563
+('MarketMaker', 'RandomTrader') 8708
+('FairValueTrader', 'MarketMaker') 2111
+('MarketMaker', 'MomentumTrader') 829
+('AttentionTrader', 'MarketMaker') 702
+('MarketMaker', 'MeanReversionTrader') 627
+('FairValueTrader', 'RandomTrader') 542
+('MarketMaker', 'PersistentTrader') 422
+('MarketMaker', 'SentimentTrader') 380
+('AttentionTrader', 'RandomTrader') 202
+('MeanReversionTrader', 'RandomTrader') 145
+('MarketMaker', 'NewsTrader') 133
+('MomentumTrader', 'RandomTrader') 115
+('RandomTrader', 'SentimentTrader') 107
+('RandomTrader', 'RandomTrader') 71
+('IndexFundTrader', 'MarketMaker') 42
+('NewsTrader', 'RandomTrader') 40
+('BreakoutTrader', 'MarketMaker') 30
+('PersistentTrader', 'RandomTrader') 16
+('FairValueTrader', 'PersistentTrader') 14
+('MeanReversionTrader', 'PersistentTrader') 11
+('IndexFundTrader', 'RandomTrader') 9
+('AttentionTrader', 'PersistentTrader') 5
+('NewsTrader', 'PersistentTrader') 5
+('PersistentTrader', 'SentimentTrader') 4
+('MomentumTrader', 'PersistentTrader') 3
+('BreakoutTrader', 'RandomTrader') 1
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           28
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 23.4027
+Last ABC:       23.31
+Trades:         41837
+Auctions:       301 (matched qty 3438)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'news': 91, 'social': 238, 'liquidity': 6, 'sector': 5, 'economic': 3} (total 343)
+Rate:           4.32%
+Flow mult:      1.04
+Liq. stress:    1.00
+Total fees:     $8,482.38
+Initial MTM:    $15,839,240.55
+Final MTM:      $15,783,040.90
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->23.40 last=23.31 trades=5887
+NBK: FV 16.20->16.06 last=16.36 trades=5606
+HLX: FV 15.40->15.45 last=15.49 trades=5885
+VLT: FV 9.60->10.17 last=10.02 trades=5603
+ORB: FV 11.00->10.94 last=11.02 trades=6814
+FRG: FV 12.35->11.90 last=11.84 trades=6074
+NVA: FV 10.80->10.04 last=10.22 trades=5968
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $   -145.65 Avg Return:   -1.47% Trades: 909
+BreakoutTrader       Traders:  15 Avg P&L: $   -139.59 Avg Return:   -0.75% Trades: 31
+FairValueTrader      Traders:  36 Avg P&L: $     66.11 Avg Return:   -0.13% Trades: 2,667
+IndexFundTrader      Traders:  14 Avg P&L: $    -10.19 Avg Return:   -0.15% Trades: 51
+MarketMaker          Traders:  21 Avg P&L: $ -1,474.00 Avg Return:   -0.30% Trades: 67,110
+MeanReversionTrader  Traders:  18 Avg P&L: $    -96.09 Avg Return:   -1.02% Trades: 783
+MomentumTrader       Traders:  24 Avg P&L: $   -238.60 Avg Return:   -3.38% Trades: 947
+NewsTrader           Traders:  18 Avg P&L: $    -50.07 Avg Return:   -0.22% Trades: 178
+PersistentTrader     Traders:  18 Avg P&L: $   -148.16 Avg Return:   -0.37% Trades: 480
+RandomTrader         Traders:  48 Avg P&L: $   -169.83 Avg Return:   -0.77% Trades: 10,027
+SentimentTrader      Traders:  18 Avg P&L: $   -223.79 Avg Return:   -0.60% Trades: 491
+
+========== YEAR REALISM CHECK ==========
+Price annual return:     -1.67%
+FV annual return:        -2.49%
+Ann. daily vol:          27.13%
+Max drawdown:            -6.11%
+Avg spread (bps):         68.8
+NewsTrader fills:          178
+Trades / day:           1992.2
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+PASS  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 29 ---
+('MarketMaker', 'MarketMaker') 26717
+('MarketMaker', 'RandomTrader') 7140
+('FairValueTrader', 'MarketMaker') 2262
+('MarketMaker', 'MomentumTrader') 1306
+('MarketMaker', 'MeanReversionTrader') 679
+('AttentionTrader', 'MarketMaker') 639
+('FairValueTrader', 'RandomTrader') 540
+('MarketMaker', 'PersistentTrader') 531
+('MarketMaker', 'SentimentTrader') 389
+('MeanReversionTrader', 'RandomTrader') 143
+('MarketMaker', 'NewsTrader') 141
+('MomentumTrader', 'RandomTrader') 140
+('AttentionTrader', 'RandomTrader') 105
+('RandomTrader', 'SentimentTrader') 86
+('RandomTrader', 'RandomTrader') 64
+('IndexFundTrader', 'MarketMaker') 47
+('NewsTrader', 'RandomTrader') 31
+('BreakoutTrader', 'MarketMaker') 31
+('FairValueTrader', 'PersistentTrader') 22
+('PersistentTrader', 'RandomTrader') 19
+('IndexFundTrader', 'RandomTrader') 9
+('MomentumTrader', 'PersistentTrader') 7
+('MeanReversionTrader', 'PersistentTrader') 5
+('PersistentTrader', 'SentimentTrader') 2
+('BreakoutTrader', 'RandomTrader') 1
+('AttentionTrader', 'PersistentTrader') 1
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           29
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 24.4291
+Last ABC:       24.81
+Trades:         41057
+Auctions:       301 (matched qty 1905)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 1, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'news': 70, 'social': 231, 'economic': 4, 'liquidity': 5, 'sector': 4} (total 314)
+Rate:           3.65%
+Flow mult:      1.01
+Liq. stress:    1.00
+Total fees:     $8,217.18
+Initial MTM:    $14,975,267.55
+Final MTM:      $15,240,519.08
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->24.43 last=24.81 trades=5235
+NBK: FV 16.20->17.64 last=17.87 trades=5889
+HLX: FV 15.40->16.25 last=16.72 trades=7230
+VLT: FV 9.60->11.09 last=11.21 trades=5152
+ORB: FV 11.00->12.11 last=12.07 trades=6000
+FRG: FV 12.35->12.21 last=12.1 trades=4871
+NVA: FV 10.80->10.26 last=10.61 trades=6680
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $     30.27 Avg Return:    0.67% Trades: 745
+BreakoutTrader       Traders:  15 Avg P&L: $    113.25 Avg Return:    0.72% Trades: 32
+FairValueTrader      Traders:  36 Avg P&L: $    252.38 Avg Return:    0.91% Trades: 2,824
+IndexFundTrader      Traders:  14 Avg P&L: $    237.54 Avg Return:    0.57% Trades: 56
+MarketMaker          Traders:  21 Avg P&L: $ 10,478.89 Avg Return:    2.49% Trades: 66,599
+MeanReversionTrader  Traders:  18 Avg P&L: $    299.84 Avg Return:    1.17% Trades: 827
+MomentumTrader       Traders:  24 Avg P&L: $     63.85 Avg Return:   -1.62% Trades: 1,453
+NewsTrader           Traders:  18 Avg P&L: $    401.45 Avg Return:    0.94% Trades: 172
+PersistentTrader     Traders:  18 Avg P&L: $    295.21 Avg Return:    1.94% Trades: 587
+RandomTrader         Traders:  48 Avg P&L: $    141.86 Avg Return:    1.13% Trades: 8,342
+SentimentTrader      Traders:  18 Avg P&L: $    241.77 Avg Return:    1.47% Trades: 477
+
+========== YEAR REALISM CHECK ==========
+Price annual return:      1.61%
+FV annual return:         1.79%
+Ann. daily vol:          17.40%
+Max drawdown:            -3.46%
+Avg spread (bps):         51.4
+NewsTrader fills:          172
+Trades / day:           1955.1
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+PASS  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+--- seed 30 ---
+('MarketMaker', 'MarketMaker') 23308
+('MarketMaker', 'RandomTrader') 9742
+('FairValueTrader', 'MarketMaker') 1656
+('MarketMaker', 'PersistentTrader') 948
+('MarketMaker', 'MeanReversionTrader') 911
+('MarketMaker', 'MomentumTrader') 874
+('AttentionTrader', 'MarketMaker') 831
+('FairValueTrader', 'RandomTrader') 549
+('MarketMaker', 'SentimentTrader') 405
+('MeanReversionTrader', 'RandomTrader') 264
+('AttentionTrader', 'RandomTrader') 252
+('MomentumTrader', 'RandomTrader') 145
+('MarketMaker', 'NewsTrader') 131
+('RandomTrader', 'SentimentTrader') 130
+('RandomTrader', 'RandomTrader') 108
+('NewsTrader', 'RandomTrader') 47
+('BreakoutTrader', 'MarketMaker') 46
+('FairValueTrader', 'PersistentTrader') 45
+('IndexFundTrader', 'MarketMaker') 35
+('PersistentTrader', 'RandomTrader') 24
+('MomentumTrader', 'PersistentTrader') 12
+('AttentionTrader', 'PersistentTrader') 12
+('MeanReversionTrader', 'PersistentTrader') 11
+('IndexFundTrader', 'RandomTrader') 7
+('NewsTrader', 'PersistentTrader') 2
+('BreakoutTrader', 'RandomTrader') 1
+('PersistentTrader', 'SentimentTrader') 1
+
+========== MARKET DIAGNOSTICS ==========
+Seed:           30
+Symbols:        ABC, NBK, HLX, VLT, ORB, FRG, NVA
+Session:        09:30–16:00 (390 min/day)
+Duration:       21 trading days (8,190 minutes)
+Primary:        ABC FV 24.0000 -> 24.8024
+Last ABC:       24.67
+Trades:         40497
+Auctions:       301 (matched qty 3771)
+Halts:          {'ABC': 0, 'NBK': 0, 'HLX': 0, 'VLT': 0, 'ORB': 0, 'FRG': 0, 'NVA': 0}
+Events:         {'social': 231, 'news': 63, 'economic': 5, 'sector': 4, 'liquidity': 6} (total 309)
+Rate:           5.00%
+Flow mult:      0.97
+Liq. stress:    1.00
+Total fees:     $9,088.41
+Initial MTM:    $16,228,959.55
+Final MTM:      $16,266,712.10
+Cash conserv:   gap=$0.0000
+Share conserv:  gap=0
+
+========== PER SYMBOL ==========
+ABC: FV 24.00->24.80 last=24.67 trades=5332
+NBK: FV 16.20->16.17 last=16.29 trades=6273
+HLX: FV 15.40->15.63 last=15.89 trades=5546
+VLT: FV 9.60->9.57 last=9.63 trades=6759
+ORB: FV 11.00->10.91 last=11.06 trades=5559
+FRG: FV 12.35->12.12 last=12.3 trades=5571
+NVA: FV 10.80->10.25 last=10.42 trades=5457
+
+========== P&L BY STRATEGY ==========
+AttentionTrader      Traders:  15 Avg P&L: $    -13.01 Avg Return:   -1.10% Trades: 1,095
+BreakoutTrader       Traders:  15 Avg P&L: $     31.64 Avg Return:    0.08% Trades: 47
+FairValueTrader      Traders:  36 Avg P&L: $    126.17 Avg Return:    0.23% Trades: 2,250
+IndexFundTrader      Traders:  14 Avg P&L: $     57.78 Avg Return:    0.05% Trades: 42
+MarketMaker          Traders:  21 Avg P&L: $  1,846.22 Avg Return:    0.38% Trades: 62,195
+MeanReversionTrader  Traders:  18 Avg P&L: $     69.31 Avg Return:    0.04% Trades: 1,186
+MomentumTrader       Traders:  24 Avg P&L: $   -205.97 Avg Return:   -3.21% Trades: 1,031
+NewsTrader           Traders:  18 Avg P&L: $     33.61 Avg Return:    0.04% Trades: 180
+PersistentTrader     Traders:  18 Avg P&L: $     57.06 Avg Return:   -0.04% Trades: 1,055
+RandomTrader         Traders:  48 Avg P&L: $   -112.40 Avg Return:   -0.42% Trades: 11,377
+SentimentTrader      Traders:  18 Avg P&L: $     45.02 Avg Return:   -0.38% Trades: 536
+
+========== YEAR REALISM CHECK ==========
+Price annual return:      3.86%
+FV annual return:         3.34%
+Ann. daily vol:          23.09%
+Max drawdown:            -4.08%
+Avg spread (bps):         52.1
+NewsTrader fills:          180
+Trades / day:           1928.4
+Session prints:            301
+
+========== SANITY FLAGS ==========
+PASS  FV return in [-20%, +40%]
+PASS  Price vol in 15–60%
+PASS  Max DD milder than -80%
+PASS  Avg spread gate (5–120 bps if days<=5 else 5–80)
+PASS  NewsTrader traded
+PASS  Cash conservation
+PASS  Share conservation
+PASS  Some daily trading
+PASS  Session prints ran
+PASS  No negative cash
+
+========== STYLIZED FACTS ==========
+Seeds: 30  Days: 21
+Excess kurtosis:      -0.092  CI [ -0.407,   0.223]
+Return AC(1):         -0.317  CI [ -0.382,  -0.253]
+Squared-ret AC(1):     0.043  CI [ -0.040,   0.125]
+Ann. vol:             28.36%  CI [ 25.74%,  30.98%]
+
+========== STRATEGY RETURN % (mean ± 95% CI) ==========
+AttentionTrader        -1.31%  CI [  -1.67%,   -0.95%]
+BreakoutTrader         -0.18%  CI [  -0.32%,   -0.04%]
+FairValueTrader        -0.15%  CI [  -0.48%,    0.18%]
+IndexFundTrader         0.02%  CI [  -0.07%,    0.11%]
+MarketMaker             0.40%  CI [   0.08%,    0.71%]
+MeanReversionTrader    -0.37%  CI [  -0.62%,   -0.12%]
+MomentumTrader         -3.30%  CI [  -3.72%,   -2.87%]
+NewsTrader             -0.01%  CI [  -0.17%,    0.16%]
+PersistentTrader       -0.06%  CI [  -0.38%,    0.26%]
+RandomTrader           -0.22%  CI [  -0.43%,   -0.01%]
+SentimentTrader        -0.14%  CI [  -0.36%,    0.08%]

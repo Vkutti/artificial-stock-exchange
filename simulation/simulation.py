@@ -10,6 +10,12 @@ from company.company import Company
 from company.news_event import generate_news_event, apply_news_event
 from company.social_event import generate_social_event, apply_social_event
 from company.economic_event import generate_economic_event, apply_economic_event
+from company.sector_event import generate_sector_event, apply_sector_event
+from company.liquidity_event import (
+    generate_liquidity_event,
+    stress_multiplier_from_event,
+    duration_from_event,
+)
 from company.economy import Economy
 from simulation.clock import SimClock, MINUTES_PER_DAY
 from simulation.events import Event
@@ -116,6 +122,8 @@ class Simulation:
         self.news_interval = (MINUTES_PER_DAY * 3) // 2
         self.social_interval = MINUTES_PER_DAY // 2
         self.economic_interval = MINUTES_PER_DAY * 5
+        self.sector_interval = MINUTES_PER_DAY * 4
+        self.liquidity_interval = MINUTES_PER_DAY * 3
         self.event_retention_ticks = MINUTES_PER_DAY
         self.flow_update_interval = 60
 
@@ -124,6 +132,8 @@ class Simulation:
         self.next_news_event = random.randint(60, max(61, self.news_interval))
         self.next_social_event = random.randint(30, max(31, self.social_interval))
         self.next_economic_event = random.randint(120, max(121, self.economic_interval))
+        self.next_sector_event = random.randint(90, max(91, self.sector_interval))
+        self.next_liquidity_event = random.randint(80, max(81, self.liquidity_interval))
         self.next_flow_update = self.flow_update_interval
 
         self.recent_events = []
@@ -143,6 +153,8 @@ class Simulation:
         self.breaker_ref_alpha = 0.05
         self._last_print_day = -1
         self._close_print_done_day = -1
+        self.liquidity_stress = 1.0
+        self.liquidity_stress_until = -1
         self.symbol_series = {
             s: {"bid": [], "ask": [], "mid": [], "last": [], "fv": [], "spread": []}
             for s in self.companies
@@ -184,21 +196,36 @@ class Simulation:
                 self._refund_order(order)
 
     def _public_events_for(self, symbol):
+        company = self._company_for(symbol)
         out = []
         for e in self.recent_events:
-            if e.symbol is None or e.symbol == symbol or e.source == "economic":
-                out.append(
-                    PublicHeadline(
-                        tick=e.tick,
-                        kind=e.kind,
-                        source=e.source,
-                        headline=e.headline,
-                        symbol=e.symbol,
-                        sign=e.sign,
-                        intensity=e.intensity,
-                    )
+            if e.source == "sector":
+                if e.sector != company.industry:
+                    continue
+            elif e.source == "liquidity":
+                pass
+            elif e.source == "economic":
+                pass
+            elif e.symbol is not None and e.symbol != symbol:
+                continue
+            out.append(
+                PublicHeadline(
+                    tick=e.tick,
+                    kind=e.kind,
+                    source=e.source,
+                    headline=e.headline,
+                    symbol=e.symbol,
+                    sign=e.sign,
+                    intensity=e.intensity,
+                    sector=getattr(e, "sector", None),
                 )
+            )
         return out
+
+    def _current_liquidity_stress(self):
+        if self.current_tick >= self.liquidity_stress_until:
+            self.liquidity_stress = 1.0
+        return self.liquidity_stress
 
     def _step_fv_noise(self, trader):
         if trader is None:
@@ -251,6 +278,10 @@ class Simulation:
             session_phase=self._session_phase(),
             flow_multiplier=self.economy.flow_multiplier,
             risk_free_rate=self.economy.risk_free_rate,
+            bid_depth=book.get_depth(Side.BUY, levels=5),
+            ask_depth=book.get_depth(Side.SELL, levels=5),
+            liquidity_stress=self._current_liquidity_stress(),
+            sector=company.industry,
         )
 
     def process_trade(self, trade):
@@ -398,7 +429,11 @@ class Simulation:
         self.next_news_event = random.randint(60, max(61, self.news_interval))
         self.next_social_event = random.randint(30, max(31, self.social_interval))
         self.next_economic_event = random.randint(120, max(121, self.economic_interval))
+        self.next_sector_event = random.randint(90, max(91, self.sector_interval))
+        self.next_liquidity_event = random.randint(80, max(81, self.liquidity_interval))
         self.next_flow_update = self.flow_update_interval
+        self.liquidity_stress = 1.0
+        self.liquidity_stress_until = -1
 
         for trader in self.traders:
             first_tick = random.randint(0, 5)
@@ -423,33 +458,64 @@ class Simulation:
                 self.economy.apply_rate_shock(event.magnitude)
                 for c in self.companies.values():
                     c.apply_economy(self.economy)
+        elif event.source == "sector":
+            for c in self.companies.values():
+                if c.industry == event.sector:
+                    apply_sector_event(c, event)
+        elif event.source == "liquidity":
+            self.liquidity_stress = stress_multiplier_from_event(event)
+            self.liquidity_stress_until = self.current_tick + duration_from_event(event)
 
         self.recent_events.append(event)
         self.event_history.append(event)
         self._prune_recent_events()
 
-    def _run_session_print(self, symbol, phase):
+    def _run_auction(self, symbol, phase):
         book = self._book(symbol)
-        bid = book.get_best_bid()
-        ask = book.get_best_ask()
         company = self._company_for(symbol)
-        if bid is None and ask is None:
-            price = company.fundamental_value
-        elif bid is None:
-            price = ask
-        elif ask is None:
-            price = bid
+        trades, clearing, matched_qty = book.execute_midpoint_cross(
+            self.current_tick, tick_size=self.exchange.tick_size
+        )
+        if trades:
+            for trade in trades:
+                trade.symbol = symbol
+                cost = trade.price * trade.quantity * (1.0 + self.fee_rate)
+                if trade.buyer_reservation_release + 1e-9 < cost:
+                    buyer = self.trader_map.get(trade.buy_trader_id)
+                    need = cost - trade.buyer_reservation_release
+                    if buyer is not None and buyer.money + 1e-9 >= need:
+                        buyer.money -= need
+                        trade.buyer_reservation_release = cost
+                self.exchange.trade_history.append(trade)
+                self.process_trade(trade)
+            price = clearing
         else:
-            price = 0.5 * (bid + ask)
+            bid = book.get_best_bid()
+            ask = book.get_best_ask()
+            if bid is None and ask is None:
+                price = company.fundamental_value
+            elif bid is None:
+                price = ask
+            elif ask is None:
+                price = bid
+            else:
+                price = 0.5 * (bid + ask)
+            price = round_to_tick(price, self.exchange.tick_size)
+            book.recent_prices.append(price)
+            if len(book.recent_prices) > 1000:
+                book.recent_prices.pop(0)
+            matched_qty = 0
 
-        price = round_to_tick(price, self.exchange.tick_size)
-        book.recent_prices.append(price)
-        if len(book.recent_prices) > 1000:
-            book.recent_prices.pop(0)
         company.update_market_stats(price)
         self._update_breaker_ref(symbol, price)
         self.session_prints.append(
-            {"tick": self.current_tick, "symbol": symbol, "phase": phase, "price": price}
+            {
+                "tick": self.current_tick,
+                "symbol": symbol,
+                "phase": phase,
+                "price": price,
+                "volume": matched_qty,
+            }
         )
         if phase == "close":
             self.prior_close[symbol] = price
@@ -463,16 +529,13 @@ class Simulation:
         if sm == 0 and self._last_print_day != day:
             for symbol in self.companies:
                 if not self._is_halted(symbol):
-                    self._run_session_print(symbol, "open")
+                    self._run_auction(symbol, "open")
             self._last_print_day = day
         if sm == MINUTES_PER_DAY - 1 and self._close_print_done_day != day:
             for symbol in self.companies:
                 if not self._is_halted(symbol):
-                    self._run_session_print(symbol, "close")
+                    self._run_auction(symbol, "close")
             self._close_print_done_day = day
-
-    def _run_auction(self, symbol, phase):
-        self._run_session_print(symbol, phase)
 
     def _maybe_run_auctions(self):
         self._maybe_run_session_prints()
@@ -531,6 +594,25 @@ class Simulation:
                 self.economic_interval * 2,
             )
 
+        while self.current_tick >= self.next_sector_event:
+            sectors = sorted({c.industry for c in self.companies.values()})
+            sector_name = random.choice(sectors)
+            event = generate_sector_event(self.current_tick, sector_name)
+            self._fire_market_event(event)
+            self.next_sector_event += random.randint(
+                max(1, self.sector_interval // 2),
+                self.sector_interval * 2,
+            )
+
+        while self.current_tick >= self.next_liquidity_event:
+            event = generate_liquidity_event(self.current_tick)
+            self._fire_market_event(event)
+            self.next_liquidity_event += random.randint(
+                max(1, self.liquidity_interval // 2),
+                self.liquidity_interval * 2,
+            )
+
+        self._current_liquidity_stress()
         self._maybe_run_session_prints()
 
     def _record_sample(self):
@@ -693,4 +775,8 @@ class Simulation:
         self.next_news_event = random.randint(60, max(61, self.news_interval))
         self.next_social_event = random.randint(30, max(31, self.social_interval))
         self.next_economic_event = random.randint(120, max(121, self.economic_interval))
+        self.next_sector_event = random.randint(90, max(91, self.sector_interval))
+        self.next_liquidity_event = random.randint(80, max(81, self.liquidity_interval))
         self.next_flow_update = self.flow_update_interval
+        self.liquidity_stress = 1.0
+        self.liquidity_stress_until = -1

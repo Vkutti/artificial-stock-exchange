@@ -57,6 +57,211 @@ class OrderBook:
             return None
         return ask - bid
 
+    def get_depth(self, side, levels=5):
+        side_book = self.order_book[side]
+        if not side_book:
+            return []
+        prices = sorted(side_book.keys(), reverse=(side == Side.BUY))
+        out = []
+        for price in prices[:levels]:
+            qty = sum(o.remaining_quantity for o in side_book[price])
+            out.append((price, qty))
+        return out
+
+    def _qty_at_or_better(self, side, price):
+        total = 0
+        side_book = self.order_book[side]
+        for px, orders in side_book.items():
+            if side == Side.BUY and px >= price:
+                total += sum(o.remaining_quantity for o in orders)
+            elif side == Side.SELL and px <= price:
+                total += sum(o.remaining_quantity for o in orders)
+        return total
+
+    def find_clearing_price(self, reference=None):
+        """Volume-maximizing uniform-price cross; None if no overlap."""
+        bids = self.order_book[Side.BUY]
+        asks = self.order_book[Side.SELL]
+        if not bids or not asks:
+            return None, 0
+        candidates = sorted(set(bids.keys()) | set(asks.keys()))
+        best_price = None
+        best_vol = 0
+        for price in candidates:
+            matched = min(
+                self._qty_at_or_better(Side.BUY, price),
+                self._qty_at_or_better(Side.SELL, price),
+            )
+            if matched <= 0:
+                continue
+            if matched > best_vol:
+                best_vol = matched
+                best_price = price
+            elif matched == best_vol and best_price is not None:
+                if reference is not None:
+                    if abs(price - reference) < abs(best_price - reference):
+                        best_price = price
+                else:
+                    best_price = 0.5 * (best_price + price)
+        if best_vol <= 0 or best_price is None:
+            return None, 0
+        return best_price, best_vol
+
+    def execute_midpoint_cross(self, current_tick, tick_size=0.01):
+        """Match best bid vs best ask at mid when the book is not locked/crossed."""
+        bid = self.get_best_bid()
+        ask = self.get_best_ask()
+        if bid is None or ask is None:
+            return [], None, 0
+        if bid >= ask:
+            clearing, volume = self.find_clearing_price(reference=0.5 * (bid + ask))
+            if clearing is None or volume <= 0:
+                return [], None, 0
+            trades = self.execute_cross(clearing, current_tick, max_volume=volume)
+            return trades, clearing, sum(t.quantity for t in trades)
+
+        mid = round(0.5 * (bid + ask) / tick_size) * tick_size
+        buy_orders = list(self.order_book[Side.BUY].get(bid, []))
+        sell_orders = list(self.order_book[Side.SELL].get(ask, []))
+        trades = []
+        bi = 0
+        si = 0
+        while bi < len(buy_orders) and si < len(sell_orders):
+            buy = buy_orders[bi]
+            sell = sell_orders[si]
+            if buy.remaining_quantity <= 0:
+                bi += 1
+                continue
+            if sell.remaining_quantity <= 0:
+                si += 1
+                continue
+            if buy.trader_id == sell.trader_id:
+                si += 1
+                continue
+            qty = min(buy.remaining_quantity, sell.remaining_quantity)
+            buyer_release = self._consume_buy_reservation(buy, qty)
+            seller_release = self._consume_sell_reservation(sell, qty)
+            buy.remaining_quantity -= qty
+            sell.remaining_quantity -= qty
+            trade = self.create_trade(
+                buy, sell, mid, qty, current_tick, buyer_release, seller_release
+            )
+            self.trade_history.append(trade)
+            self.recent_prices.append(trade.price)
+            if len(self.recent_prices) > 1000:
+                self.recent_prices.pop(0)
+            self.current_volume += qty
+            trades.append(trade)
+            if buy.remaining_quantity == 0:
+                buy.status = OrderStatus.FILLED
+                bi += 1
+            else:
+                buy.status = OrderStatus.PARTIALLY_FILLED
+            if sell.remaining_quantity == 0:
+                sell.status = OrderStatus.FILLED
+                si += 1
+            else:
+                sell.status = OrderStatus.PARTIALLY_FILLED
+
+        for side in (Side.BUY, Side.SELL):
+            side_book = self.order_book[side]
+            for price in list(side_book.keys()):
+                remaining = [o for o in side_book[price] if o.remaining_quantity > 0]
+                if remaining:
+                    side_book[price] = remaining
+                else:
+                    del side_book[price]
+
+        return trades, mid, sum(t.quantity for t in trades)
+
+    def execute_cross(self, clearing_price, current_tick, max_volume=None):
+        """Match resting interest at a uniform clearing price (price-time)."""
+        trades = []
+        if clearing_price is None:
+            return trades
+
+        buy_prices = sorted(
+            (p for p in self.order_book[Side.BUY] if p >= clearing_price),
+            reverse=True,
+        )
+        sell_prices = sorted(
+            p for p in self.order_book[Side.SELL] if p <= clearing_price
+        )
+        buy_orders = []
+        for p in buy_prices:
+            buy_orders.extend(self.order_book[Side.BUY][p])
+        sell_orders = []
+        for p in sell_prices:
+            sell_orders.extend(self.order_book[Side.SELL][p])
+
+        bi = 0
+        si = 0
+        filled = 0
+        while bi < len(buy_orders) and si < len(sell_orders):
+            if max_volume is not None and filled >= max_volume:
+                break
+            buy = buy_orders[bi]
+            sell = sell_orders[si]
+            if buy.remaining_quantity <= 0:
+                bi += 1
+                continue
+            if sell.remaining_quantity <= 0:
+                si += 1
+                continue
+            if buy.trader_id == sell.trader_id:
+                si += 1
+                continue
+
+            qty = min(buy.remaining_quantity, sell.remaining_quantity)
+            if max_volume is not None:
+                qty = min(qty, max_volume - filled)
+            if qty <= 0:
+                break
+
+            buyer_release = self._consume_buy_reservation(buy, qty)
+            seller_release = self._consume_sell_reservation(sell, qty)
+            buy.remaining_quantity -= qty
+            sell.remaining_quantity -= qty
+            filled += qty
+
+            trade = self.create_trade(
+                buy,
+                sell,
+                clearing_price,
+                qty,
+                current_tick,
+                buyer_release,
+                seller_release,
+            )
+            self.trade_history.append(trade)
+            self.recent_prices.append(trade.price)
+            if len(self.recent_prices) > 1000:
+                self.recent_prices.pop(0)
+            self.current_volume += qty
+            trades.append(trade)
+
+            if buy.remaining_quantity == 0:
+                buy.status = OrderStatus.FILLED
+                bi += 1
+            else:
+                buy.status = OrderStatus.PARTIALLY_FILLED
+            if sell.remaining_quantity == 0:
+                sell.status = OrderStatus.FILLED
+                si += 1
+            else:
+                sell.status = OrderStatus.PARTIALLY_FILLED
+
+        for side in (Side.BUY, Side.SELL):
+            side_book = self.order_book[side]
+            for price in list(side_book.keys()):
+                remaining = [o for o in side_book[price] if o.remaining_quantity > 0]
+                if remaining:
+                    side_book[price] = remaining
+                else:
+                    del side_book[price]
+
+        return trades
+
     def create_trade(
         self,
         order,

@@ -11,6 +11,9 @@ from traders.persistent_trader import PersistentTrader
 from traders.sentiment_trader import SentimentTrader
 from traders.news_trader import NewsTrader
 from traders.index_fund_trader import IndexFundTrader
+from traders.mean_reversion_trader import MeanReversionTrader
+from traders.breakout_trader import BreakoutTrader
+from traders.attention_trader import AttentionTrader
 
 from company.company import Company
 
@@ -29,6 +32,10 @@ COMPANY_SPECS = [
     ("ABC Incorporated", "Technology", "ABC", 10000000, 2000000, 1000000, 3600000, 8000000),
     ("NexBank Corp", "Finance", "NBK", 12000000, 5000000, 900000, 4000000, 9000000),
     ("Helix Health", "Healthcare", "HLX", 8000000, 1500000, 700000, 3000000, 7000000),
+    ("Volt Utilities", "Utilities", "VLT", 9000000, 3500000, 600000, 2800000, 7500000),
+    ("Orbit Retail", "Consumer", "ORB", 7000000, 1800000, 550000, 3200000, 6500000),
+    ("Forge Industrial", "Industrial", "FRG", 8500000, 2200000, 650000, 3100000, 7200000),
+    ("Nova Biotech", "Biotech", "NVA", 6000000, 1200000, 400000, 2200000, 5000000),
 ]
 
 FIRST_NAMES = [
@@ -99,48 +106,76 @@ def build_traders(symbols):
 
     money = [1000, 2000, 5000, 8000, 10000, 20000, 50000, 100000]
     traders = []
+    n = len(symbols)
+
+    def round_robin(i):
+        return symbols[i % n]
 
     for i, sym in enumerate(symbols):
         traders.append(assign(MarketMaker(next_name("MM", i), 250000, 12000, 0), sym))
-        traders.append(assign(MarketMaker(next_name("MM", i + 10), 250000, 12000, 0), sym))
         traders.append(assign(MarketMaker(next_name("MM", i + 20), 250000, 12000, 0), sym))
+        traders.append(assign(MarketMaker(next_name("MM", i + 40), 250000, 12000, 0), sym))
 
-    for i in range(60):
+    for i in range(48):
         cash = random.choice(money)
         traders.append(
-            assign(RandomTrader(next_name("RND", i), cash, starter_inventory(cash), 0), symbols[i % 3])
+            assign(RandomTrader(next_name("RND", i), cash, starter_inventory(cash), 0), round_robin(i))
         )
-    for i in range(45):
+    for i in range(36):
         cash = random.choice(money)
         traders.append(
-            assign(FairValueTrader(next_name("FV", i), cash, starter_inventory(cash), 0), symbols[i % 3])
-        )
-    for i in range(30):
-        cash = random.choice(money)
-        traders.append(
-            assign(MomentumTrader(next_name("MOM", i), cash, starter_inventory(cash), 0), symbols[i % 3])
+            assign(FairValueTrader(next_name("FV", i), cash, starter_inventory(cash), 0), round_robin(i))
         )
     for i in range(24):
         cash = random.choice(money)
         traders.append(
-            assign(PersistentTrader(next_name("PER", i), cash, starter_inventory(cash), 0), symbols[i % 3])
-        )
-    for i in range(24):
-        cash = random.choice(money)
-        traders.append(
-            assign(SentimentTrader(next_name("SENT", i), cash, starter_inventory(cash), 0), symbols[i % 3])
+            assign(MomentumTrader(next_name("MOM", i), cash, starter_inventory(cash), 0), round_robin(i))
         )
     for i in range(18):
         cash = random.choice(money)
         traders.append(
-            assign(NewsTrader(next_name("NEWS", i), cash, starter_inventory(cash), 0), symbols[i % 3])
+            assign(PersistentTrader(next_name("PER", i), cash, starter_inventory(cash), 0), round_robin(i))
         )
-    for i in range(9):
+    for i in range(18):
+        cash = random.choice(money)
+        traders.append(
+            assign(SentimentTrader(next_name("SENT", i), cash, starter_inventory(cash), 0), round_robin(i))
+        )
+    for i in range(18):
+        cash = random.choice(money)
+        traders.append(
+            assign(NewsTrader(next_name("NEWS", i), cash, starter_inventory(cash), 0), round_robin(i))
+        )
+    for i in range(18):
+        cash = random.choice(money)
+        traders.append(
+            assign(
+                MeanReversionTrader(next_name("MR", i), cash, starter_inventory(cash), 0),
+                round_robin(i),
+            )
+        )
+    for i in range(15):
+        cash = random.choice(money)
+        traders.append(
+            assign(
+                BreakoutTrader(next_name("BO", i), cash, starter_inventory(cash), 0),
+                round_robin(i),
+            )
+        )
+    for i in range(15):
+        cash = random.choice(money)
+        traders.append(
+            assign(
+                AttentionTrader(next_name("ATT", i), cash, starter_inventory(cash), 0),
+                round_robin(i),
+            )
+        )
+    for i in range(n * 2):
         cash = random.choice(money)
         traders.append(
             assign(
                 IndexFundTrader(next_name("IDX", i), cash * 2, starter_inventory(cash), 0),
-                symbols[i % 3],
+                round_robin(i),
             )
         )
 
@@ -330,11 +365,13 @@ def run_simulation(days=5, seed=None, verbose=False, plot=True):
     print(f"Primary:        ABC FV {initial_fv:.4f} -> {primary.fundamental_value:.4f}")
     print(f"Last ABC:       {final_prices['ABC']}")
     print(f"Trades:         {len(exchange.trade_history)}")
-    print(f"Session prints: {len(simulation.session_prints)}")
+    auction_vol = sum(p.get("volume", 0) for p in simulation.session_prints)
+    print(f"Auctions:       {len(simulation.session_prints)} (matched qty {auction_vol})")
     print(f"Halts:          {dict(simulation.halt_counts)}")
     print(f"Events:         {dict(event_counts)} (total {len(simulation.event_history)})")
     print(f"Rate:           {economy.risk_free_rate * 100:.2f}%")
     print(f"Flow mult:      {economy.flow_multiplier:.2f}")
+    print(f"Liq. stress:    {simulation.liquidity_stress:.2f}")
     print(f"Total fees:     ${simulation.total_fees:,.2f}")
     print(f"Initial MTM:    ${initial_total_mtm:,.2f}")
     print(f"Final MTM:      ${final_total_mtm:,.2f}")

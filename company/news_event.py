@@ -13,6 +13,7 @@ class MarketEvent:
     headline: str
     source: str = "news"
     symbol: str = None
+    sector: str = None
     event_id: int = field(default_factory=lambda: next(_event_ids))
 
     @property

@@ -38,6 +38,18 @@ class Sector:
             "pe_multiplier": 0.95,
             "sentiment_sensitivity": 0.9,
         },
+        "Utilities": {
+            "growth_multiplier": 0.85,
+            "volatility_multiplier": 0.75,
+            "pe_multiplier": 0.8,
+            "sentiment_sensitivity": 0.7,
+        },
+        "Biotech": {
+            "growth_multiplier": 1.25,
+            "volatility_multiplier": 1.6,
+            "pe_multiplier": 1.35,
+            "sentiment_sensitivity": 1.5,
+        },
     }
 
     DEFAULT = {
