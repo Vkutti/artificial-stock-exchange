@@ -3,7 +3,7 @@ from exchange.market_state import MarketState, PublicHeadline
 from traders.market_maker import MarketMaker
 
 from exchange.order import Order
-from exchange.enums import Side, OrderType, Event
+from exchange.enums import Side, OrderType
 from exchange.ticks import round_to_tick
 
 from company.company import Company
@@ -12,6 +12,7 @@ from company.social_event import generate_social_event, apply_social_event
 from company.economic_event import generate_economic_event, apply_economic_event
 from company.economy import Economy
 from simulation.clock import SimClock, MINUTES_PER_DAY
+from simulation.events import Event
 
 import random
 import heapq
@@ -33,7 +34,9 @@ class Simulation:
         sample_every_minutes=1,
         economy: Economy = None,
         enable_auctions=True,
+        enable_session_prints=None,
         enable_circuit_breakers=True,
+        seed=None,
     ):
         self.exchange = exchange
         self.exchange.fee_rate = fee_rate
@@ -58,11 +61,14 @@ class Simulation:
                 self.companies[comp.symbol] = comp
             comp.apply_economy(self.economy)
 
+        self.seed = seed
         for trader in self.traders:
             if not getattr(trader, "symbol", None):
                 trader.symbol = self.primary_symbol
             if not hasattr(trader, "fv_bias"):
                 trader.fv_bias = random.gauss(0, 0.02)
+            if not hasattr(trader, "fv_noise"):
+                trader.fv_noise = 0.0
 
         self.days = int(days)
         self.total_minutes = SimClock.total_minutes(self.days)
@@ -75,7 +81,10 @@ class Simulation:
         self.total_fees = 0.0
         self.playback_delay_sec = playback_delay_sec
         self.sample_every_minutes = max(1, int(sample_every_minutes))
-        self.enable_auctions = enable_auctions
+        if enable_session_prints is None:
+            enable_session_prints = enable_auctions
+        self.enable_session_prints = enable_session_prints
+        self.enable_auctions = enable_session_prints
         self.enable_circuit_breakers = enable_circuit_breakers
 
         self.bid_data = []
@@ -122,12 +131,22 @@ class Simulation:
         self._last_sample_minute = -1
 
         self.prior_close = {s: c.fundamental_value for s, c in self.companies.items()}
+        self.breaker_ref = {s: c.fundamental_value for s, c in self.companies.items()}
         self.halted_until = {s: -1 for s in self.companies}
+        self.halt_cooldown_until = {s: -1 for s in self.companies}
         self.halt_counts = {s: 0 for s in self.companies}
-        self.auction_prints = []
+        self.session_prints = []
+        self.auction_prints = self.session_prints
         self.breaker_band = 0.07
-        self._last_auction_day = -1
-        self._close_auction_done_day = -1
+        self.breaker_halt_minutes = 15
+        self.breaker_cooldown_minutes = 30
+        self.breaker_ref_alpha = 0.05
+        self._last_print_day = -1
+        self._close_print_done_day = -1
+        self.symbol_series = {
+            s: {"bid": [], "ask": [], "mid": [], "last": [], "fv": [], "spread": []}
+            for s in self.companies
+        }
 
     def _book(self, symbol=None):
         return self.exchange.get_book(symbol or self.primary_symbol)
@@ -137,10 +156,10 @@ class Simulation:
 
     def _session_phase(self):
         sm = self.clock.session_minute
-        if self.enable_auctions and sm == 0:
-            return "open_auction"
-        if self.enable_auctions and sm == MINUTES_PER_DAY - 1:
-            return "close_auction"
+        if self.enable_session_prints and sm == 0:
+            return "open_print"
+        if self.enable_session_prints and sm == MINUTES_PER_DAY - 1:
+            return "close_print"
         return "continuous"
 
     def _is_halted(self, symbol):
@@ -181,9 +200,19 @@ class Simulation:
                 )
         return out
 
+    def _step_fv_noise(self, trader):
+        if trader is None:
+            return 0.0
+        noise = getattr(trader, "fv_noise", 0.0)
+        noise += 0.02 * (0.0 - noise) + random.gauss(0, 0.0015)
+        noise = max(-0.05, min(0.05, noise))
+        trader.fv_noise = noise
+        return noise
+
     def _estimate_fv(self, company, trader=None):
         bias = getattr(trader, "fv_bias", 0.0) if trader is not None else 0.0
-        return max(0.01, company.fundamental_value * (1.0 + bias))
+        noise = self._step_fv_noise(trader) if trader is not None else 0.0
+        return max(0.01, company.fundamental_value * (1.0 + bias + noise))
 
     def build_market_state(self, symbol=None, trader=None):
         symbol = symbol or self.primary_symbol
@@ -248,20 +277,32 @@ class Simulation:
 
         symbol = trade.symbol or self.primary_symbol
         self._company_for(symbol).update_market_stats(trade.price)
+        self._update_breaker_ref(symbol, trade.price)
         self._maybe_halt(symbol, trade.price)
+
+    def _update_breaker_ref(self, symbol, price):
+        prev = self.breaker_ref.get(symbol, price)
+        a = self.breaker_ref_alpha
+        self.breaker_ref[symbol] = (1.0 - a) * prev + a * price
 
     def _maybe_halt(self, symbol, price):
         if not self.enable_circuit_breakers:
             return
         if self._is_halted(symbol):
             return
-        ref = self.prior_close.get(symbol) or price
+        if self.current_tick < self.halt_cooldown_until.get(symbol, -1):
+            return
+        ref = self.breaker_ref.get(symbol) or price
         if ref <= 0:
             return
         move = abs(price / ref - 1.0)
         if move >= self.breaker_band:
-            self.halted_until[symbol] = self.current_tick + 15
+            self.halted_until[symbol] = self.current_tick + self.breaker_halt_minutes
+            self.halt_cooldown_until[symbol] = (
+                self.halted_until[symbol] + self.breaker_cooldown_minutes
+            )
             self.halt_counts[symbol] = self.halt_counts.get(symbol, 0) + 1
+            self.breaker_ref[symbol] = price
             cancelled = []
             for trader in self.traders:
                 if getattr(trader, "symbol", None) == symbol:
@@ -283,6 +324,7 @@ class Simulation:
 
         order = Order(trader.trader_id, decision.side, decision.price, decision.quantity, decision.type)
         order.placed_tick = current_tick
+        order.timestamp = current_tick
         order.expiration_tick = current_tick + trader.order_ttl
         order.symbol = symbol
 
@@ -332,16 +374,21 @@ class Simulation:
         self.current_tick = 0
         self.clock.advance_to(0)
         self._last_sample_minute = -1
-        self._last_auction_day = -1
-        self._close_auction_done_day = -1
-        self.auction_prints.clear()
+        self._last_print_day = -1
+        self._close_print_done_day = -1
+        self.session_prints.clear()
 
         for company in self.companies.values():
             company.sentiment.set(0.0)
             company.apply_economy(self.economy)
 
         self.prior_close = {s: c.fundamental_value for s, c in self.companies.items()}
+        self.breaker_ref = {s: c.fundamental_value for s, c in self.companies.items()}
         self.halted_until = {s: -1 for s in self.companies}
+        self.halt_cooldown_until = {s: -1 for s in self.companies}
+        for series in self.symbol_series.values():
+            for key in series:
+                series[key].clear()
 
         self.recent_events.clear()
         self.event_history.clear()
@@ -381,7 +428,7 @@ class Simulation:
         self.event_history.append(event)
         self._prune_recent_events()
 
-    def _run_auction(self, symbol, phase):
+    def _run_session_print(self, symbol, phase):
         book = self._book(symbol)
         bid = book.get_best_bid()
         ask = book.get_best_ask()
@@ -400,27 +447,35 @@ class Simulation:
         if len(book.recent_prices) > 1000:
             book.recent_prices.pop(0)
         company.update_market_stats(price)
-        self.auction_prints.append(
+        self._update_breaker_ref(symbol, price)
+        self.session_prints.append(
             {"tick": self.current_tick, "symbol": symbol, "phase": phase, "price": price}
         )
         if phase == "close":
             self.prior_close[symbol] = price
+            self.breaker_ref[symbol] = price
 
-    def _maybe_run_auctions(self):
-        if not self.enable_auctions:
+    def _maybe_run_session_prints(self):
+        if not self.enable_session_prints:
             return
         day = self.clock.day
         sm = self.clock.session_minute
-        if sm == 0 and self._last_auction_day != day:
+        if sm == 0 and self._last_print_day != day:
             for symbol in self.companies:
                 if not self._is_halted(symbol):
-                    self._run_auction(symbol, "open")
-            self._last_auction_day = day
-        if sm == MINUTES_PER_DAY - 1 and self._close_auction_done_day != day:
+                    self._run_session_print(symbol, "open")
+            self._last_print_day = day
+        if sm == MINUTES_PER_DAY - 1 and self._close_print_done_day != day:
             for symbol in self.companies:
                 if not self._is_halted(symbol):
-                    self._run_auction(symbol, "close")
-            self._close_auction_done_day = day
+                    self._run_session_print(symbol, "close")
+            self._close_print_done_day = day
+
+    def _run_auction(self, symbol, phase):
+        self._run_session_print(symbol, phase)
+
+    def _maybe_run_auctions(self):
+        self._maybe_run_session_prints()
 
     def _process_scheduled_updates(self):
         while self.current_tick >= self.next_company_update:
@@ -476,7 +531,7 @@ class Simulation:
                 self.economic_interval * 2,
             )
 
-        self._maybe_run_auctions()
+        self._maybe_run_session_prints()
 
     def _record_sample(self):
         if self.current_tick - self._last_sample_minute < self.sample_every_minutes:
@@ -484,29 +539,39 @@ class Simulation:
                 return
         self._last_sample_minute = self.current_tick
 
-        market_state = self.build_market_state()
-        if market_state.best_bid is not None and market_state.best_ask is not None:
-            mid = (market_state.best_bid + market_state.best_ask) / 2
-        else:
-            mid = None
-
-        self.bid_data.append(market_state.best_bid)
-        self.ask_data.append(market_state.best_ask)
-        self.mid_data.append(mid)
-        self.spread_data.append(market_state.spread)
-        self.fundamental_price_data.append(self.company.fundamental_value)
-        self.true_fundamental_data.append(self.company.fundamental_value)
         self.fundamental_ticks.append(self.current_tick)
         self.time_hours.append(self.clock.to_hours())
         self.time_days.append(self.clock.to_days())
         self.time_labels.append(self.clock.label())
-        self.volume_data.append(market_state.volume)
+
+        for symbol, company in self.companies.items():
+            state = self.build_market_state(symbol)
+            if state.best_bid is not None and state.best_ask is not None:
+                mid = (state.best_bid + state.best_ask) / 2
+            else:
+                mid = None
+            series = self.symbol_series[symbol]
+            series["bid"].append(state.best_bid)
+            series["ask"].append(state.best_ask)
+            series["mid"].append(mid)
+            series["last"].append(state.last_trade_price)
+            series["fv"].append(company.fundamental_value)
+            series["spread"].append(state.spread)
+
+        primary = self.symbol_series[self.primary_symbol]
+        self.bid_data.append(primary["bid"][-1])
+        self.ask_data.append(primary["ask"][-1])
+        self.mid_data.append(primary["mid"][-1])
+        self.spread_data.append(primary["spread"][-1])
+        self.fundamental_price_data.append(primary["fv"][-1])
+        self.true_fundamental_data.append(primary["fv"][-1])
+        self.volume_data.append(self._book(self.primary_symbol).current_volume)
         self.revenue_data.append(self.company.revenue)
         self.earnings_data.append(self.company.earnings)
         self.book_value_data.append(self.company.book_value)
         self.company_cash_data.append(self.company.money)
         self.debt_data.append(self.company.debt)
-        self.last_trade_price_data.append(market_state.last_trade_price)
+        self.last_trade_price_data.append(primary["last"][-1])
 
     def process_event(self, event):
         self.current_tick = event.tick
@@ -601,7 +666,10 @@ class Simulation:
         self.time_hours.clear()
         self.time_days.clear()
         self.time_labels.clear()
-        self.auction_prints.clear()
+        self.session_prints.clear()
+        for series in self.symbol_series.values():
+            for key in series:
+                series[key].clear()
 
         self.event_queue.clear()
         self.event_counter = count()
@@ -610,13 +678,15 @@ class Simulation:
         self.total_fees = 0.0
         self.clock.advance_to(0)
         self._last_sample_minute = -1
-        self._last_auction_day = -1
-        self._close_auction_done_day = -1
+        self._last_print_day = -1
+        self._close_print_done_day = -1
 
         self.recent_events.clear()
         self.event_history.clear()
         self.exchange.clear()
         self.halted_until = {s: -1 for s in self.companies}
+        self.halt_cooldown_until = {s: -1 for s in self.companies}
+        self.breaker_ref = {s: c.fundamental_value for s, c in self.companies.items()}
 
         self.next_company_update = self.company_update_interval - 1
         self.next_sentiment_update = self.sentiment_update_interval

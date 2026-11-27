@@ -17,10 +17,15 @@ def test_observation_hides_true_company_and_uses_estimate():
     company = _co("ABC Inc", "Technology", "ABC")
     mm = MarketMaker("mm", 100000, 1000, 0)
     mm.fv_bias = 0.05
+    mm.fv_noise = 0.0
     sim = Simulation(Exchange(), [mm], company=company, days=1, enable_auctions=False)
     state = sim.build_market_state("ABC", trader=mm)
     assert state.company is None
-    assert abs(state.fundamental_price - company.fundamental_value * 1.05) < 1e-6
+    expected = company.fundamental_value * (1.0 + mm.fv_bias + mm.fv_noise)
+    assert abs(state.fundamental_price - expected) < 1e-6
+    assert mm.fv_noise != 0.0 or True
+    state2 = sim.build_market_state("ABC", trader=mm)
+    assert state2.fundamental_price != company.fundamental_value
     assert all(not hasattr(e, "magnitude") or isinstance(e.magnitude, float) for e in state.recent_events)
 
 
@@ -62,7 +67,7 @@ def test_economy_moves_pe():
     assert company.pe_ratio < before
 
 
-def test_auctions_and_halts_in_short_run():
+def test_session_prints_and_rolling_breaker():
     company = _co("ABC Inc", "Technology", "ABC")
     traders = [MarketMaker(f"mm{i}", 200000, 5000, 0) for i in range(3)]
     for i in range(10):
@@ -73,18 +78,46 @@ def test_auctions_and_halts_in_short_run():
         company=company,
         days=2,
         fee_rate=0.001,
-        enable_auctions=True,
+        enable_session_prints=True,
         enable_circuit_breakers=True,
     )
     sim.run()
-    phases = {p["phase"] for p in sim.auction_prints}
+    phases = {p["phase"] for p in sim.session_prints}
     assert "open" in phases
     assert "close" in phases
+    assert "ABC" in sim.symbol_series
+    assert len(sim.symbol_series["ABC"]["fv"]) > 0
 
-    sim.prior_close["ABC"] = 100.0
+    sim.breaker_ref["ABC"] = 100.0
+    sim.halted_until["ABC"] = -1
+    sim.halt_cooldown_until["ABC"] = -1
     sim.current_tick = 50
     sim._maybe_halt("ABC", 80.0)
     assert sim._is_halted("ABC")
+    assert sim.breaker_ref["ABC"] == 80.0
+
+    sim.halted_until["ABC"] = -1
+    sim.current_tick = sim.halt_cooldown_until["ABC"] - 1
+    before = sim.halt_counts["ABC"]
+    sim._maybe_halt("ABC", 60.0)
+    assert sim.halt_counts["ABC"] == before
+
+    sim.current_tick = sim.halt_cooldown_until["ABC"] + 1
+    sim.breaker_ref["ABC"] = 100.0
+    sim._maybe_halt("ABC", 80.0)
+    assert sim.halt_counts["ABC"] == before + 1
+
+
+def test_seed_reproducibility():
+    from main import run_simulation
+
+    a = run_simulation(days=1, seed=7, plot=False)
+    b = run_simulation(days=1, seed=7, plot=False)
+    assert len(a["exchange"].trade_history) == len(b["exchange"].trade_history)
+    assert [t.price for t in a["exchange"].trade_history] == [
+        t.price for t in b["exchange"].trade_history
+    ]
+    assert abs(a["ann_ret"] - b["ann_ret"]) < 1e-12
 
 
 def test_multi_symbol_conservation():

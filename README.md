@@ -2,23 +2,33 @@
 
 Python limit-order-book market with heterogeneous agents, multi-name listings, and a NYSE-style trading-minute clock.
 
+## Run
+
+```bash
+python main.py --days 5 --seed 42
+python main.py --days 21 --seed 7
+pytest
+python experiments/stylized_facts.py --seeds 30 --days 21
+```
+
+`--seed` makes runs reproducible. Without a fixed seed, strategy P&L is a single noisy sample.
+
 ## Time & session
 
 - 1 tick = 1 trading minute; 09:30–16:00 → 390 minutes/day
-- Configure with `DAYS` in `main.py` (`5`, `21`, `63`, `252`)
-- Open/close auction prints; continuous trading between
-- Per-symbol circuit breakers (~±7% vs prior close)
+- Open/close **session prints** (mid/BBO markers — not a full cross auction)
+- Per-symbol circuit breakers (~±7% vs a **rolling** EMA reference, with halt + cooldown)
 
 ## Market mechanics
 
-- Price-time CLOB, LIMIT + MARKET (market buys capped by reserved `ask×1.05`)
+- Price-time CLOB, LIMIT + MARKET (buys capped by reserved `ask×1.05`)
 - `$0.01` tick grid; bps spreads on market makers
 - Fees, collateral reserve/refund, self-trade prevention
-- No negative cash on fills; `reset()` refunds resting collateral
+- Order/trade timestamps use **simulation ticks**, not wall clock
 
 ## Information model
 
-Agents see a **public** view only: BBO, tape copy, sentiment snapshot, symbol-filtered headlines (sign/intensity, not raw shock size), noisy private FV estimate (`fv_bias`). They do **not** receive the live `Company` object or true fundamental.
+Agents see a public view: BBO, tape copy, sentiment snapshot, symbol-filtered headlines (sign/intensity), and a **private FV estimate** = true FV × (1 + fixed bias + mean-reverting noise). They do not get the live `Company` object.
 
 ## Return drivers
 
@@ -29,33 +39,46 @@ Agents see a **public** view only: BBO, tape copy, sentiment snapshot, symbol-fi
 | Macro / rates | Shared `Economy.risk_free_rate` → interest + PE |
 | Flow regimes | `Economy.flow_multiplier` scales participation |
 | News / social | Sign-balanced firm events (tagged by symbol) |
-| Sector | Init multipliers; macro hits all names |
 
 ## Listings
 
-`main.py` runs three names by default: **ABC** (Technology), **NBK** (Finance), **HLX** (Healthcare), each with dedicated MMs and flow traders.
+Default names: **ABC** (Technology), **NBK** (Finance), **HLX** (Healthcare).
 
-## Run
+## Research checks
 
-```bash
-python main.py
-pytest
-```
+Sanity flags in `main.py` (horizon-aware spread gate: 5–120 bps for `days<=5`, else 5–80).
 
-Year gate: set `DAYS = 252`, then check printed sanity flags (FV return, vol, spread bps, conservation, auctions, no negative cash).
+Multi-seed stylized facts (`experiments/stylized_facts.py`):
+
+- Excess kurtosis of daily returns
+- Return AC(1) and squared-return AC(1) (vol clustering)
+- Strategy average returns with 95% CI across seeds
+
+## Design decisions and limitations
+
+- **Session prints ≠ auctions.** Open/close marks a price on the tape; they do not uncross resting interest or create print volume from a clearing algorithm.
+- **FV is an estimate, not a secret oracle dump**, but estimates stay anchored near true FV, so price still tracks fundamentals closely.
+- **Long-only.** No short selling yet.
+- **Breaker** uses a rolling EMA of trade prices plus cooldown after a halt, not a static prior-close band all day.
+- **Book** uses `dict` price levels with `min`/`max` best-price scans — fine at current scale; heap/sorted levels are a later optimization if profiling requires it.
+- Dividends hit company books only; holders are not paid yet.
 
 ## Layout
 
 ```
-exchange/     OrderBook, ticks, MarketState / PublicHeadline
-company/      Company, Economy, sector, news/social/economic events
-traders/      MM, noise, FV, momentum, persistent, sentiment, news, index
-simulation/   SimClock, Simulation (events, auctions, halts)
-tests/        accounting, exchange, events, traders, phase2
+exchange/      OrderBook, ticks, MarketState / PublicHeadline
+company/       Company, Economy, sector, events
+traders/       strategies
+simulation/    SimClock, Simulation, Event
+experiments/   multi-seed stylized facts
+main.py        CLI entry (`--days`, `--seed`)
+tests/
 ```
 
-## Roadmap status
+## Roadmap
 
-**Done:** Phase 1 realism (ticks/bps/events) + Phase 2 (integrity, observation contract, economy/flow, multi-name, auctions, breakers).
+**Done:** realism core, multi-name, session prints, rolling breakers, observation contract, seed/CLI, stylized-fact harness.
 
-**Later:** short selling, ex-div to holders, earnings calendar vs consensus, options, maker–taker fees.
+**Next (UI platform):** run recorder, FastAPI replay, exchange front-end (chart/book/tape/scrubber), optional user paper trading.
+
+**Later:** shorts, ex-div to holders, earnings calendar, real auction cross, maker–taker, options.

@@ -1,6 +1,5 @@
 from exchange.enums import Side, OrderStatus, OrderType
 from exchange.trade import Trade
-import time
 
 
 class OrderBook:
@@ -74,7 +73,7 @@ class OrderBook:
                 other_order.trader_id,
                 price,
                 quantity,
-                time.time(),
+                current_tick,
                 current_tick,
                 buyer_reservation_release,
                 seller_shares_release,
@@ -85,7 +84,7 @@ class OrderBook:
             order.trader_id,
             price,
             quantity,
-            time.time(),
+            current_tick,
             current_tick,
             buyer_reservation_release,
             seller_shares_release,

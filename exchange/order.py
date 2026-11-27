@@ -1,5 +1,5 @@
-import time
 from exchange.enums import OrderStatus
+
 
 class Order:
     def __init__(self, trader_id, side, price, quantity, order_type):
@@ -11,7 +11,7 @@ class Order:
 
         self.remaining_quantity = quantity
 
-        self.timestamp = time.time()
+        self.timestamp = None
 
         self.type = order_type
 
@@ -23,7 +23,6 @@ class Order:
         self.expiration_tick = None
         self.symbol = None
 
-        # Exact collateral deducted at submit time (for precise refunds)
         self.reserved_cash = 0.0
         self.reserved_shares = 0
 
